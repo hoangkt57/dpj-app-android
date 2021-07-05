@@ -1,0 +1,58 @@
+query segLessons($courseId: ID!, $after: String, $filter: LessonFilter) {
+    node(id: $courseId) {
+        ... on Course {
+            id
+            name
+            lessonsConnection(
+                first: 20
+                after: $after
+                sort: {field: BEGIN_AT, order: DESC}
+                filter: $filter
+            ) {
+                pageInfo {
+                    hasNextPage
+                    startCursor
+                    endCursor
+                    __typename
+                }
+                edges {
+                    node {
+                        id
+                        name
+                        beginAt
+                        endAt
+                        kickUrl
+                        recordedVideosWithMetaData {
+                            video {
+                                id
+                                url
+                                __typename
+                            }
+                            __typename
+                        }
+                        teacher {
+                            id
+                            name
+                            __typename
+                        }
+                        assistant {
+                            id
+                            name
+                            __typename
+                        }
+                        course {
+                            id
+                            name
+                            __typename
+                        }
+                        __typename
+                    }
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+}

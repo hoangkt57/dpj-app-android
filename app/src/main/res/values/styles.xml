@@ -1,0 +1,72 @@
+<resources>
+
+    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="android:windowBackground">@color/color_background</item>
+        <item name="colorError">@color/color_error</item>
+        <!--        <item name="colorSurface">@color/color_surface</item>-->
+        <!--        <item name="colorOnPrimary">@color/on_primary</item>-->
+        <!--        <item name="colorOnSecondary">@color/on_secondary</item>-->
+        <!--        <item name="colorOnBackground">@color/on_background</item>-->
+        <!--        <item name="colorOnError">@color/on_error</item>-->
+        <!--        <item name="colorOnSurface">@color/color_on_surface</item>-->
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--        <item name="actionBarSize">@dimen/main_action_bar_height</item>-->
+        <!--        <item name="android:actionBarSize">@dimen/main_action_bar_height</item>-->
+
+        <item name="windowActionModeOverlay">true</item>
+        <!--        <item name="actionModeCloseDrawable">@drawable/ic_close</item>-->
+        <!--        <item name="actionModeStyle">@style/App.ActionMode</item>-->
+        <!--        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>-->
+
+        <!--        <item name="homeAsUpIndicator">@drawable/ic_back</item>-->
+
+        <!--        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>-->
+        <!--        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.BottomSheetDialog</item>-->
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme">
+
+    </style>
+
+    <style name="CourseActivity" parent="AppTheme">
+
+    </style>
+
+    <style name="LoginField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Edittext.SmallComponent</item>
+
+    </style>
+
+    <style name="FilterButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingStart">11dp</item>
+        <item name="android:paddingEnd">17dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Button.CircleComponent</item>
+        <item name="backgroundTint">@color/home_filter_bg</item>
+
+    </style>
+
+
+    <style name="TextAppearance.Tab.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+
+    </style>
+
+
+</resources>

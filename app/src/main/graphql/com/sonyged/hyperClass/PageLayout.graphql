@@ -1,0 +1,17 @@
+query PageLayout {
+    currentUser {
+        id
+        name
+        birthday
+        loginId
+        password
+        email
+        school {
+            id
+            name
+            __typename
+        }
+        acceptedTouAndPp
+        __typename
+    }
+}

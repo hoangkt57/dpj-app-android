@@ -1,0 +1,80 @@
+query tabHome(
+    $after: String,
+    $filter: UserEventFilter!,
+    $isTeacher: Boolean!
+) {
+    currentUser {
+        id
+        eventsConnection(
+            first: 20,
+            after: $after,
+            filter: $filter,
+            sort: {
+                order: ASC,
+                field: EVENT_DATE
+            }
+        ) {
+            pageInfo {
+                hasNextPage
+                startCursor
+                endCursor
+            }
+            edges {
+                node {
+                    ... on Workout {
+                        ...tabHomeWorkoutFragment
+                    }
+                    ... on Lesson {
+                        ...tabHomeLessonFragment
+                    }
+                }
+            }
+        }
+    }
+}
+
+fragment tabHomeLessonFragment on Lesson {
+    id
+    name
+    beginAt
+    endAt
+    kickUrl
+    course {
+        name
+    }
+    teacher {
+        name
+    }
+    recordedVideosWithMetaData {
+        video {
+            id
+            url
+        }
+    }
+}
+
+fragment tabHomeWorkoutFragment on Workout {
+    id
+    title
+    dueDate
+    description
+    course {
+        name
+        teacher {
+            name
+        }
+    }
+    studentWorkouts @include(if: $isTeacher) {
+        id
+        status
+    }
+    studentWorkout @skip(if: $isTeacher) {
+        status
+        description
+        attachments {
+            id
+            filename
+            url
+        }
+    }
+}

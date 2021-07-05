@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="BaseTheme.V23" parent="BaseTheme">
+        <item name="android:statusBarColor">@color/color_background</item>
+        <item name="android:windowLightStatusBar">@bool/is_light</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme.V23" />
+
+    <style name="CourseActivity" parent="AppTheme">
+        <item name="android:statusBarColor">@color/course_card_top_bg</item>
+    </style>
+
+
+</resources>

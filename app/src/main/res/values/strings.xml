@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Hyper Class</string>
+
+    <string name="splash_copyright">©2020 Sony Global Education, Inc.</string>
+
+    <string name="show_password">パスワードを表示</string>
+    <string name="login">ログイン</string>
+    <string name="id_hint">メールアドレス</string>
+    <string name="password_hint">パスワード</string>
+    <string name="login_error">IDかパスワードが間違っています</string>
+
+    <string name="home">ホーム</string>
+    <string name="course">コース</string>
+    <string name="setting">アカウント</string>
+
+
+    <string name="basic_information">基本情報</string>
+    <string name="full_name">氏名</string>
+    <string name="id">ID</string>
+    <string name="password">パスワード</string>
+    <string name="email">メールアドレス</string>
+    <string name="logout">ログアウト</string>
+    <string name="setting1">設定</string>
+    <string name="notification">このデバイスに通知を送る</string>
+    <string name="other">その他</string>
+    <string name="term">利用規約</string>
+    <string name="policy">プライバシーポリシー</string>
+    <string name="license">ソフトウェアライセンス</string>
+
+    <string name="review">概要</string>
+
+    <string name="student_count">受講生 %d</string>
+    <string name="teacher_info">%s | %s</string>
+
+    <string name="lesson">レッスン</string>
+    <string name="data">資料</string>
+    <string name="workout">ワークアウト</string>
+
+
+
+
+</resources>

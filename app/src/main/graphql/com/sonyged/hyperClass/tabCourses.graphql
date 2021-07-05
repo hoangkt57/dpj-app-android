@@ -1,0 +1,59 @@
+query tabCourses {
+    currentUser {
+        id
+        name
+        ... on Teacher {
+            assignedCourses {
+                ...tabCoursesFragment
+                schoolTagsConnection(first: 20) {
+                    edges {
+                        node {
+                            id
+                            name
+                            __typename
+                        }
+                        __typename
+                    }
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        ... on Student {
+            learningCourses {
+                ...tabCoursesFragment
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+}
+
+fragment tabCoursesFragment on Course {
+    id
+    name
+    teacher {
+        id
+        name
+        __typename
+    }
+    assistant {
+        id
+        name
+        __typename
+    }
+    students {
+        id
+        __typename
+    }
+    coverImage {
+        ... on DefaultCourseCoverImage {
+            value
+            __typename
+        }
+        __typename
+    }
+    __typename
+}

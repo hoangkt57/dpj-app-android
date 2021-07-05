@@ -1,0 +1,59 @@
+query SegWorkouts($courseId: ID!, $after: String, $isTeacher: Boolean!, $filter: WorkoutFilter) {
+    node(id: $courseId) {
+        ... on Course {
+            id
+            name
+            workoutsConnection(
+                after: $after
+                first: 20
+                sort: {field: DUE_DATE, order: DESC}
+                filter: $filter
+            ) {
+                pageInfo {
+                    hasNextPage
+                    startCursor
+                    endCursor
+                    __typename
+                }
+                edges {
+                    node {
+                        id
+                        title
+                        dueDate
+                        course {
+                            id
+                            name
+                            teacher {
+                                name
+                                __typename
+                            }
+                            __typename
+                        }
+                        studentWorkouts @include(if: $isTeacher) {
+                            id
+                            status
+                            __typename
+                        }
+                        studentWorkout @skip(if: $isTeacher) {
+                            status
+                            description
+                            attachments {
+                                id
+                                filename
+                                url
+                                __typename
+                            }
+                            __typename
+                        }
+                        __typename
+                    }
+                    cursor
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+}
