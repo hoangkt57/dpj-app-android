@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Hyper Class</string>
 
     <string name="splash_copyright">©2020 Sony Global Education, Inc.</string>
@@ -32,11 +32,25 @@
     <string name="student_count">受講生 %d</string>
     <string name="teacher_info">%s | %s</string>
 
+    <string name="all">すべて</string>
     <string name="lesson">レッスン</string>
     <string name="data">資料</string>
     <string name="workout">ワークアウト</string>
 
+    <string name="mtrl_picker_range_header_unselected" tools:override="true">開始日～終了日</string>
+    <string name="mtrl_picker_range_header_only_end_selected" tools:override="true">開始日～%1$s</string>
+    <string name="mtrl_picker_range_header_only_start_selected" tools:override="true">%1$s～終了日</string>
+    <string name="mtrl_picker_range_header_title" tools:override="true">期間を選択してください</string>
+    <string name="mtrl_picker_cancel" tools:override="true">キャンセル</string>
+    <string name="mtrl_picker_confirm" tools:override="true">OK</string>
 
 
+    <string name="none">未提出</string>
+    <string name="draft">下書き</string>
+    <string name="submitted">未確認</string>
+    <string name="reviewed">レビュー済み</string>
+    <string name="rejected">再提出</string>
+
+    <string name="start">スタート</string>
 
 </resources>

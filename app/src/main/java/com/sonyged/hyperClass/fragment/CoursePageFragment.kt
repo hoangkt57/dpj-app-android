@@ -12,7 +12,7 @@ import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.FragmentCourseBinding
 import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.viewmodel.CoursePageViewModel
+import com.sonyged.hyperClass.viewmodel.MainViewModel
 import com.sonyged.hyperClass.views.CourseSpaceItemDecoration
 import timber.log.Timber
 
@@ -33,7 +33,7 @@ class CoursePageFragment : BaseFragment(R.layout.fragment_course), OnItemClickLi
         CourseAdapter(this)
     }
 
-    private val viewModel by viewModels<CoursePageViewModel>()
+    private val viewModel by viewModels<MainViewModel>(ownerProducer = {requireActivity()})
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

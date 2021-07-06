@@ -31,11 +31,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="10dp"
             android:textColor="@color/color_text_primary"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/status"
             app:layout_constraintStart_toEndOf="@+id/logo"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/on_primary"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/date"
@@ -45,6 +62,7 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/color_text_second"
             android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/start"
             app:layout_constraintStart_toEndOf="@+id/logo"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -56,8 +74,29 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/color_text_second"
             android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/start"
             app:layout_constraintStart_toEndOf="@+id/logo"
             app:layout_constraintTop_toBottomOf="@+id/date" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/start"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="8dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="7dp"
+            android:textColor="@color/on_primary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/status" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

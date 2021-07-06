@@ -9,27 +9,13 @@
         <item name="android:colorBackground">@color/color_background</item>
         <item name="android:windowBackground">@color/color_background</item>
         <item name="colorError">@color/color_error</item>
-        <!--        <item name="colorSurface">@color/color_surface</item>-->
-        <!--        <item name="colorOnPrimary">@color/on_primary</item>-->
-        <!--        <item name="colorOnSecondary">@color/on_secondary</item>-->
-        <!--        <item name="colorOnBackground">@color/on_background</item>-->
-        <!--        <item name="colorOnError">@color/on_error</item>-->
-        <!--        <item name="colorOnSurface">@color/color_on_surface</item>-->
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!--        <item name="actionBarSize">@dimen/main_action_bar_height</item>-->
-        <!--        <item name="android:actionBarSize">@dimen/main_action_bar_height</item>-->
 
         <item name="windowActionModeOverlay">true</item>
-        <!--        <item name="actionModeCloseDrawable">@drawable/ic_close</item>-->
-        <!--        <item name="actionModeStyle">@style/App.ActionMode</item>-->
-        <!--        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>-->
 
-        <!--        <item name="homeAsUpIndicator">@drawable/ic_back</item>-->
-
-        <!--        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>-->
-        <!--        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.BottomSheetDialog</item>-->
+        <item name="materialCalendarFullscreenTheme">@style/DateRangePicker</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
@@ -61,11 +47,20 @@
 
     </style>
 
-
     <style name="TextAppearance.Tab.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="textAllCaps">false</item>
         <item name="android:textSize">13sp</item>
 
+    </style>
+
+    <style name="DateRangePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Calendar.MediumComponent</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="materialCalendarHeaderToggleButton">@style/HeaderToggleButton</item>
+    </style>
+
+    <style name="HeaderToggleButton" parent="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton">
+        <item name="android:visibility">gone</item>
     </style>
 
 

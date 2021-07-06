@@ -6,7 +6,9 @@ import androidx.activity.viewModels
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.MainPageAdapter
 import com.sonyged.hyperClass.databinding.ActivityMainBinding
+import com.sonyged.hyperClass.fragment.OnTitleClickListener
 import com.sonyged.hyperClass.viewmodel.MainViewModel
+import timber.log.Timber
 
 class MainActivity : BaseActivity() {
 
@@ -56,6 +58,19 @@ class MainActivity : BaseActivity() {
             }
             true
         }
+
+        binding.titleLayout.setOnClickListener {
+            Timber.d("title layout - position: ${binding.viewPager.currentItem}")
+            val fragment = supportFragmentManager.findFragmentByTag("f" + binding.viewPager.currentItem)
+            if (fragment is OnTitleClickListener) {
+                fragment.onTitleClick()
+            }
+        }
+
+    }
+
+    fun setTitleDateRange(title: String) {
+        changeTitle(title, true)
     }
 
     private fun changeTitle(title: String, clickable: Boolean) {

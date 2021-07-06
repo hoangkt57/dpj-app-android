@@ -5,7 +5,7 @@ query tabCourses {
         ... on Teacher {
             assignedCourses {
                 ...tabCoursesFragment
-                schoolTagsConnection(first: 20) {
+                schoolTagsConnection(first: 100) {
                     edges {
                         node {
                             id

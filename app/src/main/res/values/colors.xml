@@ -23,7 +23,6 @@
 
     <color name="color_home_bg">#F5F5F5</color>
 
-
     <color name="home_filter_bg">#E5E5E5</color>
 
     <color name="exercise_card_border">#EDEDED</color>
@@ -38,6 +37,9 @@
     <color name="setting_divider">#C3C3C3</color>
 
     <color name="course_card_top_bg">#F9F9F9</color>
+
+    <color name="workout_muted">#E65757</color>
+    <color name="workout_danger">#D97D36</color>
 
 
 </resources>

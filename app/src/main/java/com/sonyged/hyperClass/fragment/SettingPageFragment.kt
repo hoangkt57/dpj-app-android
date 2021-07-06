@@ -10,7 +10,7 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.activity.LoginActivity
 import com.sonyged.hyperClass.databinding.FragmentSettingBinding
 import com.sonyged.hyperClass.model.User
-import com.sonyged.hyperClass.viewmodel.SettingViewModel
+import com.sonyged.hyperClass.viewmodel.MainViewModel
 import timber.log.Timber
 
 class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
@@ -26,7 +26,7 @@ class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
         FragmentSettingBinding.bind(requireView())
     }
 
-    private val viewModel by viewModels<SettingViewModel>()
+    private val viewModel by viewModels<MainViewModel>(ownerProducer = {requireActivity()})
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,7 +4,7 @@ query segLessons($courseId: ID!, $after: String, $filter: LessonFilter) {
             id
             name
             lessonsConnection(
-                first: 20
+                first: 100
                 after: $after
                 sort: {field: BEGIN_AT, order: DESC}
                 filter: $filter
