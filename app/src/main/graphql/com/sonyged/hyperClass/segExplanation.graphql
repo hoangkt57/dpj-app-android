@@ -1,0 +1,46 @@
+query segExplanation($id: ID!) {
+  node(id: $id) {
+    ... on Lesson {
+      id
+      batchId
+      name
+      beginAt
+      endAt
+      kickUrl
+      recordedVideosWithMetaData {
+        video {
+          id
+          url
+          __typename
+        }
+        __typename
+      }
+      teacher {
+        id
+        name
+        __typename
+      }
+      assistant {
+        id
+        name
+        __typename
+      }
+      students {
+        id
+        __typename
+      }
+      course {
+        id
+        name
+        teacher {
+          id
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

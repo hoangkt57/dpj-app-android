@@ -1,0 +1,78 @@
+query PageWorkout($id: ID!, $isTeacher: Boolean!, $baseUrl: String!) {
+  node(id: $id) {
+    ... on Workout {
+      id
+      title
+      description
+      dueDate
+      course {
+        id
+        name
+        __typename
+      }
+      attachments {
+        id
+        filename
+        contentType
+        url
+        __typename
+      }
+      studentsConnection(first: 100) @include(if: $isTeacher) {
+        edges {
+          status
+          node {
+            id
+            name
+            __typename
+          }
+          studentWorkout {
+            id
+            status
+            description
+            attachments {
+              id
+              filename
+              contentType
+              url
+              __typename
+            }
+            comments {
+              id
+              content
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      studentWorkout @skip(if: $isTeacher) {
+        id
+        description
+        student {
+          id
+          name
+          __typename
+        }
+        status
+        attachments {
+          id
+          filename
+          contentType
+          url
+          __typename
+        }
+        comments {
+          id
+          content
+          __typename
+        }
+        __typename
+      }
+      qrCodeForSubmission(baseUrl: $baseUrl) @skip(if: $isTeacher)
+      __typename
+    }
+    __typename
+  }
+}

@@ -12,7 +12,7 @@ data class Exercise(
     val teacherName: String,
     val courseName: String,
     val status: EnumValue,
-    val kickUrl : String?
+    val kickUrl: String?
 ) {
 
     class DiffCallback : DiffUtil.ItemCallback<Exercise>() {

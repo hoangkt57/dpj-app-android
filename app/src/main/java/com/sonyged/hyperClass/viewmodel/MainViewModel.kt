@@ -121,19 +121,21 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 Timber.d("loadUserData - user : ${userResponse.data}")
 
                 userResponse.data?.currentUser?.let {
-                    user.postValue(
-                        User(
-                            it.id,
-                            it.loginId,
-                            it.name ?: "",
-                            it.password ?: "",
-                            it.email ?: "",
-                            it.__typename == "Teacher"
-                        )
+                    val data = User(
+                        it.id,
+                        it.loginId,
+                        it.name ?: "",
+                        it.password ?: "",
+                        it.email ?: "",
+                        it.__typename == "Teacher"
                     )
+                    user.postValue(data)
+                    sharedPref.setTeacher(data.isTeacher)
                 }
 
                 initDate()
+
+
 
             } catch (e: Exception) {
                 Timber.e(e)

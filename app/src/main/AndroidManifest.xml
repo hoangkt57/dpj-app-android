@@ -38,6 +38,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/CourseActivity" />
 
+        <activity
+            android:name=".activity.LessonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
+        <activity
+            android:name=".activity.WorkoutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
 
     </application>
 

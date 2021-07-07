@@ -17,4 +17,8 @@ class ExerciseAdapter(private val listener: OnItemClickListener?) : ListAdapter<
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
         holder.bindView(getItem(position))
     }
+
+    fun getAdapterItem(position: Int): Exercise {
+        return getItem(position)
+    }
 }

@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
@@ -7,9 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.activity.LessonActivity
 import com.sonyged.hyperClass.activity.MainActivity
+import com.sonyged.hyperClass.activity.WorkoutActivity
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.constants.KEY_LESSON_ID
+import com.sonyged.hyperClass.constants.KEY_WORKOUT_ID
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.UserEventFilterType
@@ -66,6 +71,15 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
 
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
+
+        val exercise = adapter.getAdapterItem(position)
+        if (exercise.type == UserEventFilterType.LESSON) {
+            startLessonActivity(exercise)
+        } else if(exercise.type == UserEventFilterType.WORKOUT) {
+            startWorkoutActivity(exercise)
+        }
+
+
     }
 
     override fun onTitleClick() {
@@ -122,6 +136,18 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
                 viewModel.type.postValue(UserEventFilterType.ALL)
             }
         }
+    }
+
+    private fun startLessonActivity(lesson: Exercise) {
+        val intent = Intent(requireContext(), LessonActivity::class.java)
+        intent.putExtra(KEY_LESSON_ID, lesson.id)
+        startActivity(intent)
+    }
+
+    private fun startWorkoutActivity(lesson: Exercise) {
+        val intent = Intent(requireContext(), WorkoutActivity::class.java)
+        intent.putExtra(KEY_WORKOUT_ID, lesson.id)
+        startActivity(intent)
     }
 
 }

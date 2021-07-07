@@ -2,6 +2,7 @@ package com.sonyged.hyperClass.db
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.sonyged.hyperClass.constants.KEY_TEACHER
 import com.sonyged.hyperClass.constants.KEY_TOKEN
 
 class SharedPref(context: Context) {
@@ -37,6 +38,14 @@ class SharedPref(context: Context) {
 
     fun getToken(): String {
         return sharedPref.getString(KEY_TOKEN, "") ?: ""
+    }
+
+    fun setTeacher(isTeacher: Boolean) {
+        sharedPref.edit().putBoolean(KEY_TEACHER, isTeacher).apply()
+    }
+
+    fun isTeacher(): Boolean {
+        return sharedPref.getBoolean(KEY_TEACHER, false)
     }
 
 

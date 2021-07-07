@@ -54,5 +54,14 @@
     <string name="start">スタート</string>
 
     <string name="student">受講生</string>
+    <string name="teacher">講師</string>
+
+    <string name="student_count_1">%d 人</string>
+    <string name="edit">編集</string>
+    <string name="description">説明</string>
+    <string name="workout_term">期限</string>
+    <string name="status">ステータス</string>
+    <string name="your_answer">あなたのこたえ</string>
+    <string name="submission_file">提出ファイル</string>
 
 </resources>
