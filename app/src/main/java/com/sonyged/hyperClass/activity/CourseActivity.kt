@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -11,7 +12,6 @@ import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
-import timber.log.Timber
 
 class CourseActivity : BaseActivity() {
 
@@ -68,6 +68,17 @@ class CourseActivity : BaseActivity() {
             }
         }.attach()
 
+        binding.studentCount.setOnClickListener {
+            startStudentActivity()
+        }
+
+
+    }
+
+    private fun startStudentActivity() {
+        val intent = Intent(this, StudentActivity::class.java)
+        intent.putExtra(KEY_COURSE, viewModel.course)
+        startActivity(intent)
     }
 
 

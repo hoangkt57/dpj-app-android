@@ -1,0 +1,32 @@
+query PageCourseStudents($id: ID!) {
+  node(id: $id) {
+    ... on Course {
+      id
+      name
+      teacher {
+        id
+        __typename
+      }
+      coverImage {
+        ... on DefaultCourseCoverImage {
+          value
+          __typename
+        }
+        __typename
+      }
+      studentsConnection(first: 100) {
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

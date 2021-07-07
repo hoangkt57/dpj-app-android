@@ -25,6 +25,7 @@ import com.sonyged.hyperClass.views.getCourseCoverImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 
 class MainViewModel(application: Application) : BaseViewModel(application) {
 
@@ -32,15 +33,15 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     val courses = MutableLiveData<List<Course>>()
 
-    val type = MutableLiveData<UserEventFilterType>()
+    val type = MutableLiveData(UserEventFilterType.ALL)
 
-    val dateRange = MutableLiveData<Pair<Long, Long>>(Pair(0, 0))
+    val dateRange = MutableLiveData<Pair<Long, Long>>()
 
     val exercises = dateRange.switchMap { dateRange ->
         type.switchMap { type ->
             liveData(Dispatchers.Default) {
-                val from = if (dateRange.first != 0L) formatDate(dateRange.first) else "2021-06-30"
-                val until = if (dateRange.first != 0L) formatDate(dateRange.second) else "2021-07-07"
+                val from = formatDate(dateRange.first)
+                val until = formatDate(dateRange.second)
                 val result = loadHomeData(from, until, type)
                 val temp = MutableLiveData<List<Exercise>>(result)
                 emitSource(temp)
@@ -132,7 +133,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     )
                 }
 
-                type.postValue(UserEventFilterType.ALL)
+                initDate()
 
             } catch (e: Exception) {
                 Timber.e(e)
@@ -168,6 +169,14 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 Timber.e(e)
             }
         }
+    }
+
+    private fun initDate() {
+        val calendar = Calendar.getInstance()
+        val time1 = calendar.time.time
+        calendar.add(Calendar.DATE, 7)
+        val time2 = calendar.time.time
+        dateRange.postValue(Pair(time1, time2))
     }
 
     fun logout() {

@@ -67,15 +67,15 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="55dp"
+                android:layout_marginEnd="65dp"
                 android:gravity="center"
                 android:textColor="@color/color_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
-                app:layout_constraintEnd_toStartOf="@+id/review"
-                app:layout_constraintStart_toEndOf="@+id/back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/back" />
 
             <View
@@ -100,29 +100,23 @@
                 app:layout_constraintEnd_toStartOf="@+id/divider1"
                 app:layout_constraintTop_toTopOf="@+id/divider1" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/student_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="25dp"
-                app:layout_constraintBottom_toBottomOf="@+id/divider1"
-                app:layout_constraintStart_toEndOf="@+id/divider1"
-                app:layout_constraintTop_toTopOf="@+id/divider1"
-                app:srcCompat="@drawable/ic_student"
-                app:tint="@color/color_primary_variant" />
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/student_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="25dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="4dp"
                 android:gravity="center"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:textColor="@color/color_primary_variant"
                 android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_student"
+                app:drawableTint="@color/color_primary_variant"
                 app:layout_constraintBottom_toBottomOf="@+id/divider1"
-                app:layout_constraintStart_toEndOf="@+id/student_icon"
+                app:layout_constraintStart_toEndOf="@+id/divider1"
                 app:layout_constraintTop_toTopOf="@+id/divider1" />
-
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -138,11 +132,10 @@
                 app:tabIndicator="@drawable/bg_tab_indicator"
                 app:tabIndicatorColor="@color/color_primary"
                 app:tabIndicatorFullWidth="true"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/on_primary"
                 app:tabTextAppearance="@style/TextAppearance.Tab.Button"
-                app:tabTextColor="@color/tab_text_color"
-                app:tabMode="fixed" />
-
+                app:tabTextColor="@color/tab_text_color" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

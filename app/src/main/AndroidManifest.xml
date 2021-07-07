@@ -33,6 +33,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/CourseActivity" />
 
+        <activity
+            android:name=".activity.StudentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
 
     </application>
 

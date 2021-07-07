@@ -54,6 +54,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         }
 
         viewModel.exercises.observe(viewLifecycleOwner) { updateExercises(it) }
+        viewModel.dateRange.observe(viewLifecycleOwner) { updateDateRange(it) }
     }
 
     private fun updateExercises(exercises: List<Exercise>) {
@@ -81,24 +82,28 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         dateRangePicker.addOnPositiveButtonClickListener { date ->
             Timber.d("onTitleClick - change date: $date")
 
-            val startDate = Date(date.first)
-            val endDate = Date(date.second)
-
-            val rangeDate = DateUtils.formatDateRange(
-                requireContext(),
-                date.first,
-                date.second,
-                DateUtils.FORMAT_SHOW_YEAR or DateUtils.FORMAT_NO_MONTH_DAY
-            )
-
-            Timber.d("onTitleClick - startDate: $startDate - endDate: $endDate - rangeDate: $rangeDate")
-
-            if (activity is MainActivity) {
-                (activity as MainActivity).setTitleDateRange(rangeDate)
-            }
-
             viewModel.dateRange.postValue(Pair(date.first, date.second))
+        }
+    }
 
+    private fun updateDateRange(date: Pair<Long, Long>) {
+        val startDate = Date(date.first)
+        val endDate = Date(date.second)
+
+        Locale.setDefault(Locale.JAPAN)
+        activity?.resources?.configuration?.setLocale(Locale.JAPAN)
+
+        val rangeDate = DateUtils.formatDateRange(
+            requireContext(),
+            date.first,
+            date.second,
+            DateUtils.FORMAT_SHOW_YEAR or DateUtils.FORMAT_NO_MONTH_DAY
+        )
+
+        Timber.d("updateDateRange - startDate: $startDate - endDate: $endDate - rangeDate: $rangeDate")
+
+        if (activity is MainActivity) {
+            (activity as MainActivity).setTitleDateRange(rangeDate)
         }
     }
 
