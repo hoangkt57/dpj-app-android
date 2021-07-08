@@ -21,6 +21,8 @@
     <color name="color_text_primary">#404040</color>
     <color name="color_text_second">#878787</color>
 
+    <color name="button_ripple">#C4C4C4</color>
+
     <color name="color_home_bg">#F5F5F5</color>
 
     <color name="home_filter_bg">#E5E5E5</color>

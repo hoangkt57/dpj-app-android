@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="action_bar_size">50dp</dimen>
+    <dimen name="action_bar_size">56dp</dimen>
 
     <dimen name="splash_copyright_margin_bottom">13dp</dimen>
 
@@ -14,6 +14,9 @@
     <dimen name="course_text_margin_icon">23dp</dimen>
 
     <dimen name="main_tab_indicator_height">38dp</dimen>
+
+    <dimen name="submission_image_size">96dp</dimen>
+    <dimen name="submission_space_horizontal">1dp</dimen>
 
 
 </resources>

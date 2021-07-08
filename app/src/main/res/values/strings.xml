@@ -63,5 +63,14 @@
     <string name="status">ステータス</string>
     <string name="your_answer">あなたのこたえ</string>
     <string name="submission_file">提出ファイル</string>
+    <string name="file">ファイル</string>
+
+    <string name="take_with_camera">カメラで撮影</string>
+    <string name="add_from_library">ライブラリから追加</string>
+    <string name="reply">回答</string>
+    <string name="answer">こたえをかく</string>
+
+    <string name="save_draft">下書き保存</string>
+    <string name="put_forward">提出</string>
 
 </resources>

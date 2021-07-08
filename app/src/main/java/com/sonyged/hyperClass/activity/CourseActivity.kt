@@ -20,7 +20,7 @@ class CourseActivity : BaseActivity() {
     }
 
     private val adapter: CoursePageAdapter by lazy {
-        CoursePageAdapter(this, viewModel.course)
+        CoursePageAdapter(this, viewModel.course, viewModel.isTeacher())
     }
 
     private val viewModel by viewModels<CourseViewModel> {

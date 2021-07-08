@@ -8,4 +8,8 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     protected val sharedPref = SharedPref.getInstance(application)
 
+    fun isTeacher() : Boolean {
+        return sharedPref.isTeacher()
+    }
+
 }

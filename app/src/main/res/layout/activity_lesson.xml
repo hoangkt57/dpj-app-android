@@ -39,6 +39,20 @@
                 app:strokeColor="@color/color_text_second"
                 app:strokeWidth="1dp" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/exercise_workout_bg"
+                android:scaleType="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/ShapeAppearance.Image.CircleComponent"
+                app:srcCompat="@drawable/ic_lesson"
+                app:tint="@color/exercise_lesson_tint" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"

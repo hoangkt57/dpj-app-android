@@ -1,8 +1,10 @@
 package com.sonyged.hyperClass.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.constants.KEY_WORKOUT_ID
+import com.sonyged.hyperClass.constants.KEY_WORKOUT_NAME
 import com.sonyged.hyperClass.databinding.ActivityWorkoutBinding
 import com.sonyged.hyperClass.model.Workout
 import com.sonyged.hyperClass.viewmodel.WorkoutViewModel
@@ -35,6 +37,10 @@ class WorkoutActivity : BaseActivity() {
         binding.back.setOnClickListener {
             finish()
         }
+
+        binding.editButton.setOnClickListener {
+            startSubmissionActivity()
+        }
     }
 
     private fun updateWorkout(workout: Workout) {
@@ -47,5 +53,12 @@ class WorkoutActivity : BaseActivity() {
         binding.term.text = workout.date
 
 
+    }
+
+    private fun startSubmissionActivity() {
+        val name = viewModel.workout.value?.name ?: ""
+        val intent = Intent(this, SubmissionActivity::class.java)
+        intent.putExtra(KEY_WORKOUT_NAME, name)
+        startActivity(intent)
     }
 }
