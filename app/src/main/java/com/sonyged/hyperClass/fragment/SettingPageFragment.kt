@@ -1,6 +1,7 @@
 package com.sonyged.hyperClass.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -12,6 +13,7 @@ import com.sonyged.hyperClass.databinding.FragmentSettingBinding
 import com.sonyged.hyperClass.model.User
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import timber.log.Timber
+
 
 class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
 
@@ -26,7 +28,7 @@ class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
         FragmentSettingBinding.bind(requireView())
     }
 
-    private val viewModel by viewModels<MainViewModel>(ownerProducer = {requireActivity()})
+    private val viewModel by viewModels<MainViewModel>(ownerProducer = { requireActivity() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,18 @@ class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
 
         }
 
+        binding.term.setOnClickListener {
+            openWeb("https://dist.hyperclass.jp/terms/HyperClass_TOU_v_1_0_0.html")
+        }
+
+        binding.policy.setOnClickListener {
+            openWeb("https://dist.hyperclass.jp/privacy/HyperClass_PP_v_1_0_0.html")
+        }
+
+        binding.license.setOnClickListener {
+            openWeb("https://dist.hyperclass.jp/misc/licenses/HyperClassLicense.html")
+        }
+
         viewModel.user.observe(viewLifecycleOwner) { updateUser(it) }
 
     }
@@ -75,5 +89,14 @@ class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
     private fun openLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun openWeb(url: String) {
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 }

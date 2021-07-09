@@ -29,4 +29,11 @@ class CourseWorkoutFragment : BaseExerciseFragment() {
     private fun updateWorkouts(workouts: List<Exercise>) {
         updateData(workouts)
     }
+
+    override fun onItemClick(position: Int) {
+        super.onItemClick(position)
+
+        val exercise = adapter.getAdapterItem(position)
+        startWorkoutActivity(exercise)
+    }
 }

@@ -138,16 +138,4 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         }
     }
 
-    private fun startLessonActivity(lesson: Exercise) {
-        val intent = Intent(requireContext(), LessonActivity::class.java)
-        intent.putExtra(KEY_LESSON_ID, lesson.id)
-        startActivity(intent)
-    }
-
-    private fun startWorkoutActivity(lesson: Exercise) {
-        val intent = Intent(requireContext(), WorkoutActivity::class.java)
-        intent.putExtra(KEY_WORKOUT_ID, lesson.id)
-        startActivity(intent)
-    }
-
 }

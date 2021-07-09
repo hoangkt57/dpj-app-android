@@ -30,7 +30,7 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
         FragmentCourseLessonBinding.bind(requireView())
     }
 
-    private val adapter: ExerciseAdapter by lazy {
+    protected val adapter: ExerciseAdapter by lazy {
         ExerciseAdapter(this)
     }
 
