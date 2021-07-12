@@ -36,7 +36,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
             }
 
             try {
-                val cookie = getCookie(URL("http://192.168.1.23:5000/graphql/"), "student0000@sctest", "indigo123")
+                val cookie = getCookie(URL("http://192.168.1.23:5000/graphql/"), id!!, password!!)
 
                 if (cookie.isNullOrEmpty()) {
                     state.postValue(LOGIN_FAILED)

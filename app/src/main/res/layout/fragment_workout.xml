@@ -4,103 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/course_card_top_bg"
-        app:cardElevation="1dp"
-        app:contentPaddingBottom="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/back"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                android:layout_width="36dp"
-                android:layout_height="34dp"
-                android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="@dimen/item_margin_edge"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                app:backgroundTint="@color/color_background"
-                app:icon="@drawable/ic_left"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconTint="@color/color_text_second"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/color_text_second"
-                app:strokeWidth="1dp" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/logo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/exercise_workout_bg"
-                android:scaleType="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/ShapeAppearance.Image.CircleComponent"
-                app:srcCompat="@drawable/ic_workout"
-                app:tint="@color/exercise_workout_tint" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/color_text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/back"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/back" />
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/date_teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/color_text_primary"
-                    android:textSize="14sp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/teacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:gravity="center"
-                    android:textColor="@color/color_primary_variant"
-                    android:textSize="14sp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/course_text"
         android:layout_width="wrap_content"
@@ -112,7 +15,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_bg" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/course"
@@ -318,6 +221,5 @@
         app:backgroundTint="@color/color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

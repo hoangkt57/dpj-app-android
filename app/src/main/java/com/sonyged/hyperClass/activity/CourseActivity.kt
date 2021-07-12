@@ -2,6 +2,7 @@ package com.sonyged.hyperClass.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
@@ -42,6 +43,8 @@ class CourseActivity : BaseActivity() {
         binding.teacher.text = viewModel.course.teacherName
         binding.studentCount.text = getString(R.string.student_count, viewModel.course.studentCount)
 
+        binding.review.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
+
         binding.back.setOnClickListener {
             finish()
         }
@@ -76,7 +79,7 @@ class CourseActivity : BaseActivity() {
     }
 
     private fun startStudentActivity() {
-        val intent = Intent(this, StudentActivity::class.java)
+        val intent = Intent(this, StudentListActivity::class.java)
         intent.putExtra(KEY_COURSE, viewModel.course)
         startActivity(intent)
     }

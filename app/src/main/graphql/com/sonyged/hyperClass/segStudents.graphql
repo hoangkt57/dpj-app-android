@@ -1,0 +1,53 @@
+query segStudents($id: ID!) {
+  node(id: $id) {
+    ... on Lesson {
+      id
+      course {
+        id
+        __typename
+      }
+      studentsConnection(first: 100) {
+        totalCount
+        edges {
+          activity {
+            user {
+              id
+              name
+              __typename
+            }
+            lesson {
+              id
+              name
+              teacher {
+                id
+                name
+                __typename
+              }
+              beginAt
+              endAt
+              __typename
+            }
+            participationDurationInSec
+            speakDurationInSec
+            trophyCount
+            raisedHandCount
+            correctQuestionCount
+            participatedQuestionCount
+            participatedBuzzerCount
+            buzzerWonCount
+            __typename
+          }
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

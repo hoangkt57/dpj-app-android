@@ -56,6 +56,10 @@ class LoginActivity : BaseActivity() {
             )
         }
 
+        binding.idEdittext.setText("teacher0003@sctest")
+//        binding.idEdittext.setText("student0000@sctest")
+        binding.passwordEdittext.setText("indigo123")
+
         viewModel.state.observe(this) { updateState(it) }
 
     }

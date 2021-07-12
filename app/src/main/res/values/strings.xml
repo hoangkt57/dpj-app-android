@@ -73,4 +73,7 @@
     <string name="save_draft">下書き保存</string>
     <string name="put_forward">提出</string>
 
+    <string name="present_situation">提出状況</string>
+    <string name="content">内容</string>
+
 </resources>

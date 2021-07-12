@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
@@ -8,13 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.sonyged.hyperClass.R
-import com.sonyged.hyperClass.activity.LessonActivity
 import com.sonyged.hyperClass.activity.MainActivity
-import com.sonyged.hyperClass.activity.WorkoutActivity
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_LESSON_ID
-import com.sonyged.hyperClass.constants.KEY_WORKOUT_ID
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.UserEventFilterType

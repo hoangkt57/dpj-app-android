@@ -12,7 +12,7 @@ import com.sonyged.hyperClass.viewmodel.StudentViewModel
 import com.sonyged.hyperClass.viewmodel.StudentViewModelFactory
 import timber.log.Timber
 
-class StudentActivity : BaseActivity() {
+class StudentListActivity : BaseActivity() {
 
     private val binding: ActivityStudentBinding by lazy {
         ActivityStudentBinding.inflate(layoutInflater)
@@ -46,7 +46,7 @@ class StudentActivity : BaseActivity() {
         }
 
         binding.recyclerView.apply {
-            adapter = this@StudentActivity.adapter
+            adapter = this@StudentListActivity.adapter
         }
     }
 

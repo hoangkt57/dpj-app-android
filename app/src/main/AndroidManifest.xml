@@ -37,17 +37,12 @@
             android:theme="@style/CourseActivity" />
 
         <activity
-            android:name=".activity.StudentActivity"
+            android:name=".activity.StudentListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CourseActivity" />
 
         <activity
-            android:name=".activity.LessonActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CourseActivity" />
-
-        <activity
-            android:name=".activity.WorkoutActivity"
+            android:name=".activity.ExerciseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CourseActivity" />
 
