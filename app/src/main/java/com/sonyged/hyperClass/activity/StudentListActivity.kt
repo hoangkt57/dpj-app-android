@@ -8,8 +8,8 @@ import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.ActivityStudentBinding
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.viewmodel.StudentViewModel
-import com.sonyged.hyperClass.viewmodel.StudentViewModelFactory
+import com.sonyged.hyperClass.viewmodel.StudentListViewModel
+import com.sonyged.hyperClass.viewmodel.StudentListViewModelFactory
 import timber.log.Timber
 
 class StudentListActivity : BaseActivity() {
@@ -18,9 +18,9 @@ class StudentListActivity : BaseActivity() {
         ActivityStudentBinding.inflate(layoutInflater)
     }
 
-    private val viewModel by viewModels<StudentViewModel> {
+    private val viewModel by viewModels<StudentListViewModel> {
         val course = intent.getParcelableExtra(KEY_COURSE) ?: Course.empty()
-        StudentViewModelFactory(application, course)
+        StudentListViewModelFactory(application, course)
     }
 
     private val adapter: StudentAdapter by lazy {

@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class StudentViewModel(application: Application, val course: Course) : BaseViewModel(application) {
+class StudentListViewModel(application: Application, val course: Course) : BaseViewModel(application) {
 
     val students = MutableLiveData<List<Student>>()
 
