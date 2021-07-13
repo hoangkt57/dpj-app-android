@@ -6,9 +6,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.sonyged.hyperClass.fragment.CourseDataFragment
 import com.sonyged.hyperClass.fragment.CourseLessonFragment
 import com.sonyged.hyperClass.fragment.CourseWorkoutFragment
-import com.sonyged.hyperClass.model.Course
 
-class CoursePageAdapter(fragmentActivity: FragmentActivity, private val course: Course, private val isTeacher: Boolean) :
+class CoursePageAdapter(fragmentActivity: FragmentActivity, private val isTeacher: Boolean) :
     FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
@@ -17,11 +16,11 @@ class CoursePageAdapter(fragmentActivity: FragmentActivity, private val course: 
 
     override fun createFragment(position: Int): Fragment {
         return if (position == 0) {
-            CourseLessonFragment.create(course)
+            CourseLessonFragment.create()
         } else if (position == 1 && isTeacher) {
-            CourseDataFragment.create(course)
+            CourseDataFragment.create()
         } else {
-            CourseWorkoutFragment.create(course)
+            CourseWorkoutFragment.create()
         }
     }
 }

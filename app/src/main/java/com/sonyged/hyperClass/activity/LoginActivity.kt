@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -9,6 +8,7 @@ import com.sonyged.hyperClass.constants.LOGIN_CHECKING
 import com.sonyged.hyperClass.constants.LOGIN_FAILED
 import com.sonyged.hyperClass.constants.LOGIN_SUCCESSFUL
 import com.sonyged.hyperClass.databinding.ActivityLoginBinding
+import com.sonyged.hyperClass.utils.startMainActivity
 import com.sonyged.hyperClass.viewmodel.LoginViewModel
 import timber.log.Timber
 
@@ -26,7 +26,7 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         if (viewModel.isLogin()) {
-            startMainActivity()
+            startMainActivity(this)
             overridePendingTransition(0, 0)
             finish()
             return
@@ -56,8 +56,8 @@ class LoginActivity : BaseActivity() {
             )
         }
 
-        binding.idEdittext.setText("teacher0003@sctest")
-//        binding.idEdittext.setText("student0000@sctest")
+//        binding.idEdittext.setText("teacher0003@sctest")
+        binding.idEdittext.setText("student0000@sctest")
         binding.passwordEdittext.setText("indigo123")
 
         viewModel.state.observe(this) { updateState(it) }
@@ -75,18 +75,9 @@ class LoginActivity : BaseActivity() {
                 binding.error.visibility = View.VISIBLE
             }
             LOGIN_SUCCESSFUL -> {
-
-                startMainActivity()
+                startMainActivity(this)
                 finish()
             }
         }
-
     }
-
-    private fun startMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
-
-
 }

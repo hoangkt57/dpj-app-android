@@ -4,25 +4,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.utils.startLessonActivity
+import com.sonyged.hyperClass.utils.startWorkoutActivity
 
-class CourseLessonFragment : BaseExerciseFragment() {
+class StudentWorkoutFragment : StudentExerciseFragment() {
 
     companion object {
 
         fun create(): Fragment {
-            return CourseLessonFragment()
+            return StudentWorkoutFragment()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.lessons.observe(viewLifecycleOwner) { updateLessons(it) }
+        viewModel.workouts.observe(viewLifecycleOwner) { updateWorkouts(it) }
     }
 
-    private fun updateLessons(lessons: List<Exercise>) {
-        updateData(lessons)
+    private fun updateWorkouts(workouts: List<Exercise>) {
+        updateData(workouts)
     }
 
     override fun onItemClick(position: Int) {
@@ -30,6 +30,6 @@ class CourseLessonFragment : BaseExerciseFragment() {
 
         val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startLessonActivity(context, exercise.id)
+        startWorkoutActivity(context, exercise.id)
     }
 }

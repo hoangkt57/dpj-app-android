@@ -1,0 +1,23 @@
+query pageStudent($id: ID!) {
+  node(id: $id) {
+    ... on Student {
+      id
+      name
+      email
+      loginId
+      password
+      schoolTags {
+        id
+        name
+        __typename
+      }
+      learningCourses {
+        id
+        name
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

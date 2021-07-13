@@ -1,0 +1,36 @@
+query segStudentLessons($id: ID!, $after: String) {
+  node(id: $id) {
+    ... on Student {
+      id
+      lessonsConnection(first: 100, after: $after) {
+        pageInfo {
+          hasNextPage
+          startCursor
+          endCursor
+          __typename
+        }
+        edges {
+          node {
+            id
+            beginAt
+            endAt
+            name
+            teacher {
+              id
+              name
+            }
+            course {
+              id
+              name
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

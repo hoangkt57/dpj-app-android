@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,6 +10,7 @@ import com.sonyged.hyperClass.adapter.CoursePageAdapter
 import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
+import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
 
@@ -21,7 +21,7 @@ class CourseActivity : BaseActivity() {
     }
 
     private val adapter: CoursePageAdapter by lazy {
-        CoursePageAdapter(this, viewModel.course, viewModel.isTeacher())
+        CoursePageAdapter(this, viewModel.isTeacher())
     }
 
     private val viewModel by viewModels<CourseViewModel> {
@@ -44,6 +44,7 @@ class CourseActivity : BaseActivity() {
         binding.studentCount.text = getString(R.string.student_count, viewModel.course.studentCount)
 
         binding.review.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
+        binding.create.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
 
         binding.back.setOnClickListener {
             finish()
@@ -72,17 +73,8 @@ class CourseActivity : BaseActivity() {
         }.attach()
 
         binding.studentCount.setOnClickListener {
-            startStudentActivity()
+            startStudentActivity(this, viewModel.course)
         }
-
-
     }
-
-    private fun startStudentActivity() {
-        val intent = Intent(this, StudentListActivity::class.java)
-        intent.putExtra(KEY_COURSE, viewModel.course)
-        startActivity(intent)
-    }
-
 
 }

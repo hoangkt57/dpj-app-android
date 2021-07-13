@@ -4,18 +4,20 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.StudentAdapter
+import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.KEY_COURSE
-import com.sonyged.hyperClass.databinding.ActivityStudentBinding
+import com.sonyged.hyperClass.databinding.ActivityStudentListBinding
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Student
+import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.viewmodel.StudentListViewModel
 import com.sonyged.hyperClass.viewmodel.StudentListViewModelFactory
 import timber.log.Timber
 
-class StudentListActivity : BaseActivity() {
+class StudentListActivity : BaseActivity(), OnItemClickListener {
 
-    private val binding: ActivityStudentBinding by lazy {
-        ActivityStudentBinding.inflate(layoutInflater)
+    private val binding: ActivityStudentListBinding by lazy {
+        ActivityStudentListBinding.inflate(layoutInflater)
     }
 
     private val viewModel by viewModels<StudentListViewModel> {
@@ -24,7 +26,7 @@ class StudentListActivity : BaseActivity() {
     }
 
     private val adapter: StudentAdapter by lazy {
-        StudentAdapter(null)
+        StudentAdapter(this, viewModel.isTeacher())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,14 @@ class StudentListActivity : BaseActivity() {
         binding.studentCount.text = students.size.toString()
 
         adapter.submitList(students)
+
+    }
+
+    override fun onItemClick(position: Int) {
+        Timber.d("onItemClick - position: $position")
+
+        val student = adapter.getAdapterItem(position)
+        startStudentActivity(this, student.id)
 
     }
 }

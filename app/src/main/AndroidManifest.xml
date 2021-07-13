@@ -50,6 +50,11 @@
             android:name=".activity.SubmissionActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.StudentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

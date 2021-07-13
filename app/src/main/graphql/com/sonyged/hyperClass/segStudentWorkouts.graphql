@@ -1,0 +1,35 @@
+query segStudentWorkouts($id: ID!, $after: String) {
+  node(id: $id) {
+    ... on Student {
+      id
+      workoutsConnection(first: 100, after: $after) {
+        pageInfo {
+          hasNextPage
+          startCursor
+          endCursor
+          __typename
+        }
+        edges {
+          node {
+            id
+            title
+            dueDate
+            course {
+              id
+              name
+              teacher {
+                id
+                name
+              }
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

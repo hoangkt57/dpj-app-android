@@ -6,12 +6,12 @@ import androidx.fragment.app.Fragment
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.utils.startLessonActivity
 
-class CourseLessonFragment : BaseExerciseFragment() {
+class StudentLessonFragment : StudentExerciseFragment() {
 
     companion object {
 
         fun create(): Fragment {
-            return CourseLessonFragment()
+            return StudentLessonFragment()
         }
     }
 

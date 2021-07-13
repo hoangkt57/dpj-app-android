@@ -76,4 +76,9 @@
     <string name="present_situation">提出状況</string>
     <string name="content">内容</string>
 
+    <string name="id_password">ID / パスワード</string>
+    <string name="tag">タグ</string>
+    <string name="information">情報</string>
+    <string name="id_password_value">%s / %s</string>
+
 </resources>

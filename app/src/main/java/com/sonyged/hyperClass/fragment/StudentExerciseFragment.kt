@@ -6,24 +6,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_COURSE
-import com.sonyged.hyperClass.databinding.FragmentCourseLessonBinding
-import com.sonyged.hyperClass.model.Course
+import com.sonyged.hyperClass.databinding.FragmentStudentExerciseBinding
 import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.viewmodel.CourseViewModel
-import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
+import com.sonyged.hyperClass.viewmodel.StudentViewModel
 import com.sonyged.hyperClass.views.CourseSpaceItemDecoration
-import com.sonyged.hyperClass.views.ExerciseSpaceItemDecoration
 import timber.log.Timber
 
-abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_lesson), OnItemClickListener {
+abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_student_exercise), OnItemClickListener {
 
-    protected val viewModel: CourseViewModel by lazy {
-        ViewModelProvider(requireActivity()).get(CourseViewModel::class.java)
+    protected val binding: FragmentStudentExerciseBinding by lazy {
+        FragmentStudentExerciseBinding.bind(requireView())
     }
 
-    protected val binding: FragmentCourseLessonBinding by lazy {
-        FragmentCourseLessonBinding.bind(requireView())
+    protected val viewModel: StudentViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(StudentViewModel::class.java)
     }
 
     protected val adapter: ExerciseAdapter by lazy {
@@ -39,7 +35,7 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
 
         binding.recyclerView.apply {
             addItemDecoration(CourseSpaceItemDecoration(requireContext()))
-            adapter = this@BaseExerciseFragment.adapter
+            adapter = this@StudentExerciseFragment.adapter
         }
     }
 
@@ -51,5 +47,6 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
     override fun onItemClick(position: Int) {
 
     }
+
 
 }

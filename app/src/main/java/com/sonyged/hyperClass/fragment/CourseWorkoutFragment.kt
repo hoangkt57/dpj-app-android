@@ -3,20 +3,15 @@ package com.sonyged.hyperClass.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.sonyged.hyperClass.constants.KEY_COURSE
-import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.utils.startWorkoutActivity
 
 class CourseWorkoutFragment : BaseExerciseFragment() {
 
     companion object {
 
-        fun create(course: Course): Fragment {
-            val fragment = CourseWorkoutFragment()
-            val bundle = Bundle()
-            bundle.putParcelable(KEY_COURSE, course)
-            fragment.arguments = bundle
-            return fragment
+        fun create(): Fragment {
+            return CourseWorkoutFragment()
         }
     }
 
@@ -33,7 +28,8 @@ class CourseWorkoutFragment : BaseExerciseFragment() {
     override fun onItemClick(position: Int) {
         super.onItemClick(position)
 
+        val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startWorkoutActivity(exercise)
+        startWorkoutActivity(context, exercise.id)
     }
 }

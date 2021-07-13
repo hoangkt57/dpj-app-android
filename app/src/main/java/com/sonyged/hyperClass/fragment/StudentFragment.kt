@@ -1,18 +1,18 @@
 package com.sonyged.hyperClass.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.chip.Chip
 import com.sonyged.hyperClass.R
-import com.sonyged.hyperClass.adapter.StudentAdapter
-import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.databinding.FragmentStudentBinding
-import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
-import timber.log.Timber
+import com.sonyged.hyperClass.databinding.ViewChipTagBinding
+import com.sonyged.hyperClass.model.StudentPage
+import com.sonyged.hyperClass.viewmodel.StudentViewModel
 
-class StudentFragment : BaseFragment(R.layout.fragment_student), OnItemClickListener {
+class StudentFragment : BaseFragment(R.layout.fragment_student) {
 
     companion object {
 
@@ -25,12 +25,8 @@ class StudentFragment : BaseFragment(R.layout.fragment_student), OnItemClickList
         FragmentStudentBinding.bind(requireView())
     }
 
-    private val viewModel: ExerciseViewModel by lazy {
-        ViewModelProvider(requireActivity()).get(ExerciseViewModel::class.java)
-    }
-
-    private val adapter: StudentAdapter by lazy {
-        StudentAdapter(this)
+    private val viewModel: StudentViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(StudentViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,21 +36,22 @@ class StudentFragment : BaseFragment(R.layout.fragment_student), OnItemClickList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.apply {
-            adapter = this@StudentFragment.adapter
+        viewModel.student.observe(viewLifecycleOwner) { updateStudent(it) }
+    }
+
+    private fun updateStudent(student: StudentPage) {
+        binding.idPassword.text = getString(R.string.id_password_value, student.loginId, student.password)
+        binding.email.text = student.email
+        if (student.courses.isNotEmpty()) {
+            binding.course.text = student.courses[0]
         }
 
-        viewModel.students.observe(viewLifecycleOwner) { updateStudents(it) }
-    }
+        student.tag.forEach {
+            val chipBinding = ViewChipTagBinding.inflate(LayoutInflater.from(requireContext()))
+            chipBinding.root.text = it
+            binding.chipGroup.addView(chipBinding.root)
 
-    private fun updateStudents(students: List<Student>) {
-        Timber.d("updateStudents - size: ${students.size}")
+        }
 
-        adapter.submitList(students)
-
-    }
-
-    override fun onItemClick(position: Int) {
-        Timber.d("onItemClick - position: $position")
     }
 }
