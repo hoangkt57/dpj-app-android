@@ -2,6 +2,7 @@ package com.sonyged.hyperClass.db
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.sonyged.hyperClass.constants.KEY_LOGIN
 import com.sonyged.hyperClass.constants.KEY_TEACHER
 import com.sonyged.hyperClass.constants.KEY_TOKEN
 
@@ -38,6 +39,14 @@ class SharedPref(context: Context) {
 
     fun getToken(): String {
         return sharedPref.getString(KEY_TOKEN, "") ?: ""
+    }
+
+    fun setLoginSuccess(value: Boolean) {
+        sharedPref.edit().putBoolean(KEY_LOGIN, value).apply()
+    }
+
+    fun isLoginSuccess(): Boolean {
+        return sharedPref.getBoolean(KEY_LOGIN, false)
     }
 
     fun setTeacher(isTeacher: Boolean) {

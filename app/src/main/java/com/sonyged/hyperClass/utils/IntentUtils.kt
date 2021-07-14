@@ -2,14 +2,9 @@ package com.sonyged.hyperClass.utils
 
 import android.content.Context
 import android.content.Intent
-import com.sonyged.hyperClass.activity.ExerciseActivity
-import com.sonyged.hyperClass.activity.MainActivity
-import com.sonyged.hyperClass.activity.StudentActivity
-import com.sonyged.hyperClass.activity.StudentListActivity
-import com.sonyged.hyperClass.constants.KEY_COURSE
-import com.sonyged.hyperClass.constants.KEY_ID
-import com.sonyged.hyperClass.constants.KEY_LESSON
-import com.sonyged.hyperClass.constants.KEY_STUDENT_ID
+import android.net.Uri
+import com.sonyged.hyperClass.activity.*
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.model.Course
 import timber.log.Timber
 
@@ -37,19 +32,49 @@ fun startWorkoutActivity(context: Context, workoutId: String) {
 
 fun startMainActivity(context: Context) {
     val intent = Intent(context, MainActivity::class.java)
-    context.startActivity(intent)
+    startActivityWithException(context, intent)
 }
 
 fun startStudentActivity(context: Context, course: Course) {
     val intent = Intent(context, StudentListActivity::class.java)
     intent.putExtra(KEY_COURSE, course)
-    context.startActivity(intent)
+    startActivityWithException(context, intent)
+}
+
+fun startLogin(context: Context) {
+    val intent = Intent(context, LoginActivity::class.java)
+    startActivityWithException(context, intent)
+}
+
+fun openWeb(context: Context, url: String) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivityWithException(context, browserIntent)
+}
+
+fun changePasswordActivity(context: Context, userId: String) {
+    val intent = Intent(context, ChangePasswordActivity::class.java)
+    intent.putExtra(KEY_USER_ID, userId)
+    startActivityWithException(context, intent)
+}
+
+fun changePasswordActivityFirst(context: Context, userId: String) {
+    val intent = Intent(context, ChangePasswordActivity::class.java)
+    intent.putExtra(KEY_USER_ID, userId)
+    intent.putExtra(KEY_CHANGE_PASSWORD_FIRST, true)
+    startActivityWithException(context, intent)
+}
+
+fun startAgreementPpActivity(context: Context, userId: String, changePassword: Boolean) {
+    val intent = Intent(context, AgreementPpActivity::class.java)
+    intent.putExtra(KEY_USER_ID, userId)
+    intent.putExtra(KEY_CHANGE_PASSWORD_FIRST, changePassword)
+    startActivityWithException(context, intent)
 }
 
 private fun startExerciseActivity(context: Context, isLesson: Boolean, id: String) {
     val intent = Intent(context, ExerciseActivity::class.java)
     intent.putExtra(KEY_ID, id)
     intent.putExtra(KEY_LESSON, isLesson)
-    context.startActivity(intent)
+    startActivityWithException(context, intent)
 }
 

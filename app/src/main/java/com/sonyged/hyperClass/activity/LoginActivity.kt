@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import androidx.activity.viewModels
-import com.sonyged.hyperClass.constants.LOGIN_CHECKING
-import com.sonyged.hyperClass.constants.LOGIN_FAILED
-import com.sonyged.hyperClass.constants.LOGIN_SUCCESSFUL
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityLoginBinding
+import com.sonyged.hyperClass.utils.changePasswordActivity
+import com.sonyged.hyperClass.utils.changePasswordActivityFirst
+import com.sonyged.hyperClass.utils.startAgreementPpActivity
 import com.sonyged.hyperClass.utils.startMainActivity
 import com.sonyged.hyperClass.viewmodel.LoginViewModel
 import timber.log.Timber
@@ -57,8 +58,9 @@ class LoginActivity : BaseActivity() {
         }
 
 //        binding.idEdittext.setText("teacher0003@sctest")
-        binding.idEdittext.setText("student0000@sctest")
-        binding.passwordEdittext.setText("indigo123")
+        binding.idEdittext.setText("student0008@sctest")
+//        binding.passwordEdittext.setText("indigo123")
+        binding.passwordEdittext.setText("rmuct298")
 
         viewModel.state.observe(this) { updateState(it) }
 
@@ -74,10 +76,31 @@ class LoginActivity : BaseActivity() {
             LOGIN_FAILED -> {
                 binding.error.visibility = View.VISIBLE
             }
+            LOGIN_CHANGE_PASSWORD -> {
+                handleFirstLogin(agreementPP = false, changePassword = true)
+            }
+            LOGIN_AGREEMENT_PP -> {
+                handleFirstLogin(agreementPP = true, changePassword = false)
+            }
+            LOGIN_BOTH -> {
+                handleFirstLogin(agreementPP = true, changePassword = true)
+            }
             LOGIN_SUCCESSFUL -> {
+                viewModel.setLoginSuccess()
                 startMainActivity(this)
                 finish()
             }
         }
     }
+
+    private fun handleFirstLogin(agreementPP: Boolean, changePassword: Boolean) {
+        if (agreementPP) {
+            startAgreementPpActivity(this, viewModel.userId, changePassword)
+        } else {
+            changePasswordActivityFirst(this, viewModel.userId)
+        }
+        finish()
+    }
+
+
 }

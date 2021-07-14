@@ -39,13 +39,11 @@ class MainActivity : BaseActivity() {
             adapter = this@MainActivity.adapter
         }
 
-        changeTitle("2020年 11月", true)
-
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.page_home -> {
                     binding.viewPager.setCurrentItem(0, true)
-                    changeTitle("2020年 11月", true)
+                    changeTitle(viewModel.rangeDateText, true)
                 }
                 R.id.page_course -> {
                     binding.viewPager.setCurrentItem(1, true)
@@ -70,6 +68,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun setTitleDateRange(title: String) {
+        viewModel.rangeDateText = title
         changeTitle(title, true)
     }
 

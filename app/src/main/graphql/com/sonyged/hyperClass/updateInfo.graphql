@@ -1,0 +1,20 @@
+
+    mutation updateInfo($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
+    ... on UserMutationErrors {
+      errors {
+        code
+        message
+        field
+      }
+    }
+    ... on UserResult {
+      user {
+        id
+        name
+        loginId
+        email
+      }
+    }
+  }
+}

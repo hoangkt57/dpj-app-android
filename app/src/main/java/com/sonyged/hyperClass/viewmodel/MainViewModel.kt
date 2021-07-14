@@ -11,14 +11,12 @@ import com.google.gson.Gson
 import com.sonyged.hyperClass.PageLayoutQuery
 import com.sonyged.hyperClass.TabCoursesQuery
 import com.sonyged.hyperClass.TabHomeQuery
+import com.sonyged.hyperClass.UpdateInfoMutation
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.model.User
-import com.sonyged.hyperClass.type.LessonStatus
-import com.sonyged.hyperClass.type.UserEventFilter
-import com.sonyged.hyperClass.type.UserEventFilterType
-import com.sonyged.hyperClass.type.WorkoutStatus
+import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.formatDate
 import com.sonyged.hyperClass.utils.formatDateTime
 import com.sonyged.hyperClass.views.getCourseCoverImage
@@ -36,6 +34,8 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     val type = MutableLiveData(UserEventFilterType.ALL)
 
     val dateRange = MutableLiveData<Pair<Long, Long>>()
+
+    var rangeDateText = ""
 
     val exercises = dateRange.switchMap { dateRange ->
         type.switchMap { type ->
@@ -183,6 +183,27 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     fun logout() {
         sharedPref.setToken("")
+        sharedPref.setLoginSuccess(false)
+    }
+
+    fun updateInfo(name: String, email: String) {
+        Timber.d("updateInfo")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val id = user.value?.id ?: return@launch
+                val userInput = UserUpdateInput(id = id, name = Input.optional(name), email = Input.optional(email))
+                val infoResponse = ApiUtils.getApolloClient().mutate(UpdateInfoMutation(userInput)).await()
+                Timber.d("updateInfo - user : ${infoResponse.data}")
+
+                infoResponse.data?.userUpdate?.asUserResult?.user?.let {
+                    user.value?.copy(name = it.name ?: "", email = it.email ?: "")?.let {
+                        user.postValue(it)
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e,"updateInfo")
+            }
+        }
     }
 
 

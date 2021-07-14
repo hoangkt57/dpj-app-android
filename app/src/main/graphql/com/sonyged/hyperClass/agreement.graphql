@@ -1,0 +1,17 @@
+mutation agreement {
+  userAcceptTouAndPp {
+    ... on UserResult {
+      user {
+        id
+        acceptedTouAndPp
+      }
+    }
+    ... on UserMutationErrors {
+      errors {
+        field
+        message
+        code
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+query agreementCurrentUser {
+  currentUser {
+    id
+    name
+    school {
+      id
+      name
+      __typename
+    }
+    acceptedTouAndPp
+    __typename
+  }
+}

@@ -3,7 +3,7 @@
 
     <style name="ShapeAppearance.Edittext.SmallComponent" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">3dp</item>
+        <item name="cornerSize">6dp</item>
     </style>
 
     <style name="ShapeAppearance.Button.SmallComponent" parent="">

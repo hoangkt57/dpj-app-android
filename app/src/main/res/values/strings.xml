@@ -81,4 +81,24 @@
     <string name="information">情報</string>
     <string name="id_password_value">%s / %s</string>
 
+    <string name="input_least_1">１文字以上入力してください</string>
+    <string name="change_password">パスワードを変更しましょう</string>
+    <string name="change_password_desc">パスワードは、推測されやすいものや他のサービスで利用しているものにしないようにご注意ください</string>
+    <string name="old_password">いまのパスワード</string>
+    <string name="new_password">新しいパスワード</string>
+    <string name="confirm">確認</string>
+    <string name="change">変更</string>
+
+    <string name="new_pass_not_equal_new_pass_1">新しいパスワードと確認用パスワードが一致しません。</string>
+    <string name="new_pass_least_8">パスワードは8文字以上にしてください</string>
+    <string name="old_pass_equal_new_pass">変更前と同じパスワードは設定できません</string>
+    <string name="new_pass_need_letter">パスワードにアルファベットを含めてください</string>
+    <string name="new_pass_need_number">パスワードに数字を含めてください</string>
+    <string name="pass_not_match">パスワードが一致しません</string>
+    <string name="password_changed">パスワードを変更しました</string>
+
+    <string name="term_use_pp">利用規約とプライバシーポリシー</string>
+    <string name="term_use_pp_desc">サービスのご利用には、利用規約とプライバシーポリシーへの同意が必要です。下記のリンクをそれぞれご一読いただき、「同意する」を押してください。</string>
+    <string name="agree">同意する</string>
+
 </resources>

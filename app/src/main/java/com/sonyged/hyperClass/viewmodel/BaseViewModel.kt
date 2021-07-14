@@ -12,4 +12,8 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
         return sharedPref.isTeacher()
     }
 
+    fun setLoginSuccess() {
+        sharedPref.setLoginSuccess(true)
+    }
+
 }

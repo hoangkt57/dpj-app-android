@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
+import com.sonyged.hyperClass.AgreementCurrentUserQuery
+import com.sonyged.hyperClass.ChangePasswordCurrentUserQuery
 import com.sonyged.hyperClass.PageLayoutQuery
 import com.sonyged.hyperClass.api.ApiUtils
-import com.sonyged.hyperClass.constants.LOGIN_CHECKING
-import com.sonyged.hyperClass.constants.LOGIN_FAILED
-import com.sonyged.hyperClass.constants.LOGIN_SUCCESSFUL
+import com.sonyged.hyperClass.constants.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,8 +21,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
 
     val state = MutableLiveData<Int>()
 
+    var userId = ""
+
     fun isLogin(): Boolean {
-        return sharedPref.getToken().isNotEmpty()
+        return sharedPref.getToken().isNotEmpty() && sharedPref.isLoginSuccess()
     }
 
     fun login(id: String?, password: String?) {
@@ -44,9 +46,29 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
                 }
 
                 sharedPref.setToken(cookie)
-                state.postValue(LOGIN_SUCCESSFUL)
+
+                val agreementResponse = ApiUtils.getApolloClient().query(AgreementCurrentUserQuery()).await()
+                val changePasswordResponse = ApiUtils.getApolloClient().query(ChangePasswordCurrentUserQuery()).await()
+                Timber.d("login - agreementResponse: $agreementResponse")
+                Timber.d("login - changePasswordResponse: $changePasswordResponse")
+
+                val agreementPP = agreementResponse.data?.currentUser?.acceptedTouAndPp ?: false
+                val changePassword = changePasswordResponse.data?.currentUser?.password.isNullOrEmpty()
+
+                userId = changePasswordResponse.data?.currentUser?.id ?: ""
+
+                if (agreementPP && changePassword) {
+                    state.postValue(LOGIN_SUCCESSFUL)
+                } else if (agreementPP && !changePassword) {
+                    state.postValue(LOGIN_CHANGE_PASSWORD)
+                } else if (!agreementPP && changePassword) {
+                    state.postValue(LOGIN_AGREEMENT_PP)
+                } else {
+                    state.postValue(LOGIN_BOTH)
+                }
 
             } catch (e: Exception) {
+                Timber.e(e, "login")
                 state.postValue(LOGIN_FAILED)
             }
         }

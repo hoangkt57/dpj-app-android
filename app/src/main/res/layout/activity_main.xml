@@ -30,7 +30,6 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2020年 11月"
                 android:textColor="@color/color_text_primary"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -82,7 +81,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@+id/action_bar_layout" />
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

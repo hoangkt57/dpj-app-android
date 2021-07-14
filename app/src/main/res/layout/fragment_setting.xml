@@ -74,17 +74,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/name_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@null"
-                android:clickable="false"
-                android:focusable="false"
-                android:inputType="none"
                 android:textColor="@color/color_text_primary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/edit1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -93,7 +90,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="@+id/name_edit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/name_edit"
@@ -109,6 +105,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/name_edit" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/id"
+                android:textColor="@color/color_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/id_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/color_text_primary"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/setting_divider"
+                app:layout_constraintTop_toBottomOf="@+id/id_edit" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,17 +146,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/password_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@null"
-                android:clickable="false"
-                android:focusable="false"
                 android:inputType="none|textPassword"
+                android:text="000000000"
                 android:textColor="@color/color_text_primary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/edit3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password" />
 
@@ -155,40 +180,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/password_edit" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/id"
-                android:textColor="@color/color_text_primary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/id_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@null"
-                android:clickable="false"
-                android:focusable="false"
-                android:inputType="none"
-                android:textColor="@color/color_text_primary"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/id" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="11dp"
-                android:background="@color/setting_divider"
-                app:layout_constraintTop_toBottomOf="@+id/id_edit" />
-
-            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -200,17 +191,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/email_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@null"
-                android:clickable="false"
-                android:focusable="false"
-                android:inputType="none"
                 android:textColor="@color/color_text_primary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/edit4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email" />
 
