@@ -1,0 +1,45 @@
+query pageCourseDetail($id: ID!) {
+  node(id: $id) {
+    ... on Course {
+      id
+      name
+      teacher {
+        id
+        name
+        __typename
+      }
+      assistant {
+        id
+        name
+        __typename
+      }
+      autoCreateLessonWorkout
+      expiredAt
+      coverImage {
+        ... on DefaultCourseCoverImage {
+          value
+          __typename
+        }
+        __typename
+      }
+      schoolTagsConnection(first: 20) {
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  schoolTags(type: COURSE) {
+    id
+    name
+    __typename
+  }
+}

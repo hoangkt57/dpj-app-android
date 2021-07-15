@@ -71,6 +71,18 @@ fun startAgreementPpActivity(context: Context, userId: String, changePassword: B
     startActivityWithException(context, intent)
 }
 
+fun startCourseActivity(context: Context, course: Course) {
+    val intent = Intent(context, CourseActivity::class.java)
+    intent.putExtra(KEY_COURSE, course)
+    startActivityWithException(context, intent)
+}
+
+fun startCourseDetailActivity(context: Context, courseId: String) {
+    val intent = Intent(context, CourseDetailActivity::class.java)
+    intent.putExtra(KEY_COURSE_ID, courseId)
+    startActivityWithException(context, intent)
+}
+
 private fun startExerciseActivity(context: Context, isLesson: Boolean, id: String) {
     val intent = Intent(context, ExerciseActivity::class.java)
     intent.putExtra(KEY_ID, id)

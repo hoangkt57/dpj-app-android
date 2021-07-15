@@ -4,210 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/course_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/course"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/course"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course_text" />
-
-    <View
-        android:id="@+id/divider1"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/course" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/description_text"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/description"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_primary_variant"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_text" />
+        <include
+            android:id="@+id/course"
+            layout="@layout/view_item_detail" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        <include
+            android:id="@+id/description"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/term_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/workout_term"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        <include
+            android:id="@+id/term"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/term"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/term_text" />
+        <include
+            android:id="@+id/status"
+            layout="@layout/view_item_detail" />
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/term" />
+        <include
+            android:id="@+id/answer"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/status_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/status"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+        <include
+            android:id="@+id/file"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_text" />
-
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/status" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/answer_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/your_answer"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/answer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer_text" />
-
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/answer" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/file_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/submission_file"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider5" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/file_text" />
-
-    <View
-        android:id="@+id/divider6"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/file" />
-
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/edit_button"

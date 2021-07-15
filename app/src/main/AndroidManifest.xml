@@ -61,6 +61,11 @@
             android:theme="@style/CourseActivity" />
 
         <activity
+            android:name=".activity.CourseDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
+        <activity
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />
 

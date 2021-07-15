@@ -5,6 +5,7 @@ const val KEY_LOGIN= "key_login"
 const val KEY_TEACHER = "key_teacher"
 
 const val KEY_COURSE = "key_course"
+const val KEY_COURSE_ID = "key_course_id"
 const val KEY_ID = "key_id"
 const val KEY_LESSON = "key_lesson"
 const val KEY_STUDENT_ID = "key_student_id"

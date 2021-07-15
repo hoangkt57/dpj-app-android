@@ -37,6 +37,13 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.course.text1.setText(R.string.course)
+        binding.description.text1.setText(R.string.description)
+        binding.term.text1.setText(R.string.workout_term)
+        binding.status.text1.setText(R.string.status)
+        binding.answer.text1.setText(R.string.your_answer)
+        binding.file.text1.setText(R.string.submission_file)
+
         binding.editButton.setOnClickListener {
             startSubmissionActivity()
         }
@@ -47,8 +54,8 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
     private fun updateWorkout(workout: Workout) {
         Timber.d("updateWorkout - workout: $workout")
 
-        binding.course.text = workout.courseName
-        binding.term.text = workout.date
+        binding.course.text2.text = workout.courseName
+        binding.term.text2.text = workout.date
 
     }
 

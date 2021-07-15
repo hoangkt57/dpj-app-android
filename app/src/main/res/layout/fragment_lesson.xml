@@ -4,107 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/course"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/course"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/course_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course" />
-
-    <View
-        android:id="@+id/divider1"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/course_name" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/teacher1"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/teacher"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/teacher_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_primary_variant"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacher1" />
+        <include
+            android:id="@+id/course"
+            layout="@layout/view_item_detail" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/teacher_name" />
+        <include
+            android:id="@+id/teacher"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/student"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="15dp"
-        android:text="@string/student"
-        android:textColor="@color/color_text_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        <include
+            android:id="@+id/student"
+            layout="@layout/view_item_detail" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/student_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/color_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student" />
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/item_margin_edge"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="@dimen/item_margin_edge"
-        android:background="@color/setting_divider"
-        app:layout_constraintTop_toBottomOf="@+id/teacher_name" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/start_button"

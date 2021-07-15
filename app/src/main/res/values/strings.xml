@@ -101,4 +101,8 @@
     <string name="term_use_pp_desc">サービスのご利用には、利用規約とプライバシーポリシーへの同意が必要です。下記のリンクをそれぞれご一読いただき、「同意する」を押してください。</string>
     <string name="agree">同意する</string>
 
+    <string name="course_name">コース名</string>
+    <string name="end_date">終了日</string>
+    <string name="auto_create_workout_end">レッスン終了時に自動でワークアウトを作成</string>
+
 </resources>

@@ -10,6 +10,7 @@ import com.sonyged.hyperClass.adapter.CoursePageAdapter
 import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
+import com.sonyged.hyperClass.utils.startCourseDetailActivity
 import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
@@ -48,6 +49,10 @@ class CourseActivity : BaseActivity() {
 
         binding.back.setOnClickListener {
             finish()
+        }
+
+        binding.review.setOnClickListener {
+            startCourseDetailActivity(this, viewModel.course.id)
         }
 
         binding.viewPager.apply {

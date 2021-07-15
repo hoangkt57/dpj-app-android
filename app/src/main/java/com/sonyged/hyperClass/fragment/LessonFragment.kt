@@ -34,15 +34,19 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.course.text1.setText(R.string.course)
+        binding.teacher.text1.setText(R.string.teacher)
+        binding.student.text1.setText(R.string.student)
+
         viewModel.lesson.observe(viewLifecycleOwner) { updateLesson(it) }
     }
 
     private fun updateLesson(lesson: Lesson) {
         Timber.d("updateLesson - lesson: $lesson")
 
-        binding.courseName.text = lesson.courseName
-        binding.teacherName.text = lesson.teacher
-        binding.studentCount.text = getString(R.string.student_count_1, lesson.studentCount)
+        binding.course.text2.text = lesson.courseName
+        binding.teacher.text2.text = lesson.teacher
+        binding.student.text2.text = getString(R.string.student_count_1, lesson.studentCount)
 
         if (lesson.kickUrl != null) {
             binding.startButton.visibility = View.VISIBLE
