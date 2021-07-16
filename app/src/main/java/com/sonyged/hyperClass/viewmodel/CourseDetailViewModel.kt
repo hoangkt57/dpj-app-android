@@ -1,6 +1,7 @@
 package com.sonyged.hyperClass.viewmodel
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
@@ -27,11 +28,17 @@ class CourseDetailViewModel(application: Application, val courseId: String) : Ba
                 Timber.d("loadCourseDetail - courseResponse: $courseResponse")
 
                 courseResponse.data?.node?.asCourse?.let {
+                    val tags = arrayListOf<String>()
+                    it.schoolTagsConnection?.edges?.forEach { tagEdge ->
+                        tagEdge?.node?.let {
+                            tags.add(it.name)
+                        }
+                    }
                     courseDetail.postValue(
                         CourseDetail(
                             it.id,
                             it.name ?: "",
-                            "",
+                            TextUtils.join(", ", tags),
                             it.teacher.name ?: "",
                             "",
                             it.autoCreateLessonWorkout,

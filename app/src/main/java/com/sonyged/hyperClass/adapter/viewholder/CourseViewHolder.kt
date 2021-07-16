@@ -1,7 +1,9 @@
 package com.sonyged.hyperClass.adapter.viewholder
 
+import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 import com.sonyged.hyperClass.databinding.ItemCourseBinding
+import com.sonyged.hyperClass.databinding.ViewChipTagBinding
 import com.sonyged.hyperClass.model.Course
 
 class CourseViewHolder(private val listener: OnItemClickListener?, private val binding: ItemCourseBinding) :
@@ -13,14 +15,19 @@ class CourseViewHolder(private val listener: OnItemClickListener?, private val b
         }
     }
 
-    fun bindView(exercise: Course) {
+    fun bindView(course: Course) {
 
-        binding.title.text = exercise.title
-        binding.teacher.text = exercise.teacherName
-        binding.count.text = exercise.studentCount.toString()
+        binding.title.text = course.title
+        binding.teacher.text = course.teacherName
+        binding.count.text = course.studentCount.toString()
 
-        binding.logo.setImageResource(exercise.coverImage)
+        binding.logo.setImageResource(course.coverImage)
 
+        course.tags.forEach {
+            val chipBinding = ViewChipTagBinding.inflate(LayoutInflater.from(itemView.context))
+            chipBinding.root.text = it
+            binding.tagGroup.addView(chipBinding.root)
+        }
     }
 
 

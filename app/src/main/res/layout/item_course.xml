@@ -11,91 +11,82 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="13dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="13dp"
-        android:paddingBottom="18dp">
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
             android:background="@color/course_logo_bg"
             android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="@+id/count"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/title" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/course_text_margin_icon"
-            android:textColor="@color/color_text_primary"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/logo"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/layout1"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:visibility="invisible"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/course_text_margin_icon"
-            android:layout_marginTop="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/logo"
-            app:layout_constraintTop_toBottomOf="@+id/title">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
+                android:id="@+id/title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/course_language_bg"
-                android:paddingStart="8dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="2dp"
-                android:text="英語"
-                android:textColor="@color/color_primary_variant"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/logo"
+                android:textColor="@color/color_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tag_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/course_text_margin_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/color_text_second"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tag_group" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/teacher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/course_text_margin_icon"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/color_text_second"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/logo"
-            app:layout_constraintTop_toBottomOf="@+id/layout1" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/student"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/count"
+                app:layout_constraintStart_toEndOf="@+id/teacher"
+                app:layout_constraintTop_toTopOf="@+id/count"
+                app:srcCompat="@drawable/ic_student" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/student"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/count"
-            app:layout_constraintStart_toEndOf="@+id/teacher"
-            app:layout_constraintTop_toTopOf="@+id/count"
-            app:srcCompat="@drawable/ic_student" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/color_text_second"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/student"
+                app:layout_constraintTop_toBottomOf="@+id/tag_group" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/color_text_second"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/student"
-            app:layout_constraintTop_toBottomOf="@+id/layout1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

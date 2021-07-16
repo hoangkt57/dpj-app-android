@@ -165,13 +165,20 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 pageResponse.data?.currentUser?.asTeacher?.assignedCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
                     val coverImage = getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
-                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size))
+                    val tags = arrayListOf<String>()
+                    it.schoolTagsConnection?.edges?.forEach { tagEdge ->
+                        tagEdge?.node?.name?.let { tag ->
+                            tags.add(tag)
+                        }
+                    }
+                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size, tags))
                 }
 
                 pageResponse.data?.currentUser?.asStudent?.learningCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
                     val coverImage = getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
-                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size))
+                    val tags = arrayListOf<String>()
+                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size, tags))
                 }
 
                 courses.postValue(result)
@@ -207,7 +214,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     }
                 }
             } catch (e: Exception) {
-                Timber.e(e,"updateInfo")
+                Timber.e(e, "updateInfo")
             }
         }
     }

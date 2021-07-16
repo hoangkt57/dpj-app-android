@@ -5,13 +5,19 @@
     android:layout_height="wrap_content"
     android:clickable="false"
     android:focusable="false"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:text="School tag 1"
     android:textColor="@color/color_primary_variant"
-    android:textSize="12sp"
+    android:textSize="10sp"
     app:chipBackgroundColor="@color/student_tag_bg"
     app:chipCornerRadius="3dp"
-    app:chipMinHeight="28dp"
+    app:chipEndPadding="0dp"
+    app:chipMinHeight="0dp"
+    app:chipMinTouchTargetSize="0dp"
+    app:chipStartPadding="0dp"
     app:chipStrokeColor="@color/student_tag_stroke"
-    app:chipStrokeWidth="1dp">
+    app:chipStrokeWidth="1dp"
+    app:rippleColor="@null">
 
 </com.google.android.material.chip.Chip>

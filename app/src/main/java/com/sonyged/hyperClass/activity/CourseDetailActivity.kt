@@ -46,6 +46,7 @@ class CourseDetailActivity : BaseActivity() {
         binding.name.text1.setText(R.string.course_name)
         binding.name.text2.text = courseDetail.name
         binding.tag.text1.setText(R.string.tag)
+        binding.tag.text2.text = courseDetail.tag
         binding.teacher.text1.setText(R.string.teacher)
         binding.teacher.text2.text = courseDetail.teacher
         binding.date.text1.setText(R.string.end_date)

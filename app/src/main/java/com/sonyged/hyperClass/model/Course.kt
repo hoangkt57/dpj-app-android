@@ -10,7 +10,8 @@ data class Course(
     val title: String,
     val coverImage: Int,
     val teacherName: String,
-    val studentCount: Int
+    val studentCount: Int,
+    val tags: List<String>
 ) : Parcelable {
 
     class DiffCallback : DiffUtil.ItemCallback<Course>() {
@@ -25,7 +26,7 @@ data class Course(
 
     companion object {
         fun empty(): Course {
-            return Course("", "", 0, "", 0)
+            return Course("", "", 0, "", 0, arrayListOf())
         }
     }
 
