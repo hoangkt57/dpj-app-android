@@ -46,5 +46,8 @@
     <color name="student_tag_bg">#F0F3FA</color>
     <color name="student_tag_stroke">#9EA8BA</color>
 
+    <color name="back_circle_bg">#E5E5E5</color>
+    <color name="date_time_hint">#C9C9C9</color>
+
 
 </resources>

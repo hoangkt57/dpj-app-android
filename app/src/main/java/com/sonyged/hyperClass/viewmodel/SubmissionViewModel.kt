@@ -33,7 +33,7 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
         if (!folder.exists()) {
             folder.mkdirs()
         }
-        val name = "image_camera_${folder.list()?.size}.jpg"
+        val name = "image_camera_${System.currentTimeMillis()}.jpg"
         val file = File(folder, name)
         imageUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file)
         return imageUri

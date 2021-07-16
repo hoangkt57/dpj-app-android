@@ -66,6 +66,16 @@
             android:theme="@style/CourseActivity" />
 
         <activity
+            android:name=".activity.LessonCreateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
+        <activity
+            android:name=".activity.WorkoutCreateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CourseActivity" />
+
+        <activity
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait" />
 

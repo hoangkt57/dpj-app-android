@@ -27,3 +27,14 @@ fun formatDate(dateLong: Long): String {
     }
     return ""
 }
+
+fun formatDate1(dateLong: Long): String {
+    try {
+        val date = Date(dateLong)
+        val clientDf = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
+        return clientDf.format(date)
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
+    return ""
+}

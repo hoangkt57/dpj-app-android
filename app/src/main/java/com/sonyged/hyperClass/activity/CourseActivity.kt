@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.CoursePageAdapter
@@ -11,7 +12,9 @@ import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.utils.startCourseDetailActivity
+import com.sonyged.hyperClass.utils.startLessonCreateActivity
 import com.sonyged.hyperClass.utils.startStudentActivity
+import com.sonyged.hyperClass.utils.startWorkoutCreateActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
 
@@ -55,6 +58,10 @@ class CourseActivity : BaseActivity() {
             startCourseDetailActivity(this, viewModel.course.id)
         }
 
+        binding.create.setOnClickListener {
+            startCreateActivity()
+        }
+
         binding.viewPager.apply {
             adapter = this@CourseActivity.adapter
         }
@@ -79,6 +86,37 @@ class CourseActivity : BaseActivity() {
 
         binding.studentCount.setOnClickListener {
             startStudentActivity(this, viewModel.course)
+        }
+
+        binding.viewPager.registerOnPageChangeCallback(callBack)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        binding.viewPager.unregisterOnPageChangeCallback(callBack)
+    }
+
+    private fun startCreateActivity() {
+        when (binding.viewPager.currentItem) {
+            0 -> {
+                startLessonCreateActivity(this)
+            }
+            2 -> {
+                startWorkoutCreateActivity(this)
+            }
+        }
+    }
+
+    private val callBack = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+
+            if (position == 1) {
+                binding.create.hide()
+            } else {
+                binding.create.show()
+            }
         }
     }
 

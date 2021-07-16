@@ -83,6 +83,16 @@ fun startCourseDetailActivity(context: Context, courseId: String) {
     startActivityWithException(context, intent)
 }
 
+fun startLessonCreateActivity(context: Context) {
+    val intent = Intent(context, LessonCreateActivity::class.java)
+    startActivityWithException(context, intent)
+}
+
+fun startWorkoutCreateActivity(context: Context) {
+    val intent = Intent(context, WorkoutCreateActivity::class.java)
+    startActivityWithException(context, intent)
+}
+
 private fun startExerciseActivity(context: Context, isLesson: Boolean, id: String) {
     val intent = Intent(context, ExerciseActivity::class.java)
     intent.putExtra(KEY_ID, id)

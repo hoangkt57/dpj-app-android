@@ -84,7 +84,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         Locale.setDefault(Locale.JAPAN)
         activity?.resources?.configuration?.setLocale(Locale.JAPAN)
 
-        val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
 
         val dateRangePicker = dateRangePickerBuilder.build()
         dateRangePicker.show(childFragmentManager, "dateRangePicker")

@@ -16,6 +16,8 @@
         <item name="windowActionModeOverlay">true</item>
 
         <item name="materialCalendarFullscreenTheme">@style/DateRangePicker</item>
+        <item name="materialCalendarTheme">@style/DateRangePicker</item>
+        <item name="materialTimePickerTheme">@style/TimePicker</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
@@ -65,6 +67,15 @@
     </style>
 
     <style name="HeaderToggleButton" parent="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="TimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Calendar.MediumComponent</item>
+        <item name="imageButtonStyle">@style/TimePickerImageButton</item>
+    </style>
+
+    <style name="TimePickerImageButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="android:visibility">gone</item>
     </style>
 
@@ -128,6 +139,43 @@
         <item name="icon">@drawable/ic_left</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">0dp</item>
+    </style>
+
+    <style name="BackButtonCircle" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/back_circle_bg</item>
+        <item name="iconTint">@color/color_primary_variant</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="icon">@drawable/ic_close</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="cornerRadius">36dp</item>
+    </style>
+
+    <style name="DateTimeButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textColor">@color/date_time_hint</item>
+        <item name="android:gravity">start</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="strokeColor">@color/color_primary_variant</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="iconPadding">0dp</item>
+        <item name="cornerRadius">4dp</item>
     </style>
 
 

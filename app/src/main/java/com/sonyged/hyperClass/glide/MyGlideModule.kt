@@ -24,5 +24,10 @@ class MyGlideModule : AppGlideModule() {
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .skipMemoryCache(true)
             .format(DecodeFormat.PREFER_RGB_565)
+
+        fun noCacheOptions(): RequestOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .format(DecodeFormat.PREFER_RGB_565)
     }
 }

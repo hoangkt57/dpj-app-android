@@ -44,6 +44,9 @@
     <string name="mtrl_picker_cancel" tools:override="true">キャンセル</string>
     <string name="mtrl_picker_confirm" tools:override="true">OK</string>
 
+    <string name="mtrl_picker_date_header_unselected" tools:override="true">選択した日付</string>
+    <string name="mtrl_picker_date_header_title" tools:override="true">日付を選択してください</string>
+
 
     <string name="none">未提出</string>
     <string name="draft">下書き</string>
@@ -104,5 +107,22 @@
     <string name="course_name">コース名</string>
     <string name="end_date">終了日</string>
     <string name="auto_create_workout_end">レッスン終了時に自動でワークアウトを作成</string>
+
+    <string name="create_lesson">レッスンの作成</string>
+    <string name="lesson_name">レッスン名</string>
+    <string name="lesson_name_in_30_char">タイトル30文字以内</string>
+    <string name="date_and_time">日時</string>
+    <string name="repetition">繰り返し</string>
+    <string name="record_lesson">レッスンを録画する</string>
+    <string name="comment">コメント</string>
+    <string name="create">作成</string>
+
+    <string name="select_time">時間を選択</string>
+    <string name="value_time">%02d:%02d</string>
+
+    <string name="create_workout">ワークアウトの設定</string>
+    <string name="title">タイトル</string>
+    <string name="deadline">提出期限</string>
+    <string name="select_file">ファイルを選択</string>
 
 </resources>
