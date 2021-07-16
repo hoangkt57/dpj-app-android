@@ -4,6 +4,8 @@ const val LINK_TERM = "https://dist.hyperclass.jp/terms/HyperClass_TOU_v_1_0_0.h
 const val LINK_POLICY = "https://dist.hyperclass.jp/privacy/HyperClass_PP_v_1_0_0.html"
 const val LINK_LICENSES = "https://dist.hyperclass.jp/misc/licenses/HyperClassLicense.html"
 
+const val TEACHER = "Teacher"
+
 const val LOGIN_CHECKING = 1
 const val LOGIN_FAILED = 2
 const val LOGIN_SUCCESSFUL = 3

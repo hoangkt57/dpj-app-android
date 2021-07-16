@@ -48,7 +48,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val name = lessonResponse.data?.node?.asLesson?.name ?: ""
                 val courseName = lessonResponse.data?.node?.asLesson?.course?.name ?: ""
                 val teacher = lessonResponse.data?.node?.asLesson?.teacher?.name ?: ""
-                val date = formatDateTime(lessonResponse.data?.node?.asLesson?.beginAt.toString())
+                val date = formatDateTime(lessonResponse.data?.node?.asLesson?.beginAt as String?)
                 val studentCount = lessonResponse.data?.node?.asLesson?.students?.size ?: 0
                 val kickUrl = lessonResponse.data?.node?.asLesson?.kickUrl
 
@@ -69,7 +69,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
             try {
                 val result = arrayListOf<Student>()
                 val studentResponse = ApiUtils.getApolloClient().query(SegStudentsQuery(id)).await()
-
+                Timber.d("loadStudent - studentResponse: $studentResponse")
                 studentResponse.data?.node?.asLesson?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
                         result.add(Student(it.id, it.name ?: "", 0, it.__typename))
@@ -97,7 +97,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val name = workoutResponse.data?.node?.asWorkout?.title ?: ""
                 val courseName = workoutResponse.data?.node?.asWorkout?.course?.name ?: ""
                 val description = workoutResponse.data?.node?.asWorkout?.description ?: ""
-                val date = formatDateTime(workoutResponse.data?.node?.asWorkout?.dueDate.toString())
+                val date = formatDateTime(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
                 val data = ""
                 val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
                 val yourAnswer = ""
@@ -113,7 +113,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
 
                 workout.postValue(Workout(id, name, courseName, description, date, data, status, yourAnswer, file))
 
-                info.postValue(Triple(name, date, ""))
+                info.postValue(Triple(name, "", courseName))
 
             } catch (e: Exception) {
                 Timber.e(e)

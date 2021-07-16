@@ -4,8 +4,11 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun formatDateTime(dueDate: String): String {
+fun formatDateTime(dueDate: String?): String {
     try {
+        if (dueDate.isNullOrEmpty()) {
+            return ""
+        }
         val serverDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
         serverDf.timeZone = TimeZone.getTimeZone("UTC")
         val date = serverDf.parse(dueDate) ?: Date()
@@ -37,4 +40,12 @@ fun formatDate1(dateLong: Long): String {
         Timber.e(e)
     }
     return ""
+}
+
+fun range7DayFromCurrent(): Pair<Long, Long> {
+    val calendar = Calendar.getInstance()
+    val time1 = calendar.time.time
+    calendar.add(Calendar.DATE, 7)
+    val time2 = calendar.time.time
+    return Pair(time1, time2)
 }

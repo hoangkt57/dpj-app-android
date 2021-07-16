@@ -19,6 +19,7 @@ import com.sonyged.hyperClass.model.User
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.formatDate
 import com.sonyged.hyperClass.utils.formatDateTime
+import com.sonyged.hyperClass.utils.range7DayFromCurrent
 import com.sonyged.hyperClass.views.getCourseCoverImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +51,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     }
 
     init {
+        initDate()
         loadUserData()
         loadCourseData()
     }
@@ -58,7 +60,8 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         Timber.d("loadHomeData - from: $from - until: $until - type: $type - thread: ${Thread.currentThread()}")
         val result = arrayListOf<Exercise>()
         try {
-            val isTeacher = user.value?.isTeacher ?: return result
+            val time = System.currentTimeMillis()
+            val isTeacher = sharedPref.isTeacher()
             val homeQuery = TabHomeQuery(
                 Input.optional(""),
                 UserEventFilter(Input.optional(from), Input.optional(until), type),
@@ -77,7 +80,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                         Exercise(
                             it.id,
                             it.name,
-                            formatDateTime(it.beginAt.toString()),
+                            formatDateTime(it.beginAt as String?),
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseName,
@@ -97,7 +100,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                         Exercise(
                             it.id,
                             it.title,
-                            formatDateTime(it.dueDate.toString()),
+                            formatDateTime(it.dueDate as String?),
                             UserEventFilterType.WORKOUT,
                             teacherName,
                             courseName,
@@ -107,6 +110,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     )
                 }
             }
+
+            Timber.d("loadHomeData - time: ${System.currentTimeMillis() - time}")
+
         } catch (e: Exception) {
             Timber.e(e)
         }
@@ -117,6 +123,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         Timber.d("loadUserData")
         viewModelScope.launch(Dispatchers.Default) {
             try {
+                val time = System.currentTimeMillis()
                 val userResponse = ApiUtils.getApolloClient().query(PageLayoutQuery()).await()
                 Timber.d("loadUserData - user : ${userResponse.data}")
 
@@ -130,12 +137,13 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                         it.__typename == "Teacher"
                     )
                     user.postValue(data)
-                    sharedPref.setTeacher(data.isTeacher)
+                    if (data.isTeacher != sharedPref.isTeacher()) {
+                        sharedPref.setTeacher(data.isTeacher)
+                        initDate()
+                    }
                 }
 
-                initDate()
-
-
+                Timber.d("loadUserData - time: ${System.currentTimeMillis() - time}")
 
             } catch (e: Exception) {
                 Timber.e(e)
@@ -147,6 +155,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         Timber.d("loadCourseData")
         viewModelScope.launch(Dispatchers.Default) {
             try {
+                val time = System.currentTimeMillis()
                 val pageResponse = ApiUtils.getApolloClient().query(TabCoursesQuery()).await()
 
                 Timber.d("loadCourseData - data : ${Gson().toJson(pageResponse.data)}")
@@ -166,7 +175,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 }
 
                 courses.postValue(result)
-
+                Timber.d("loadCourseData - time: ${System.currentTimeMillis() - time}")
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -174,15 +183,12 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun initDate() {
-        val calendar = Calendar.getInstance()
-        val time1 = calendar.time.time
-        calendar.add(Calendar.DATE, 7)
-        val time2 = calendar.time.time
-        dateRange.postValue(Pair(time1, time2))
+        dateRange.postValue(range7DayFromCurrent())
     }
 
     fun logout() {
         sharedPref.setToken("")
+        sharedPref.setTeacher(false)
         sharedPref.setLoginSuccess(false)
     }
 

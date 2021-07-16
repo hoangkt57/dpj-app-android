@@ -4,17 +4,21 @@ import com.apollographql.apollo.ApolloClient
 import com.sonyged.hyperClass.MainApplication
 import com.sonyged.hyperClass.db.SharedPref
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 
 class ApiUtils {
 
     companion object {
 
-        private const val BASE_URL = "http://192.168.1.23:5000/graphql"
+//        private const val BASE_URL = "http://192.168.1.23:5000/graphql"
+        const val BASE_URL = "https://api.hyperclass.jp/graphql"
 
         fun getApolloClient(): ApolloClient {
             val okHttp = OkHttpClient
                 .Builder()
+                .readTimeout(60,TimeUnit.SECONDS)
+                .writeTimeout(60,TimeUnit.SECONDS)
                 .addInterceptor { chain ->
                     val original = chain.request()
                     val builder = original.newBuilder().method(

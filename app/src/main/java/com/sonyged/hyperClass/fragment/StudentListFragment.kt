@@ -41,6 +41,7 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.loading.show()
         binding.recyclerView.apply {
             adapter = this@StudentListFragment.adapter
         }
@@ -52,13 +53,13 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
         Timber.d("updateStudents - size: ${students.size}")
 
         adapter.submitList(students)
-
+        binding.loading.hide()
     }
 
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
 
         val student = adapter.getAdapterItem(position)
-        startStudentActivity(requireContext(), student.id)
+        startStudentActivity(requireContext(), student)
     }
 }

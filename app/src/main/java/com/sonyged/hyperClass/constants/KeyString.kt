@@ -3,6 +3,10 @@ package com.sonyged.hyperClass.constants
 const val KEY_TOKEN = "key_token"
 const val KEY_LOGIN= "key_login"
 const val KEY_TEACHER = "key_teacher"
+const val KEY_TITLE = "key_title"
+const val KEY_DATE = "key_date"
+const val KEY_LOGIN_ID = "key_login_id"
+const val KEY_PASSWORD = "key_password"
 
 const val KEY_COURSE = "key_course"
 const val KEY_COURSE_ID = "key_course_id"

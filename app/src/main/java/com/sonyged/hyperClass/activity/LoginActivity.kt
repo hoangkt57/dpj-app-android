@@ -58,7 +58,7 @@ class LoginActivity : BaseActivity() {
         }
 
 //        binding.idEdittext.setText("teacher0003@sctest")
-        binding.idEdittext.setText("student0000@sctest")
+        binding.idEdittext.setText("t0036@hcdemo")
 //        binding.idEdittext.setText("student0008@sctest")
         binding.passwordEdittext.setText("indigo123")
 //        binding.passwordEdittext.setText("rmuct298")
@@ -73,9 +73,11 @@ class LoginActivity : BaseActivity() {
         when (state) {
             LOGIN_CHECKING -> {
                 binding.error.visibility = View.GONE
+                showProgressDialog()
             }
             LOGIN_FAILED -> {
                 binding.error.visibility = View.VISIBLE
+                hideProgressDialog()
             }
             LOGIN_CHANGE_PASSWORD -> {
                 handleFirstLogin(agreementPP = false, changePassword = true)

@@ -178,5 +178,11 @@
         <item name="cornerRadius">4dp</item>
     </style>
 
+    <style name="ProgressDialog" parent="@style/MaterialAlertDialog.MaterialComponents">
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 
 </resources>

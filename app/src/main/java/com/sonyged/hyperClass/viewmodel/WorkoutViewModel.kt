@@ -33,7 +33,7 @@ class WorkoutViewModel(application: Application, val workoutId: String) : BaseVi
                 val name = workoutResponse.data?.node?.asWorkout?.title ?: ""
                 val courseName = workoutResponse.data?.node?.asWorkout?.course?.name ?: ""
                 val description = workoutResponse.data?.node?.asWorkout?.description ?: ""
-                val date = formatDateTime(workoutResponse.data?.node?.asWorkout?.dueDate.toString())
+                val date = formatDateTime(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
                 val data = ""
                 val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
                 val yourAnswer = ""

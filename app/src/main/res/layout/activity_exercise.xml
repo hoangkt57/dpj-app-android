@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:gravity="center"
-                android:textColor="@color/color_primary_variant"
+                android:textColor="@color/color_text_second"
                 android:textSize="14sp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

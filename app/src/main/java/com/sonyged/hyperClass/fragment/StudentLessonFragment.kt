@@ -30,6 +30,6 @@ class StudentLessonFragment : StudentExerciseFragment() {
 
         val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startLessonActivity(context, exercise.id)
+        startLessonActivity(context, exercise)
     }
 }

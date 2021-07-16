@@ -7,6 +7,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.StudentPageAdapter
 import com.sonyged.hyperClass.constants.KEY_STUDENT_ID
+import com.sonyged.hyperClass.constants.KEY_TITLE
 import com.sonyged.hyperClass.databinding.ActivityStudentBinding
 import com.sonyged.hyperClass.model.StudentPage
 import com.sonyged.hyperClass.viewmodel.StudentViewModel
@@ -39,6 +40,9 @@ class StudentActivity : BaseActivity() {
 
     private fun setupView() {
 
+        intent.getStringExtra(KEY_TITLE)?.let {
+            binding.title.text = it
+        }
         binding.back.setOnClickListener {
             finish()
         }

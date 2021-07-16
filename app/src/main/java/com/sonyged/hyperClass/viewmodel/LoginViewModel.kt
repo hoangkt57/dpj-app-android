@@ -38,7 +38,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
             }
 
             try {
-                val cookie = getCookie(URL("http://192.168.1.23:5000/graphql/"), id!!, password!!)
+                val cookie = getCookie(URL(ApiUtils.BASE_URL), id!!, password!!)
 
                 if (cookie.isNullOrEmpty()) {
                     state.postValue(LOGIN_FAILED)
@@ -56,6 +56,13 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
                 val changePassword = changePasswordResponse.data?.currentUser?.password.isNullOrEmpty()
 
                 userId = changePasswordResponse.data?.currentUser?.id ?: ""
+                val isTeacher = changePasswordResponse.data?.currentUser?.__typename == TEACHER
+                sharedPref.setTeacher(isTeacher)
+
+                if (userId.isEmpty()) {
+                    state.postValue(LOGIN_FAILED)
+                    return@launch
+                }
 
                 if (agreementPP && changePassword) {
                     state.postValue(LOGIN_SUCCESSFUL)
@@ -92,11 +99,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-
     private fun getCookie(url: URL, id: String, password: String): String? {
         val urlConnection = url.openConnection() as HttpURLConnection
-        urlConnection.readTimeout = 10000
-        urlConnection.connectTimeout = 15000
+        urlConnection.readTimeout = 30000
+        urlConnection.connectTimeout = 30000
         urlConnection.requestMethod = "POST"
         urlConnection.doOutput = true
         urlConnection.doInput = true

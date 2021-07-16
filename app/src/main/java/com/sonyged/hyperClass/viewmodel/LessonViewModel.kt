@@ -31,7 +31,7 @@ class LessonViewModel(application: Application, val lessonId: String) : BaseView
                 val name = lessonResponse.data?.node?.asLesson?.name ?: ""
                 val courseName = lessonResponse.data?.node?.asLesson?.course?.name ?: ""
                 val teacher = lessonResponse.data?.node?.asLesson?.teacher?.name ?: ""
-                val date = formatDateTime(lessonResponse.data?.node?.asLesson?.beginAt.toString())
+                val date = formatDateTime(lessonResponse.data?.node?.asLesson?.beginAt as String?)
                 val studentCount = lessonResponse.data?.node?.asLesson?.students?.size ?: 0
                 val kickUrl = lessonResponse.data?.node?.asLesson?.kickUrl
 

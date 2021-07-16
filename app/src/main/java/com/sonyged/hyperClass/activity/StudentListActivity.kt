@@ -40,6 +40,7 @@ class StudentListActivity : BaseActivity(), OnItemClickListener {
     }
 
     private fun setupView() {
+        binding.loading.show()
         binding.title.setText(R.string.student)
         binding.studentCount.text = viewModel.course.studentCount.toString()
 
@@ -58,14 +59,14 @@ class StudentListActivity : BaseActivity(), OnItemClickListener {
         binding.studentCount.text = students.size.toString()
 
         adapter.submitList(students)
-
+        binding.loading.hide()
     }
 
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
 
         val student = adapter.getAdapterItem(position)
-        startStudentActivity(this, student.id)
+        startStudentActivity(this, student)
 
     }
 }

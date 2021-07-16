@@ -6,6 +6,8 @@ import android.net.Uri
 import com.sonyged.hyperClass.activity.*
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.model.Course
+import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.Student
 import timber.log.Timber
 
 private fun startActivityWithException(context: Context, intent: Intent) {
@@ -16,18 +18,19 @@ private fun startActivityWithException(context: Context, intent: Intent) {
     }
 }
 
-fun startStudentActivity(context: Context, studentId: String) {
+fun startStudentActivity(context: Context, student: Student) {
     val intent = Intent(context, StudentActivity::class.java)
-    intent.putExtra(KEY_STUDENT_ID, studentId)
+    intent.putExtra(KEY_STUDENT_ID, student.id)
+    intent.putExtra(KEY_TITLE, student.name)
     startActivityWithException(context, intent)
 }
 
-fun startLessonActivity(context: Context, lessonId: String) {
-    startExerciseActivity(context, true, lessonId)
+fun startLessonActivity(context: Context, exercise: Exercise) {
+    startExerciseActivity(context, true, exercise)
 }
 
-fun startWorkoutActivity(context: Context, workoutId: String) {
-    startExerciseActivity(context, false, workoutId)
+fun startWorkoutActivity(context: Context, exercise: Exercise) {
+    startExerciseActivity(context, false, exercise)
 }
 
 fun startMainActivity(context: Context) {
@@ -93,10 +96,17 @@ fun startWorkoutCreateActivity(context: Context) {
     startActivityWithException(context, intent)
 }
 
-private fun startExerciseActivity(context: Context, isLesson: Boolean, id: String) {
+private fun startExerciseActivity(context: Context, isLesson: Boolean, exercise: Exercise) {
     val intent = Intent(context, ExerciseActivity::class.java)
-    intent.putExtra(KEY_ID, id)
+    intent.putExtra(KEY_ID, exercise.id)
     intent.putExtra(KEY_LESSON, isLesson)
+    intent.putExtra(KEY_TITLE, exercise.title)
+    if (isLesson) {
+        intent.putExtra(KEY_DATE, exercise.date)
+        intent.putExtra(KEY_TEACHER, exercise.teacherName)
+    } else {
+        intent.putExtra(KEY_TEACHER, exercise.courseName)
+    }
     startActivityWithException(context, intent)
 }
 

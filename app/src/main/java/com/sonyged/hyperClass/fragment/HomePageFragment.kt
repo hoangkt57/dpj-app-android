@@ -51,6 +51,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
             adapter = this@HomePageFragment.adapter
         }
 
+        binding.loading.show()
         binding.filter.setOnClickListener {
             changeFilter()
         }
@@ -61,9 +62,9 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
 
     private fun updateExercises(exercises: List<Exercise>) {
         Timber.d("updateExercises - size: ${exercises.size}")
-
         adapter.submitList(exercises)
-
+        binding.loading.hide()
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
     override fun onItemClick(position: Int) {
@@ -72,9 +73,9 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         val exercise = adapter.getAdapterItem(position)
         val context = context ?: return
         if (exercise.type == UserEventFilterType.LESSON) {
-            startLessonActivity(context, exercise.id)
+            startLessonActivity(context, exercise)
         } else if (exercise.type == UserEventFilterType.WORKOUT) {
-            startWorkoutActivity(context, exercise.id)
+            startWorkoutActivity(context, exercise)
         }
     }
 
@@ -92,6 +93,8 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         dateRangePicker.addOnPositiveButtonClickListener { date ->
             Timber.d("onTitleClick - change date: $date")
 
+            binding.loading.show()
+            binding.recyclerView.visibility = View.INVISIBLE
             viewModel.dateRange.postValue(Pair(date.first, date.second))
         }
     }
@@ -118,6 +121,8 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     }
 
     private fun changeFilter() {
+        binding.loading.show()
+        binding.recyclerView.visibility = View.INVISIBLE
         when (viewModel.type.value) {
             UserEventFilterType.ALL -> {
                 binding.filter.setText(R.string.lesson)

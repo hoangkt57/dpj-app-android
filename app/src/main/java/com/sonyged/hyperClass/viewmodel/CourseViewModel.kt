@@ -11,7 +11,9 @@ import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.*
+import com.sonyged.hyperClass.utils.formatDate
 import com.sonyged.hyperClass.utils.formatDateTime
+import com.sonyged.hyperClass.utils.range7DayFromCurrent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -32,15 +34,17 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
 
         viewModelScope.launch(Dispatchers.Default) {
             try {
-
+                val time = range7DayFromCurrent()
+                val startTime = formatDate(time.first)
+                val endTime = formatDate(time.second)
                 val lessonsQuery = SegLessonsQuery(
                     course.id,
                     filter = Input.optional(
                         LessonFilter(
                             beginAtBetween = Input.optional(
                                 DateRange(
-                                    Input.optional("2021-06-30"),
-                                    Input.optional("2021-07-09")
+                                    Input.optional(startTime),
+                                    Input.optional(endTime)
                                 )
                             )
                         )
@@ -62,7 +66,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                             Exercise(
                                 it.id,
                                 it.name,
-                                formatDateTime(it.beginAt.toString()),
+                                formatDateTime(it.beginAt as String?),
                                 UserEventFilterType.LESSON,
                                 teacherName,
                                 course.title,
@@ -86,7 +90,9 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
 
         viewModelScope.launch(Dispatchers.Default) {
             try {
-
+                val time = range7DayFromCurrent()
+                val startTime = formatDate(time.first)
+                val endTime = formatDate(time.second)
                 val workoutsQuery = SegWorkoutsQuery(
                     course.id,
                     isTeacher = true,
@@ -94,8 +100,8 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                         WorkoutFilter(
                             dueDateBetween = Input.optional(
                                 DateRange(
-                                    Input.optional("2021-06-30"),
-                                    Input.optional("2021-07-09")
+                                    Input.optional(startTime),
+                                    Input.optional(endTime)
                                 )
                             )
                         )
@@ -115,7 +121,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                             Exercise(
                                 it.id,
                                 it.title,
-                                formatDateTime(it.dueDate.toString()),
+                                formatDateTime(it.dueDate as String?),
                                 UserEventFilterType.WORKOUT,
                                 teacherName,
                                 course.title,

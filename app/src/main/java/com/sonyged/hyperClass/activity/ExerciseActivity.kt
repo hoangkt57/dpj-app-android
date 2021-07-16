@@ -8,8 +8,7 @@ import androidx.core.widget.ImageViewCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ExercisePageAdapter
-import com.sonyged.hyperClass.constants.KEY_ID
-import com.sonyged.hyperClass.constants.KEY_LESSON
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityExerciseBinding
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModelFactory
@@ -41,7 +40,8 @@ class ExerciseActivity : BaseActivity() {
     }
 
     private fun setupView() {
-
+        loadFirstData()
+        
         if (viewModel.isTeacher()) {
             binding.tabLayout.visibility = View.VISIBLE
         }
@@ -82,6 +82,18 @@ class ExerciseActivity : BaseActivity() {
                 }
             }
         }.attach()
+    }
+
+    private fun loadFirstData() {
+        intent.getStringExtra(KEY_TITLE)?.let {
+            binding.title.text = it
+        }
+        intent.getStringExtra(KEY_DATE)?.let {
+            binding.date.text = it
+        }
+        intent.getStringExtra(KEY_TEACHER)?.let {
+            binding.teacher.text = it
+        }
     }
 
     private fun updateInfo(info: Triple<String, String, String>) {

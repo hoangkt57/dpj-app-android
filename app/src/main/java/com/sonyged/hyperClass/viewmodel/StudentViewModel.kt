@@ -81,7 +81,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
                             Exercise(
                                 it.id,
                                 it.name,
-                                formatDateTime(it.beginAt.toString()),
+                                formatDateTime(it.beginAt as String?),
                                 UserEventFilterType.LESSON,
                                 teacherName,
                                 courseName,
@@ -118,7 +118,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
                             Exercise(
                                 it.id,
                                 it.title,
-                                formatDateTime(it.dueDate.toString()),
+                                formatDateTime(it.dueDate as String?),
                                 UserEventFilterType.WORKOUT,
                                 teacherName,
                                 courseName,

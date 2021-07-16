@@ -40,6 +40,7 @@ class CoursePageFragment : BaseFragment(R.layout.fragment_course), OnItemClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.loading.show()
         binding.recyclerView.apply {
             addItemDecoration(CourseSpaceItemDecoration(requireContext()))
             adapter = this@CoursePageFragment.adapter
@@ -53,7 +54,7 @@ class CoursePageFragment : BaseFragment(R.layout.fragment_course), OnItemClickLi
         Timber.d("updateCourses - size: ${courses.size}")
 
         adapter.submitList(courses)
-
+        binding.loading.hide()
     }
 
     override fun onItemClick(position: Int) {

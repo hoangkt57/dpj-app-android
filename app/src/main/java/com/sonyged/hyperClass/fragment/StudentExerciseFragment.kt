@@ -33,6 +33,7 @@ abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_studen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.loading.show()
         binding.recyclerView.apply {
             addItemDecoration(CourseSpaceItemDecoration(requireContext()))
             adapter = this@StudentExerciseFragment.adapter
@@ -42,6 +43,7 @@ abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_studen
     protected fun updateData(data: List<Exercise>) {
         Timber.d("updateData - size: ${data.size}")
         adapter.submitList(data)
+        binding.loading.hide()
     }
 
     override fun onItemClick(position: Int) {

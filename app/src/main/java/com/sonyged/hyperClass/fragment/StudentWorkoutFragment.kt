@@ -30,6 +30,6 @@ class StudentWorkoutFragment : StudentExerciseFragment() {
 
         val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startWorkoutActivity(context, exercise.id)
+        startWorkoutActivity(context, exercise)
     }
 }
