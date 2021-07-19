@@ -2,6 +2,7 @@ package com.sonyged.hyperClass.activity
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -52,6 +53,10 @@ class WorkoutCreateActivity : BaseActivity() {
 
         binding.removeFile.setOnClickListener {
             viewModel.removeFile()
+        }
+
+        binding.create.setOnClickListener {
+            Toast.makeText(this,"Feature is not implemented", Toast.LENGTH_SHORT).show()
         }
     }
 

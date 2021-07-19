@@ -31,12 +31,23 @@ android {
         }
         pro {
             dimension "type"
+            applicationId "com.sonyged.hyperClass.demo"
+        }
+    }
+
+    signingConfigs {
+        indigo {
+            storeFile file('key_test.jks')
+            storePassword 'indigo123'
+            keyAlias 'alias'
+            keyPassword 'indigo123'
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.indigo
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

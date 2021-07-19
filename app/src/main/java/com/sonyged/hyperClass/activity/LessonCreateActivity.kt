@@ -1,6 +1,7 @@
 package com.sonyged.hyperClass.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -44,6 +45,10 @@ class LessonCreateActivity : BaseActivity() {
 
         binding.endTime.setOnClickListener {
             startTimePicker(false)
+        }
+
+        binding.create.setOnClickListener {
+            Toast.makeText(this,"Feature is not implemented", Toast.LENGTH_SHORT).show()
         }
 
     }
