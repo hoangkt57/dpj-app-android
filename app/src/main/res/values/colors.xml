@@ -49,5 +49,7 @@
     <color name="back_circle_bg">#E5E5E5</color>
     <color name="date_time_hint">#C9C9C9</color>
 
+    <color name="preview_bg">#020202</color>
+
 
 </resources>

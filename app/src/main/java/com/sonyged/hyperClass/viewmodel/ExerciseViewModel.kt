@@ -101,7 +101,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val data = ""
                 val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
                 val yourAnswer = ""
-                val file = ""
+                val file = workoutResponse.data?.node?.asWorkout?.attachments ?: arrayListOf()
 
                 workoutResponse.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {

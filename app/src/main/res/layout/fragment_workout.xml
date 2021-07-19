@@ -22,17 +22,17 @@
             android:id="@+id/term"
             layout="@layout/view_item_detail" />
 
-        <include
-            android:id="@+id/status"
-            layout="@layout/view_item_detail" />
+<!--        <include-->
+<!--            android:id="@+id/status"-->
+<!--            layout="@layout/view_item_detail" />-->
 
-        <include
-            android:id="@+id/answer"
-            layout="@layout/view_item_detail" />
+<!--        <include-->
+<!--            android:id="@+id/answer"-->
+<!--            layout="@layout/view_item_detail" />-->
 
         <include
             android:id="@+id/file"
-            layout="@layout/view_item_detail" />
+            layout="@layout/view_item_detail_multiple_value" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

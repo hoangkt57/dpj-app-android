@@ -28,6 +28,13 @@
 
     </style>
 
+    <style name="PreviewPage" parent="AppTheme">
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="LoginField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintEnabled">false</item>
         <item name="strokeWidth">1dp</item>

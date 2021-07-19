@@ -96,6 +96,12 @@ fun startWorkoutCreateActivity(context: Context) {
     startActivityWithException(context, intent)
 }
 
+fun previewImageActivity(context: Context, url: String) {
+    val intent = Intent(context, PreviewImageActivity::class.java)
+    intent.putExtra(KEY_URL, url)
+    startActivityWithException(context, intent)
+}
+
 private fun startExerciseActivity(context: Context, isLesson: Boolean, exercise: Exercise) {
     val intent = Intent(context, ExerciseActivity::class.java)
     intent.putExtra(KEY_ID, exercise.id)

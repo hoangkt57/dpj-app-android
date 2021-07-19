@@ -126,5 +126,6 @@
     <string name="select_file">ファイルを選択</string>
 
     <string name="please_wait">お待ちください</string>
+    <string name="url_null_empty">URLがnullまたは空です</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.model
 
+import com.sonyged.hyperClass.PageWorkoutQuery
 import com.sonyged.hyperClass.type.WorkoutStatus
 
 data class Workout(
@@ -11,5 +12,5 @@ data class Workout(
     val data: String,
     val status: WorkoutStatus,
     val yourAnswer: String,
-    val file: String
+    val files : List<PageWorkoutQuery.Attachment>
 )
