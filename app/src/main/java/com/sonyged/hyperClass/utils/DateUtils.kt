@@ -49,3 +49,14 @@ fun range7DayFromCurrent(): Pair<Long, Long> {
     val time2 = calendar.time.time
     return Pair(time1, time2)
 }
+
+fun formatDayWithName(dateLong: Long): String {
+    try {
+        val date = Date(dateLong)
+        val clientDf = SimpleDateFormat("dd (E)", Locale.JAPAN)
+        return clientDf.format(date)
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
+    return ""
+}

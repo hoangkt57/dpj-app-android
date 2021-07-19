@@ -40,7 +40,7 @@
     <string name="mtrl_picker_range_header_unselected" tools:override="true">開始日～終了日</string>
     <string name="mtrl_picker_range_header_only_end_selected" tools:override="true">開始日～%1$s</string>
     <string name="mtrl_picker_range_header_only_start_selected" tools:override="true">%1$s～終了日</string>
-    <string name="mtrl_picker_range_header_title" tools:override="true">期間を選択してください</string>
+    <string name="picker_range_header_title" tools:override="true">期間を選択してください</string>
     <string name="mtrl_picker_cancel" tools:override="true">キャンセル</string>
     <string name="mtrl_picker_confirm" tools:override="true">OK</string>
 

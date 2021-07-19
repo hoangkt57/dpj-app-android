@@ -18,5 +18,9 @@
     <dimen name="submission_image_size">96dp</dimen>
     <dimen name="submission_space_horizontal">1dp</dimen>
 
+    <dimen name="home_day_range_text_size_big">32sp</dimen>
+    <dimen name="home_day_range_text_size_medium">24sp</dimen>
+    <dimen name="home_day_range_text_size_small">14sp</dimen>
+
 
 </resources>

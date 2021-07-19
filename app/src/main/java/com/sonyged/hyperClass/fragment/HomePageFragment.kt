@@ -1,7 +1,11 @@
 package com.sonyged.hyperClass.fragment
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE
+import android.text.TextUtils
 import android.text.format.DateUtils
+import android.text.style.AbsoluteSizeSpan
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,12 +17,14 @@ import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.UserEventFilterType
+import com.sonyged.hyperClass.utils.formatDayWithName
 import com.sonyged.hyperClass.utils.startLessonActivity
 import com.sonyged.hyperClass.utils.startWorkoutActivity
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import com.sonyged.hyperClass.views.ExerciseSpaceItemDecoration
 import timber.log.Timber
 import java.util.*
+
 
 class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListener, OnTitleClickListener {
 
@@ -86,6 +92,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         activity?.resources?.configuration?.setLocale(Locale.JAPAN)
 
         val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
+        dateRangePickerBuilder.setTitleText(R.string.picker_range_header_title)
 
         val dateRangePicker = dateRangePickerBuilder.build()
         dateRangePicker.show(childFragmentManager, "dateRangePicker")
@@ -113,6 +120,8 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
             DateUtils.FORMAT_SHOW_YEAR or DateUtils.FORMAT_NO_MONTH_DAY
         )
 
+        binding.dayRange.text = formatDayRange(date)
+
         Timber.d("updateDateRange - startDate: $startDate - endDate: $endDate - rangeDate: $rangeDate")
 
         if (activity is MainActivity) {
@@ -137,6 +146,31 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
                 viewModel.type.postValue(UserEventFilterType.ALL)
             }
         }
+    }
+
+    private fun formatDayRange(date: Pair<Long, Long>): CharSequence {
+        try {
+            val textSize1 = resources.getDimensionPixelSize(R.dimen.home_day_range_text_size_big)
+            val textSize2 = resources.getDimensionPixelSize(R.dimen.home_day_range_text_size_medium)
+            val textSize3 = resources.getDimensionPixelSize(R.dimen.home_day_range_text_size_small)
+            val day1 = formatDayWithName(date.first)
+            val day2 = formatDayWithName(date.second)
+            val split1 = day1.split(" ")
+            val split2 = day2.split(" ")
+            val span1 = SpannableString(split1[0])
+            span1.setSpan(AbsoluteSizeSpan(textSize1), 0, span1.length, SPAN_INCLUSIVE_INCLUSIVE)
+            val span2 = SpannableString(split2[0])
+            span2.setSpan(AbsoluteSizeSpan(textSize2), 0, span2.length, SPAN_INCLUSIVE_INCLUSIVE)
+            val span3 = SpannableString(split1[1] + " ~")
+            span3.setSpan(AbsoluteSizeSpan(textSize3), 0, span3.length, SPAN_INCLUSIVE_INCLUSIVE)
+            val span4 = SpannableString(split2[1])
+            span4.setSpan(AbsoluteSizeSpan(textSize3), 0, span4.length, SPAN_INCLUSIVE_INCLUSIVE)
+
+            return TextUtils.concat(span1, " ", span3, " ", span2, " ", span4)
+        } catch (e: Exception) {
+            Timber.e(e, "formatDayRange")
+        }
+        return ""
     }
 
 }
