@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 
-    <style name="BaseTheme.V27" parent="BaseTheme.V26">
+    <style name="BaseTheme.V27" parent="BaseTheme.V23">
         <item name="android:navigationBarColor">@color/color_background</item>
         <item name="android:windowLightNavigationBar">@bool/is_light</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
@@ -9,5 +9,11 @@
 
     <style name="AppTheme" parent="BaseTheme.V27" />
 
+    <style name="BasePreviewPage.V27" parent="BasePreviewPage.V23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="PreviewPage" parent="BasePreviewPage.V27">
+    </style>
 
 </resources>

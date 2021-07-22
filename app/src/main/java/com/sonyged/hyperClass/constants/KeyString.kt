@@ -22,3 +22,4 @@ const val KEY_WORKOUT_FILE = "key_workout_file"
 const val KEY_STUDENT_WORKOUT_ID = "key_student_workout_id"
 
 const val KEY_URL= "key_url"
+const val KEY_WORKOUT= "key_workout"

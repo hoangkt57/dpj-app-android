@@ -82,7 +82,9 @@ android {
     }
 
     apollo {
-        // instruct the compiler to generate Kotlin models
+        customTypeMapping = [
+                "Upload" : "com.apollographql.apollo.api.FileUpload"
+        ]
         generateKotlinModels.set(true)
     }
 }

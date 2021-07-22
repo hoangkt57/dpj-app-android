@@ -1,0 +1,24 @@
+mutation WorkoutUpdate($id: ID!, $input: WorkoutUpdateInput!) {
+  workoutUpdate(id: $id, input: $input) {
+    ... on WorkoutMutationSuccess {
+      workout {
+        id
+        title
+        description
+        dueDate
+        attachments {
+          id
+          filename
+          contentType
+          url
+        }
+      }
+    }
+    ... on WorkoutMutationFailure {
+      errors {
+        code
+        message
+      }
+    }
+  }
+}

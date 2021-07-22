@@ -8,6 +8,7 @@ import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.model.Student
+import com.sonyged.hyperClass.model.Workout
 import timber.log.Timber
 
 private fun startActivityWithException(context: Context, intent: Intent) {
@@ -96,9 +97,19 @@ fun startWorkoutCreateActivity(context: Context) {
     startActivityWithException(context, intent)
 }
 
-fun previewImageActivity(context: Context, url: String) {
-    val intent = Intent(context, PreviewImageActivity::class.java)
-    intent.putExtra(KEY_URL, url)
+fun startWorkoutCreateActivity(context: Context, workout: Workout?) {
+    val intent = Intent(context, WorkoutCreateActivity::class.java)
+    intent.putExtra(KEY_WORKOUT, workout)
+    startActivityWithException(context, intent)
+}
+
+fun previewFileActivity(context: Context, attachment: Workout.Attachment) {
+    val intent = if (attachment.contentType?.startsWith("image") == true) {
+        Intent(context, PreviewImageActivity::class.java)
+    } else {
+        Intent(context, WebViewActivity::class.java)
+    }
+    intent.putExtra(KEY_URL, attachment.url)
     startActivityWithException(context, intent)
 }
 

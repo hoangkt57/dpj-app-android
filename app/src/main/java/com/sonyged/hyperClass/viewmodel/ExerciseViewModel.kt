@@ -13,6 +13,7 @@ import com.sonyged.hyperClass.model.Student
 import com.sonyged.hyperClass.model.Workout
 import com.sonyged.hyperClass.type.WorkoutStatus
 import com.sonyged.hyperClass.utils.formatDateTime
+import com.sonyged.hyperClass.utils.formatDateTimeToLong
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -97,11 +98,13 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val name = workoutResponse.data?.node?.asWorkout?.title ?: ""
                 val courseName = workoutResponse.data?.node?.asWorkout?.course?.name ?: ""
                 val description = workoutResponse.data?.node?.asWorkout?.description ?: ""
-                val date = formatDateTime(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
-                val data = ""
+                val date = formatDateTimeToLong(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
                 val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
-                val yourAnswer = ""
-                val file = workoutResponse.data?.node?.asWorkout?.attachments ?: arrayListOf()
+
+                val files = arrayListOf<Workout.Attachment>()
+                workoutResponse.data?.node?.asWorkout?.attachments?.forEach { attachment ->
+                    files.add(Workout.Attachment(attachment.id, attachment.filename, attachment.contentType, attachment.url))
+                }
 
                 workoutResponse.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
@@ -111,7 +114,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
 
                 students.postValue(result)
 
-                workout.postValue(Workout(id, name, courseName, description, date, data, status, yourAnswer, file))
+                workout.postValue(Workout(id, name, courseName, description, date, status, files))
 
                 info.postValue(Triple(name, "", courseName))
 

@@ -20,6 +20,21 @@ fun formatDateTime(dueDate: String?): String {
     return ""
 }
 
+fun formatDateTimeToLong(dueDate: String?): Long {
+    try {
+        if (dueDate.isNullOrEmpty()) {
+            return 0
+        }
+        val serverDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+        serverDf.timeZone = TimeZone.getTimeZone("UTC")
+        val date = serverDf.parse(dueDate) ?: Date()
+        return date.time
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
+    return 0
+}
+
 fun formatDate(dateLong: Long): String {
     try {
         val date = Date(dateLong)
@@ -35,6 +50,28 @@ fun formatDate1(dateLong: Long): String {
     try {
         val date = Date(dateLong)
         val clientDf = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
+        return clientDf.format(date)
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
+    return ""
+}
+
+fun formatDate2(dateLong: Long): String {
+    try {
+        val date = Date(dateLong)
+        val clientDf = SimpleDateFormat("yy/MM/dd(E) HH:mm", Locale.JAPAN)
+        return clientDf.format(date)
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
+    return ""
+}
+
+fun formatTime(dateLong: Long): String {
+    try {
+        val date = Date(dateLong)
+        val clientDf = SimpleDateFormat("HH:mm", Locale.JAPAN)
         return clientDf.format(date)
     } catch (e: Exception) {
         Timber.e(e)

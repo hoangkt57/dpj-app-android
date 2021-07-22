@@ -87,6 +87,10 @@
             android:name=".activity.PreviewImageActivity"
             android:theme="@style/PreviewPage" />
 
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:theme="@style/PreviewPage" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

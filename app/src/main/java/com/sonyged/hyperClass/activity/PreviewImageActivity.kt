@@ -30,6 +30,7 @@ class PreviewImageActivity : PreviewFileActivity() {
 
     private fun setupView() {
         val url = intent.getStringExtra(KEY_URL)
+        Timber.d("setupView - url: $url")
         if (url.isNullOrEmpty()) {
             Toast.makeText(applicationContext, R.string.url_null_empty, Toast.LENGTH_SHORT).show()
             finish()

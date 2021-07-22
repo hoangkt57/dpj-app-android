@@ -198,32 +198,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/data_text" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/file_name"
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/file_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/color_text_second"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/remove_file"
-                app:layout_constraintEnd_toStartOf="@+id/remove_file"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/remove_file" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/remove_file"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/file_name"
-                app:layout_constraintTop_toBottomOf="@+id/file"
-                app:srcCompat="@drawable/ic_close" />
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/file" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
