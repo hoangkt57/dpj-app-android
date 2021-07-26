@@ -24,5 +24,7 @@
 
     <dimen name="item_detail_value_margin_top">2dp</dimen>
 
+    <dimen name="popup_view_margin_top">8dp</dimen>
+
 
 </resources>

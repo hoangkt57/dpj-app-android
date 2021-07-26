@@ -46,6 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/top_bar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -104,15 +105,71 @@
                 app:layout_constraintTop_toBottomOf="@+id/lesson_name_field" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group"
+                android:id="@+id/teacher_group"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
                 android:background="@drawable/bg_lesson_create_tag"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingStart="13dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:layout_constraintHeight_min="40dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/teacher" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/text_icon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/item_margin_edge"
+                app:layout_constraintBottom_toBottomOf="@+id/teacher_group"
+                app:layout_constraintEnd_toEndOf="@+id/teacher_group"
+                app:layout_constraintTop_toTopOf="@+id/teacher_group"
+                app:srcCompat="@drawable/ic_down"
+                app:tint="@color/lesson_create_arrow_down" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/assistant_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_margin_edge"
+                android:layout_marginTop="12dp"
+                android:text="@string/assistant"
+                android:textColor="@color/color_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_group" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/assistant_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_margin_edge"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/item_margin_edge"
+                android:background="@drawable/bg_lesson_create_tag"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingStart="13dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:layout_constraintHeight_min="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assistant_text" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/text_icon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/item_margin_edge"
+                app:layout_constraintBottom_toBottomOf="@+id/assistant_group"
+                app:layout_constraintEnd_toEndOf="@+id/assistant_group"
+                app:layout_constraintTop_toTopOf="@+id/assistant_group"
+                app:srcCompat="@drawable/ic_down"
+                app:tint="@color/lesson_create_arrow_down" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/date_time_text"
@@ -125,7 +182,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chip_group" />
+                app:layout_constraintTop_toBottomOf="@+id/assistant_group" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/date"
@@ -135,7 +192,8 @@
                 android:layout_marginStart="@dimen/item_margin_edge"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
-                android:text="2020/10/10"
+                android:text="@string/date"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_time_text" />
 
@@ -147,7 +205,8 @@
                 android:layout_marginStart="@dimen/item_margin_edge"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
-                android:text="00:00"
+                android:text="@string/start_time"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
 
@@ -170,21 +229,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="12dp"
-                android:text="00:00"
+                android:text="@string/end_time"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toEndOf="@+id/time_divider"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/repetition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="12dp"
-                android:text="@string/repetition"
-                android:textColor="@color/color_text_primary"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/start_time" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/record"
@@ -196,50 +244,328 @@
                 android:textColor="@color/color_text_primary"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/repetition" />
+                app:layout_constraintTop_toBottomOf="@+id/start_time" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/comment_text"
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cut_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="12dp"
-                android:text="@string/comment"
+                android:text="@string/cut_camera"
                 android:textColor="@color/color_text_primary"
                 android:textSize="14sp"
-                android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/record" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/comment_field"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/repetition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_margin_edge"
+                android:text="@string/repetition"
+                android:textColor="@color/color_text_primary"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cut_camera" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/expand_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
-                app:boxStrokeColor="@color/stroke_lesson_create_field"
-                app:boxStrokeWidth="1dp"
-                app:hintEnabled="false"
+                android:background="@drawable/bg_frequency_lesson"
+                android:paddingStart="@dimen/item_margin_edge"
+                android:paddingTop="8dp"
+                android:paddingEnd="@dimen/item_margin_edge"
+                android:paddingBottom="15dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comment_text"
-                app:shapeAppearance="@style/ShapeAppearance.Button.SmallComponent">
+                app:layout_constraintTop_toBottomOf="@+id/repetition">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/comment_edit"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/frequency_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frequency"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/frequency_field"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    app:boxBackgroundColor="@color/color_background"
+                    app:boxStrokeColor="@color/stroke_lesson_create_field"
+                    app:boxStrokeWidth="1dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toStartOf="@+id/frequency_type"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/frequency_text"
+                    app:shapeAppearance="@style/ShapeAppearance.Button.SmallComponent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/frequency_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:text="1"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/frequency_type"
+                    style="@style/DateTimeButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/each_day"
+                    android:textAllCaps="false"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/color_background"
+                    app:icon="@drawable/ic_down"
+                    app:iconGravity="end"
+                    app:iconTint="@color/lesson_create_arrow_down"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/frequency_field"
+                    app:layout_constraintTop_toBottomOf="@+id/frequency_text" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/day_of_week_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/day_of_week"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/frequency_field" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/day_week_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:minLines="3"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:scrollHorizontally="false"
-                    android:textColor="@color/color_text_primary"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone"
+                    app:alignContent="stretch"
+                    app:alignItems="stretch"
+                    app:flexWrap="wrap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/day_of_week_text">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/sun_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/sun_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/mon_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/mon_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/tue_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/tue_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/wed_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/wed_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/thu_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/thu_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/fri_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/fri_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/sat_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_margin_edge"
+                        android:text="@string/sat_day"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp" />
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/condition_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/exit_condition"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/day_week_layout" />
+
+                <RadioButton
+                    android:id="@+id/until_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/until_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/until_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/until_layout" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/until_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_lesson_create_tag"
+                    android:foreground="@drawable/fg_lesson_create_border"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/until_radio"
+                    app:layout_constraintTop_toBottomOf="@+id/condition_text">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/until"
+                        style="@style/DateTimeButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/date"
+                        android:textAllCaps="false"
+                        app:cornerRadius="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/date_time_text"
+                        app:strokeWidth="0dp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/until_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/lesson_create_condition_text_bg"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/frequency"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <RadioButton
+                    android:id="@+id/repeat_time_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/repeat_time_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/repeat_time_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/repeat_time_layout" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/repeat_time_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_lesson_create_tag"
+                    android:foreground="@drawable/fg_lesson_create_border"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/until_radio"
+                    app:layout_constraintTop_toBottomOf="@+id/until_layout">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/repeat_time_field"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/color_background"
+                        app:boxStrokeColor="@color/stroke_lesson_create_field"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toStartOf="@+id/frequency_type"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/frequency_text"
+                        app:shapeAppearance="@style/ShapeAppearance.Button.SmallComponent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/repeat_time_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:paddingTop="12dp"
+                            android:paddingBottom="12dp"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/repeat_time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/lesson_create_condition_text_bg"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/repeat_time"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

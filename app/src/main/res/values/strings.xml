@@ -130,6 +130,29 @@
 
     <string name="delete">削除</string>
 
+    <string name="assistant">アシスタント</string>
+    <string name="frequency">頻度</string>
+    <string name="search_by_name_or_tag">名前またはタグで検索できます</string>
+    <string name="date">日付</string>
+    <string name="start_time">開始時刻</string>
+    <string name="end_time">終了時刻</string>
+
+    <string name="cut_camera">カメラエリアを録画から切り取る</string>
+    <string name="each_day">日ごと</string>
+    <string name="weekly">週間ごと</string>
+    <string name="exit_condition">終了条件</string>
+    <string name="until">まで</string>
+    <string name="repeat_time">回繰り返す</string>
+    <string name="day_of_week">曜日</string>
+
+    <string name="sun_day">日</string>
+    <string name="mon_day">月</string>
+    <string name="tue_day">火</string>
+    <string name="wed_day">水</string>
+    <string name="thu_day">木</string>
+    <string name="fri_day">金</string>
+    <string name="sat_day">土</string>
+
 
 
 </resources>

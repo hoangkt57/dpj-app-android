@@ -24,18 +24,59 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/start_button"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:layout_marginBottom="17dp"
+        android:contentDescription="@string/edit"
         android:gravity="center"
-        android:text="@string/start"
+        android:text="@string/edit"
         android:textColor="@color/on_primary"
-        android:visibility="gone"
         app:backgroundTint="@color/color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/on_primary" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/change_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/change"
+        android:textColor="@color/color_primary_variant"
+        android:visibility="gone"
+        app:backgroundTint="@color/color_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/edit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/color_primary_variant"
+        app:strokeWidth="1dp" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/delete"
+        android:textColor="@color/color_primary_variant"
+        android:visibility="gone"
+        app:backgroundTint="@color/color_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/change_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/color_primary_variant"
+        app:strokeWidth="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,5 +51,8 @@
 
     <color name="preview_bg">#020202</color>
 
+    <color name="lesson_create_arrow_down">#446B75</color>
+    <color name="lesson_create_condition_text_bg">#f7f7fa</color>
+
 
 </resources>

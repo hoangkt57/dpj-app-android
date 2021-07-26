@@ -1,0 +1,34 @@
+query ModalSettingLesson($first: NonNegativeInt, $filter: UserFilter) {
+  currentUser {
+    id
+    school {
+      membersConnection(first: $first, filter: $filter) {
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      schoolTagsConnection(
+        first: 100
+        filter: {OR: [{type: TEACHER}, {type: ACCOUNT}]}
+      ) {
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

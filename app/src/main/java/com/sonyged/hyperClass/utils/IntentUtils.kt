@@ -5,10 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.sonyged.hyperClass.activity.*
 import com.sonyged.hyperClass.constants.*
-import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.model.Workout
+import com.sonyged.hyperClass.model.*
 import timber.log.Timber
 
 private fun startActivityWithException(context: Context, intent: Intent) {
@@ -88,13 +85,17 @@ fun startCourseDetailActivity(context: Context, courseId: String) {
 }
 
 fun startLessonCreateActivity(context: Context) {
+    startLessonCreateActivity(context, null)
+}
+
+fun startLessonCreateActivity(context: Context, lesson: Lesson?) {
     val intent = Intent(context, LessonCreateActivity::class.java)
+    intent.putExtra(KEY_LESSON, lesson)
     startActivityWithException(context, intent)
 }
 
 fun startWorkoutCreateActivity(context: Context) {
-    val intent = Intent(context, WorkoutCreateActivity::class.java)
-    startActivityWithException(context, intent)
+    startWorkoutCreateActivity(context, null)
 }
 
 fun startWorkoutCreateActivity(context: Context, workout: Workout?) {

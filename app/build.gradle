@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.sonyged.hyperClass"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -132,4 +132,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 }
