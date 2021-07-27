@@ -154,5 +154,15 @@
     <string name="sat_day">土</string>
 
 
+    <string name="add_student">受講生追加</string>
+    <string name="addition_of_student">受講生の追加</string>
+    <string name="addition">追加</string>
+    <string name="added">追加しました</string>
+    <string name="student_selection">受講生の選択</string>
+    <string name="delete_student">受講生の削除</string>
+    <string name="delete_student_msg">%sを削除します。このコースのすべてのレッスンが受講できなくなります。よろしいですか？</string>
+    <string name="student_deleted">削除しました</string>
+
+
 
 </resources>

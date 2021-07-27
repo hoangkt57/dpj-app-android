@@ -5,6 +5,7 @@ const val LINK_POLICY = "https://dist.hyperclass.jp/privacy/HyperClass_PP_v_1_0_
 const val LINK_LICENSES = "https://dist.hyperclass.jp/misc/licenses/HyperClassLicense.html"
 
 const val TEACHER = "Teacher"
+const val STUDENT = "Student"
 
 const val LOGIN_CHECKING = 1
 const val LOGIN_FAILED = 2

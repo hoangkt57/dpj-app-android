@@ -7,9 +7,9 @@ import androidx.fragment.app.viewModels
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.CourseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.contract.OpenCourse
 import com.sonyged.hyperClass.databinding.FragmentCourseBinding
 import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.utils.startCourseActivity
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import com.sonyged.hyperClass.views.CourseSpaceItemDecoration
 import timber.log.Timber
@@ -61,8 +61,16 @@ class CoursePageFragment : BaseFragment(R.layout.fragment_course), OnItemClickLi
         Timber.d("onItemClick - position: $position")
 
         val course = adapter.getAdapterItem(position)
-        startCourseActivity(requireContext(), course)
+        openCourse.launch(course)
     }
+
+    private val openCourse =
+        registerForActivityResult(OpenCourse()) { isRefresh ->
+            Timber.d("openCourse - isRefresh: $isRefresh")
+            if (isRefresh) {
+                viewModel.loadCourseData()
+            }
+        }
 
 
 }

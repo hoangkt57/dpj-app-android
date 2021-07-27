@@ -74,13 +74,37 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add"
+        style="@style/FilterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginTop="@dimen/item_margin_edge"
+        android:layout_marginEnd="@dimen/item_margin_edge"
+        android:layout_marginBottom="@dimen/item_margin_edge"
+        android:text="@string/add_student"
+        app:icon="@drawable/ic_add"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_bg" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/item_margin_edge"
+        android:layout_marginEnd="@dimen/item_margin_edge"
+        android:background="@color/setting_divider"
+        app:layout_constraintTop_toTopOf="@+id/recycler_view" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_bg" />
+        app:layout_constraintTop_toBottomOf="@+id/add" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loading"

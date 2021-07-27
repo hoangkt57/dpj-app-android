@@ -9,7 +9,7 @@ data class Course(
     val id: String,
     val title: String,
     val coverImage: Int,
-    val teacherName: String,
+    val teacher: Person,
     val studentCount: Int,
     val tags: List<String>
 ) : Parcelable {
@@ -26,7 +26,7 @@ data class Course(
 
     companion object {
         fun empty(): Course {
-            return Course("", "", 0, "", 0, arrayListOf())
+            return Course("", "", 0, Person.empty(), 0, arrayListOf())
         }
     }
 

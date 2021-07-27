@@ -1,0 +1,16 @@
+mutation removeCourseStudents($courseId: ID!, $studentIds: [ID!]!) {
+  courseRemoveStudent(input: {courseId: $courseId, studentId: $studentIds}) {
+    ... on CourseRemoveStudentSuccess {
+      course {
+        id
+      }
+    }
+    ... on CourseMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

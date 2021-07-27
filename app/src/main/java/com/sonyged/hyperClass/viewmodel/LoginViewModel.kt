@@ -64,6 +64,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
                     return@launch
                 }
 
+                sharedPref.setUserId(userId)
+
                 if (agreementPP && changePassword) {
                     state.postValue(LOGIN_SUCCESSFUL)
                 } else if (agreementPP && !changePassword) {

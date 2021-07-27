@@ -1,0 +1,19 @@
+mutation addCourseStudents($courseId: ID!, $studentIds: [ID!]!) {
+  courseAddStudent(input: {courseId: $courseId, studentId: $studentIds}) {
+    ... on CourseAddStudentSuccess {
+      course {
+        id
+        students {
+          id
+        }
+      }
+    }
+    ... on CourseMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

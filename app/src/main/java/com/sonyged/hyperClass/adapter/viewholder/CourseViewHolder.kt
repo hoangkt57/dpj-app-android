@@ -18,7 +18,7 @@ class CourseViewHolder(private val listener: OnItemClickListener?, private val b
     fun bindView(course: Course) {
 
         binding.title.text = course.title
-        binding.teacher.text = course.teacherName
+        binding.teacher.text = course.teacher.name
         binding.count.text = course.studentCount.toString()
 
         binding.logo.setImageResource(course.coverImage)

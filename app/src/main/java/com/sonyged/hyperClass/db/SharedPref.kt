@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.sonyged.hyperClass.constants.KEY_LOGIN
 import com.sonyged.hyperClass.constants.KEY_TEACHER
 import com.sonyged.hyperClass.constants.KEY_TOKEN
+import com.sonyged.hyperClass.constants.KEY_USER_ID
 
 class SharedPref(context: Context) {
 
@@ -55,6 +56,14 @@ class SharedPref(context: Context) {
 
     fun isTeacher(): Boolean {
         return sharedPref.getBoolean(KEY_TEACHER, false)
+    }
+
+    fun setUserId(id: String) {
+        sharedPref.edit().putString(KEY_USER_ID, id).apply()
+    }
+
+    fun getUserId(): String {
+        return sharedPref.getString(KEY_USER_ID, "") ?: ""
     }
 
 

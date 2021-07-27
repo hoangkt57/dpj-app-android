@@ -1,0 +1,37 @@
+query modalStudentsAdd($skip: NonNegativeInt, $first: NonNegativeInt, $after: String, $last: NonNegativeInt, $before: String, $filter: UserFilter) {
+  currentUser {
+    id
+    school {
+      membersConnection(skip: $skip, first: $first, after: $after, last: $last, before: $before, filter: $filter) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+          __typename
+        }
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      schoolTagsConnection(first: 100, filter: {OR: [{type: STUDENT}, {type: ACCOUNT}]}) {
+        edges {
+          node {
+            id
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

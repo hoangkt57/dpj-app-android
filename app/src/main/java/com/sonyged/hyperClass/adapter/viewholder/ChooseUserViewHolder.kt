@@ -17,12 +17,13 @@ class ChooseUserViewHolder(
         }
     }
 
-    fun bindView(student: Student) {
+    fun bindView(student: Student, isSelected: Boolean) {
         binding.name.text = student.name
         if (isMultipleSelection) {
             binding.checkbox.visibility = View.VISIBLE
         } else {
             binding.checkbox.visibility = View.GONE
         }
+        binding.checkbox.isChecked = isSelected
     }
 }

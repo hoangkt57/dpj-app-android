@@ -15,6 +15,7 @@ import com.sonyged.hyperClass.UpdateInfoMutation
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.Person
 import com.sonyged.hyperClass.model.User
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.formatDate
@@ -56,7 +57,11 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         loadCourseData()
     }
 
-    private suspend fun loadHomeData(from: String, until: String, type: UserEventFilterType): ArrayList<Exercise> {
+    private suspend fun loadHomeData(
+        from: String,
+        until: String,
+        type: UserEventFilterType
+    ): ArrayList<Exercise> {
         Timber.d("loadHomeData - from: $from - until: $until - type: $type - thread: ${Thread.currentThread()}")
         val result = arrayListOf<Exercise>()
         try {
@@ -151,7 +156,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    private fun loadCourseData() {
+    fun loadCourseData() {
         Timber.d("loadCourseData")
         viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -164,21 +169,49 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
                 pageResponse.data?.currentUser?.asTeacher?.assignedCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
-                    val coverImage = getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
+                    val coverImage =
+                        getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
                     val tags = arrayListOf<String>()
                     it.schoolTagsConnection?.edges?.forEach { tagEdge ->
                         tagEdge?.node?.name?.let { tag ->
                             tags.add(tag)
                         }
                     }
-                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size, tags))
+                    result.add(
+                        Course(
+                            node.id,
+                            node.name ?: "",
+                            coverImage,
+                            Person(
+                                node.teacher.id,
+                                node.teacher.name ?: "",
+                                node.teacher.__typename
+                            ),
+                            node.students.size,
+                            tags
+                        )
+                    )
                 }
 
                 pageResponse.data?.currentUser?.asStudent?.learningCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
-                    val coverImage = getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
+                    val coverImage =
+                        getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
                     val tags = arrayListOf<String>()
-                    result.add(Course(node.id, node.name ?: "", coverImage, node.teacher.name ?: "", node.students.size, tags))
+                    result.add(
+                        Course(
+                            node.id,
+                            node.name ?: "",
+                            coverImage,
+                            Person(
+                                node.teacher.id,
+                                node.teacher.name ?: "",
+                                node.teacher.__typename
+                            ),
+                            node.students.size,
+                            tags
+                        )
+                    )
                 }
 
                 courses.postValue(result)
@@ -195,6 +228,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     fun logout() {
         sharedPref.setToken("")
+        sharedPref.setUserId("")
         sharedPref.setTeacher(false)
         sharedPref.setLoginSuccess(false)
     }
@@ -204,8 +238,13 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val id = user.value?.id ?: return@launch
-                val userInput = UserUpdateInput(id = id, name = Input.optional(name), email = Input.optional(email))
-                val infoResponse = ApiUtils.getApolloClient().mutate(UpdateInfoMutation(userInput)).await()
+                val userInput = UserUpdateInput(
+                    id = id,
+                    name = Input.optional(name),
+                    email = Input.optional(email)
+                )
+                val infoResponse =
+                    ApiUtils.getApolloClient().mutate(UpdateInfoMutation(userInput)).await()
                 Timber.d("updateInfo - user : ${infoResponse.data}")
 
                 infoResponse.data?.userUpdate?.asUserResult?.user?.let {

@@ -31,7 +31,7 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
     }
 
     private val adapter: StudentAdapter by lazy {
-        StudentAdapter(this, viewModel.isTeacher())
+        StudentAdapter(this, viewModel.isTeacher(), false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

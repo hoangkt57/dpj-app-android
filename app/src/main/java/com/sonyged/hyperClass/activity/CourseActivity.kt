@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -9,14 +10,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.CoursePageAdapter
 import com.sonyged.hyperClass.constants.KEY_COURSE
+import com.sonyged.hyperClass.contract.OpenStudentList
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.utils.startCourseDetailActivity
 import com.sonyged.hyperClass.utils.startLessonCreateActivity
-import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.utils.startWorkoutCreateActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
+import timber.log.Timber
 
 class CourseActivity : BaseActivity() {
 
@@ -44,7 +46,7 @@ class CourseActivity : BaseActivity() {
     private fun setupView() {
 
         binding.title.text = viewModel.course.title
-        binding.teacher.text = viewModel.course.teacherName
+        binding.teacher.text = viewModel.course.teacher.name
         binding.studentCount.text = getString(R.string.student_count, viewModel.course.studentCount)
 
         binding.review.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
@@ -85,7 +87,7 @@ class CourseActivity : BaseActivity() {
         }.attach()
 
         binding.studentCount.setOnClickListener {
-            startStudentActivity(this, viewModel.course)
+            openStudentList.launch(viewModel.course)
         }
 
         binding.viewPager.registerOnPageChangeCallback(callBack)
@@ -120,4 +122,12 @@ class CourseActivity : BaseActivity() {
         }
     }
 
+    private val openStudentList =
+        registerForActivityResult(OpenStudentList()) { count ->
+            Timber.d("openStudentList - count: $count")
+            if (count != -1) {
+                binding.studentCount.text = getString(R.string.student_count, count)
+                setResult(RESULT_OK, Intent())
+            }
+        }
 }

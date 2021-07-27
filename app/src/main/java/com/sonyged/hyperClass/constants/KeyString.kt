@@ -23,3 +23,5 @@ const val KEY_STUDENT_WORKOUT_ID = "key_student_workout_id"
 
 const val KEY_URL= "key_url"
 const val KEY_WORKOUT= "key_workout"
+
+const val KEY_NEW_STUDENT_COUNT= "key_new_student_count"
