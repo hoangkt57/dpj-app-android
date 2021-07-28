@@ -8,7 +8,6 @@ import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.*
 import com.sonyged.hyperClass.api.ApiUtils
-import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Student
 import com.sonyged.hyperClass.type.UserFilter
 import com.sonyged.hyperClass.type.UserRoleFilter
@@ -16,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class StudentListViewModel(application: Application, val course: Course) :
+class StudentListViewModel(application: Application, val courseId: String, val teacherId: String) :
     BaseViewModel(application) {
 
     val students = MutableLiveData<List<Student>>()
@@ -34,7 +33,7 @@ class StudentListViewModel(application: Application, val course: Course) :
     }
 
     fun isOwner(): Boolean {
-        return course.teacher.id == sharedPref.getUserId()
+        return teacherId == sharedPref.getUserId()
     }
 
     private fun loadStudents() {
@@ -43,7 +42,7 @@ class StudentListViewModel(application: Application, val course: Course) :
             try {
                 val result1 = arrayListOf<Student>()
 
-                val studentQuery = PageCourseStudentsQuery(course.id)
+                val studentQuery = PageCourseStudentsQuery(courseId)
                 val studentResponse = ApiUtils.getApolloClient().query(studentQuery).await()
                 Timber.d("loadStudents - studentResponse: $studentResponse")
                 studentResponse.data?.node?.asCourse?.studentsConnection?.edges?.forEach { edge ->
@@ -101,8 +100,9 @@ class StudentListViewModel(application: Application, val course: Course) :
         viewModelScope.launch(Dispatchers.Default) {
             isRunning = true
             val result = arrayListOf<Student>()
+            val query = text.lowercase()
             allStudents.forEach {
-                if (it.name.contains(text)) {
+                if (it.name.lowercase().contains(query)) {
                     result.add(it)
                 }
             }
@@ -118,7 +118,7 @@ class StudentListViewModel(application: Application, val course: Course) :
         viewModelScope.launch(Dispatchers.Default) {
             isRunning = true
 
-            val query = RemoveCourseStudentsMutation(course.id, arrayListOf(studentId))
+            val query = RemoveCourseStudentsMutation(courseId, arrayListOf(studentId))
             val deleteResponse = ApiUtils.getApolloClient().mutate(query).await()
             Timber.d("deleteStudent - deleteResponse: $deleteResponse")
             if (deleteResponse.errors.isNullOrEmpty()) {
@@ -154,7 +154,7 @@ class StudentListViewModel(application: Application, val course: Course) :
             data.forEach {
                 ids.add(it.id)
             }
-            val query = AddCourseStudentsMutation(course.id, ids)
+            val query = AddCourseStudentsMutation(courseId, ids)
             val response = ApiUtils.getApolloClient().mutate(query).await()
             Timber.d("addStudent - response: $response")
             if (response.errors.isNullOrEmpty()) {

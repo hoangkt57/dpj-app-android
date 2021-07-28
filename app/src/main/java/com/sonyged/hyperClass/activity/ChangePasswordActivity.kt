@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityChangePasswordBinding
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.utils.startMainActivity
 import com.sonyged.hyperClass.viewmodel.ChangePasswordViewModel
 import timber.log.Timber
@@ -64,9 +65,9 @@ class ChangePasswordActivity : BaseActivity() {
         binding.oldPwEdit.setText(password)
     }
 
-    private fun updateStatus(status: Int) {
+    private fun updateStatus(status: Status) {
         Timber.d("updateStatus - status: $status")
-        if (status == PASSWORD_ERROR_NONE) {
+        if (status.id == PASSWORD_ERROR_NONE) {
             binding.error.visibility = View.INVISIBLE
             val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
             if (changePassword) {
@@ -79,7 +80,7 @@ class ChangePasswordActivity : BaseActivity() {
             finish()
             return
         }
-        val error = when (status) {
+        val error = when (status.id) {
             PASSWORD_ERROR_NOT_EQUAL_CONFIRM -> {
                 R.string.new_pass_not_equal_new_pass_1
             }

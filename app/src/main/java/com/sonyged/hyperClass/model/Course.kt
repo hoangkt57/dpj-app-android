@@ -2,14 +2,16 @@ package com.sonyged.hyperClass.model
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
+import com.sonyged.hyperClass.type.DefaultCourseCoverImageOption
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Course(
     val id: String,
     val title: String,
-    val coverImage: Int,
+    val coverImage: DefaultCourseCoverImageOption,
     val teacher: Person,
+    val assistant: Person,
     val studentCount: Int,
     val tags: List<String>
 ) : Parcelable {
@@ -26,7 +28,15 @@ data class Course(
 
     companion object {
         fun empty(): Course {
-            return Course("", "", 0, Person.empty(), 0, arrayListOf())
+            return Course(
+                "",
+                "",
+                DefaultCourseCoverImageOption.UNKNOWN__,
+                Person.empty(),
+                Person.empty(),
+                0,
+                arrayListOf()
+            )
         }
     }
 

@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
+import com.sonyged.hyperClass.PageCourseQuery
 import com.sonyged.hyperClass.SegLessonsQuery
 import com.sonyged.hyperClass.SegWorkoutsQuery
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.Person
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.formatDate
 import com.sonyged.hyperClass.utils.formatDateTime
@@ -18,15 +20,53 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CourseViewModel(application: Application, val course: Course) : BaseViewModel(application) {
+class CourseViewModel(application: Application, val courseId: String) : BaseViewModel(application) {
 
     val lessons = MutableLiveData<List<Exercise>>()
 
     val workouts = MutableLiveData<List<Exercise>>()
 
+    val course = MutableLiveData<Course>()
+
     init {
+        loadCourse()
         loadLessons()
         loadWorkouts()
+    }
+
+    fun loadCourse() {
+        Timber.d("loadCourse")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val query = PageCourseQuery(courseId)
+                val response = ApiUtils.getApolloClient().query(query).await()
+                Timber.d("loadCourse - response : $response")
+
+                response.data?.node?.asCourse?.let {
+                    val result = Course(
+                        it.id,
+                        it.name ?: "",
+                        it.coverImage.asDefaultCourseCoverImage?.value ?: DefaultCourseCoverImageOption.UNKNOWN__,
+                        Person(
+                            it.teacher.id,
+                            it.teacher.name ?: "",
+                            it.teacher.__typename
+                        ),
+                        Person(
+                            it.assistant?.id ?: "",
+                            it.assistant?.name ?: "",
+                            it.assistant?.__typename ?: ""
+                        ),
+                        it.studentsConnection?.totalCount ?: 0,
+                        arrayListOf()
+                    )
+                    course.postValue(result)
+                }
+
+            } catch (e: Exception) {
+                Timber.e(e, "loadCourse")
+            }
+        }
     }
 
     private fun loadLessons() {
@@ -38,7 +78,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                 val startTime = formatDate(time.first)
                 val endTime = formatDate(time.second)
                 val lessonsQuery = SegLessonsQuery(
-                    course.id,
+                    courseId,
                     filter = Input.optional(
                         LessonFilter(
                             beginAtBetween = Input.optional(
@@ -56,7 +96,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
 //                Timber.d("loadData - data : ${lessonResponse}")
 
                 val result = arrayListOf<Exercise>()
-
+                val courseTitle = lessonResponse.data?.node?.asCourse?.name ?: ""
                 lessonResponse.data?.node?.asCourse?.lessonsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
 
@@ -69,7 +109,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                                 formatDateTime(it.beginAt as String?),
                                 UserEventFilterType.LESSON,
                                 teacherName,
-                                course.title,
+                                courseTitle,
                                 LessonStatus.UNKNOWN__,
                                 it.kickUrl
                             )
@@ -94,7 +134,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                 val startTime = formatDate(time.first)
                 val endTime = formatDate(time.second)
                 val workoutsQuery = SegWorkoutsQuery(
-                    course.id,
+                    courseId,
                     isTeacher = true,
                     filter = Input.optional(
                         WorkoutFilter(
@@ -111,7 +151,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                 val workoutResponse = ApiUtils.getApolloClient().query(workoutsQuery).await()
 
                 val result = arrayListOf<Exercise>()
-
+                val courseTitle = workoutResponse.data?.node?.asCourse?.name ?: ""
                 workoutResponse.data?.node?.asCourse?.workoutsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
 
@@ -124,7 +164,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
                                 formatDateTime(it.dueDate as String?),
                                 UserEventFilterType.WORKOUT,
                                 teacherName,
-                                course.title,
+                                courseTitle,
                                 status,
                                 null
                             )
@@ -137,11 +177,7 @@ class CourseViewModel(application: Application, val course: Course) : BaseViewMo
             } catch (e: Exception) {
                 Timber.e(e)
             }
-
-
         }
-
-
     }
 
 }

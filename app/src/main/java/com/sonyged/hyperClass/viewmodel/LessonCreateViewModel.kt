@@ -78,8 +78,9 @@ class LessonCreateViewModel(application: Application, val data: Lesson) :
         viewModelScope.launch(Dispatchers.Default) {
             isRunning = true
             val result = arrayListOf<Student>()
+            val query = text.lowercase()
             teacherList.forEach {
-                if (it.name.contains(text)) {
+                if (it.name.lowercase().contains(query)) {
                     result.add(it)
                 }
             }

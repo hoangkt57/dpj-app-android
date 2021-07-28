@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityAgreementBinding
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.utils.changePasswordActivityFirst
 import com.sonyged.hyperClass.utils.openWeb
 import com.sonyged.hyperClass.utils.startMainActivity
@@ -43,10 +44,10 @@ class AgreementPpActivity : BaseActivity() {
 
     }
 
-    private fun updateStatus(status: Int) {
+    private fun updateStatus(status: Status) {
         Timber.d("updateStatus - status: $status")
 
-        if (status == LOGIN_AGREEMENT_PP) {
+        if (status.id == LOGIN_AGREEMENT_PP) {
             val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
             if (changePassword) {
                 val id = intent.getStringExtra(KEY_USER_ID) ?: ""

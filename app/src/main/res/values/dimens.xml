@@ -26,5 +26,5 @@
 
     <dimen name="popup_view_margin_top">8dp</dimen>
 
-
+    <dimen name="course_create_image_size">96dp</dimen>
 </resources>

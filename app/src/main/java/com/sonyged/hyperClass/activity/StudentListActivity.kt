@@ -10,11 +10,11 @@ import com.sonyged.hyperClass.adapter.ChooseUserAdapter
 import com.sonyged.hyperClass.adapter.StudentAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnDeleteClickListener
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_COURSE
+import com.sonyged.hyperClass.constants.KEY_COURSE_ID
 import com.sonyged.hyperClass.constants.KEY_NEW_STUDENT_COUNT
+import com.sonyged.hyperClass.constants.KEY_TEACHER_ID
 import com.sonyged.hyperClass.databinding.ActivityStudentListBinding
 import com.sonyged.hyperClass.databinding.DialogStudentAdditionBinding
-import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Student
 import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.viewmodel.StudentListViewModel
@@ -28,8 +28,9 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
     }
 
     private val viewModel by viewModels<StudentListViewModel> {
-        val course = intent.getParcelableExtra(KEY_COURSE) ?: Course.empty()
-        StudentListViewModelFactory(application, course)
+        val courseId = intent.getStringExtra(KEY_COURSE_ID) ?: ""
+        val teacherId = intent.getStringExtra(KEY_TEACHER_ID) ?: ""
+        StudentListViewModelFactory(application, courseId, teacherId)
     }
 
     private val adapter: StudentAdapter by lazy {
@@ -54,7 +55,7 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
     private fun setupView() {
         binding.loading.show()
         binding.title.setText(R.string.student)
-        binding.studentCount.text = viewModel.course.studentCount.toString()
+
         if (!viewModel.isOwner()) {
             binding.add.visibility = View.GONE
             binding.divider.visibility = View.GONE
@@ -83,7 +84,6 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
         }
         adapter.submitList(students)
         binding.loading.hide()
-
 
     }
 

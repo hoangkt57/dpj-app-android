@@ -21,6 +21,11 @@
         <item name="cornerSize">20dp</item>
     </style>
 
+    <style name="CourseDetail.Logo" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">18dp</item>
+    </style>
+
     <style name="ShapeAppearance.Image.Setting" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">35dp</item>

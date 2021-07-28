@@ -3,6 +3,24 @@ package com.sonyged.hyperClass.views
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.type.DefaultCourseCoverImageOption
 
+fun getCourseCoverImageList(): List<DefaultCourseCoverImageOption> {
+    return arrayListOf(
+        DefaultCourseCoverImageOption._1,
+        DefaultCourseCoverImageOption._2,
+        DefaultCourseCoverImageOption._3,
+        DefaultCourseCoverImageOption._4,
+        DefaultCourseCoverImageOption._5,
+        DefaultCourseCoverImageOption._6,
+        DefaultCourseCoverImageOption._7,
+        DefaultCourseCoverImageOption._8,
+        DefaultCourseCoverImageOption._9,
+        DefaultCourseCoverImageOption._10,
+        DefaultCourseCoverImageOption._11,
+        DefaultCourseCoverImageOption._12,
+        DefaultCourseCoverImageOption._13
+    )
+}
+
 fun getCourseCoverImage(image: DefaultCourseCoverImageOption?): Int {
     return when (image) {
         DefaultCourseCoverImageOption._1 -> {

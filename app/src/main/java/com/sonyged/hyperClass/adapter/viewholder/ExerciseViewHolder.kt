@@ -63,7 +63,7 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
     private fun getStatus(status: EnumValue): Pair<Int, Int> {
         return when (status) {
             WorkoutStatus.NONE -> {
-                Pair(R.string.none, R.color.workout_muted)
+                Pair(R.string.not_submitted, R.color.workout_muted)
             }
             WorkoutStatus.DRAFT -> {
                 Pair(R.string.draft, R.color.workout_muted)

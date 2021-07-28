@@ -33,13 +33,23 @@ query pageCourseDetail($id: ID!) {
         }
         __typename
       }
+      school {
+        id
+        schoolTagsConnection(first: 100, filter: {type: COURSE}) {
+          edges {
+            node {
+              id
+              name
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
       __typename
     }
-    __typename
-  }
-  schoolTags(type: COURSE) {
-    id
-    name
     __typename
   }
 }

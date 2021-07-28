@@ -1,0 +1,40 @@
+query pageCourse($id: ID!) {
+  node(id: $id) {
+    ... on Course {
+      id
+      name
+      coverImage {
+        ... on DefaultCourseCoverImage {
+          value
+          __typename
+        }
+        __typename
+      }
+      teacher {
+        id
+        name
+        __typename
+      }
+      assistant {
+        id
+        name
+        __typename
+      }
+      studentsConnection(first: 1) {
+        totalCount
+        __typename
+      }
+      directory {
+        id
+        name
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  currentUser {
+    id
+    __typename
+  }
+}

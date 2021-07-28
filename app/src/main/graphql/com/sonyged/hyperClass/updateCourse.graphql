@@ -1,0 +1,36 @@
+mutation updateCourse($id: ID!, $name: String, $expiredAt: DateTime, $autoCreateLessonWorkout: Boolean, $defaultImage: DefaultCourseCoverImageOption, $schoolTagIds: [ID!], $deletedSchoolTagIds: [ID!]) {
+  courseUpdate(input: {id: $id, name: $name, expiredAt: $expiredAt, autoCreateLessonWorkout: $autoCreateLessonWorkout, coverImage: {defaultOption: $defaultImage}, schoolTagIds: $schoolTagIds, deletedSchoolTagIds: $deletedSchoolTagIds}) {
+    ... on CourseUpdateSuccess {
+      course {
+        id
+        name
+        teacher {
+          id
+          name
+        }
+        autoCreateLessonWorkout
+        expiredAt
+        coverImage {
+          ... on DefaultCourseCoverImage {
+            value
+          }
+        }
+        schoolTagsConnection(first: 20) {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+    ... on CourseMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

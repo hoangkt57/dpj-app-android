@@ -9,14 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/course_card_top_bg"
-        android:paddingTop="@dimen/item_margin_edge"
-        android:paddingBottom="@dimen/item_margin_edge"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back"
             style="@style/BackButton"
             android:layout_marginStart="@dimen/item_margin_edge"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,10 +29,28 @@
             android:textColor="@color/color_text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/back"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/back" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/item_margin_edge"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="@dimen/item_margin_edge"
+            android:background="@color/color_background"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            app:contentPadding="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/CourseDetail.Logo"
+            app:strokeColor="@color/color_text_primary"
+            app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -42,7 +59,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_bar" >
+        app:layout_constraintTop_toBottomOf="@+id/top_bar">
 
         <include
             android:id="@+id/name"
@@ -50,7 +67,7 @@
 
         <include
             android:id="@+id/tag"
-            layout="@layout/view_item_detail" />
+            layout="@layout/view_item_chip" />
 
         <include
             android:id="@+id/teacher"
@@ -65,6 +82,21 @@
             layout="@layout/view_item_detail" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="17dp"
+        android:contentDescription="@string/edit"
+        android:textColor="@color/on_primary"
+        android:visibility="gone"
+        app:backgroundTint="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_edit"
+        app:tint="@color/on_primary" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

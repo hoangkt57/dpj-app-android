@@ -48,7 +48,7 @@
     <string name="mtrl_picker_date_header_title" tools:override="true">日付を選択してください</string>
 
 
-    <string name="none">未提出</string>
+    <string name="not_submitted">未提出</string>
     <string name="draft">下書き</string>
     <string name="submitted">未確認</string>
     <string name="reviewed">レビュー済み</string>
@@ -162,6 +162,19 @@
     <string name="delete_student">受講生の削除</string>
     <string name="delete_student_msg">%sを削除します。このコースのすべてのレッスンが受講できなくなります。よろしいですか？</string>
     <string name="student_deleted">削除しました</string>
+
+    <string name="none">なし</string>
+    <string name="course_setting">コースの設定</string>
+    <string name="picture">ピクチャ</string>
+    <string name="change_course">変更する</string>
+    <string name="add_tag">タグの追加</string>
+    <string name="course_updated">更新しました</string>
+    <string name="put_end_date_after_today">終了日は翌日以降に設定できます</string>
+    <string name="course_error_date">「%s」は現在時刻から%s日間以上ではありません</string>
+    <string name="error_occurred">エラーが発生しました</string>
+    <string name="error_occurred_not_register">エラーが発生しました登録できませんでし \n %s</string>
+    <string name="could_not_update_due_to_ongoing_lesson">実施中のレッスンがあるため、コースの設定を更新できませんでした</string>
+    <string name="could_not_update_due_to_completed_course">終了しているコースのため、設定を更新できませんでした</string>
 
 
 

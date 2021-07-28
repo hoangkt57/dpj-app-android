@@ -97,3 +97,20 @@ fun formatDayWithName(dateLong: Long): String {
     }
     return ""
 }
+
+fun formatServerTime(dateLong: Long): String {
+    try {
+        val date = Date(dateLong)
+        val clientDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.US)
+        clientDf.timeZone = TimeZone.getTimeZone("UTC")
+        return clientDf.format(date)
+    } catch (e: Exception) {
+        Timber.e(e, "formatServerTime")
+    }
+    return ""
+}
+
+fun diffDate(date1: Long, date2: Long): Int {
+    val diff = date2 - date1
+    return (diff / (24 * 60 * 60 * 1000)).toInt()
+}

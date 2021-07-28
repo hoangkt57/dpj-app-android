@@ -21,7 +21,6 @@ import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.formatDate
 import com.sonyged.hyperClass.utils.formatDateTime
 import com.sonyged.hyperClass.utils.range7DayFromCurrent
-import com.sonyged.hyperClass.views.getCourseCoverImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -169,8 +168,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
                 pageResponse.data?.currentUser?.asTeacher?.assignedCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
-                    val coverImage =
-                        getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
                     val tags = arrayListOf<String>()
                     it.schoolTagsConnection?.edges?.forEach { tagEdge ->
                         tagEdge?.node?.name?.let { tag ->
@@ -181,11 +178,16 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                         Course(
                             node.id,
                             node.name ?: "",
-                            coverImage,
+                            node.coverImage.asDefaultCourseCoverImage?.value ?: DefaultCourseCoverImageOption.UNKNOWN__,
                             Person(
                                 node.teacher.id,
                                 node.teacher.name ?: "",
                                 node.teacher.__typename
+                            ),
+                            Person(
+                                node.assistant?.id ?: "",
+                                node.assistant?.name ?: "",
+                                node.assistant?.__typename ?: ""
                             ),
                             node.students.size,
                             tags
@@ -195,18 +197,21 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
                 pageResponse.data?.currentUser?.asStudent?.learningCourses?.forEach {
                     val node = it.fragments.tabCoursesFragment
-                    val coverImage =
-                        getCourseCoverImage(node.coverImage.asDefaultCourseCoverImage?.value)
                     val tags = arrayListOf<String>()
                     result.add(
                         Course(
                             node.id,
                             node.name ?: "",
-                            coverImage,
+                            node.coverImage.asDefaultCourseCoverImage?.value ?: DefaultCourseCoverImageOption.UNKNOWN__,
                             Person(
                                 node.teacher.id,
                                 node.teacher.name ?: "",
                                 node.teacher.__typename
+                            ),
+                            Person(
+                                node.assistant?.id ?: "",
+                                node.assistant?.name ?: "",
+                                node.assistant?.__typename ?: ""
                             ),
                             node.students.size,
                             tags

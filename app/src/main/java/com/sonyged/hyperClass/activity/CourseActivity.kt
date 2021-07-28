@@ -10,10 +10,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.CoursePageAdapter
 import com.sonyged.hyperClass.constants.KEY_COURSE
+import com.sonyged.hyperClass.contract.OpenCourseDetail
 import com.sonyged.hyperClass.contract.OpenStudentList
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.utils.startCourseDetailActivity
 import com.sonyged.hyperClass.utils.startLessonCreateActivity
 import com.sonyged.hyperClass.utils.startWorkoutCreateActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
@@ -32,7 +32,7 @@ class CourseActivity : BaseActivity() {
 
     private val viewModel by viewModels<CourseViewModel> {
         val course = intent.getParcelableExtra(KEY_COURSE) ?: Course.empty()
-        CourseViewModelFactory(application, course)
+        CourseViewModelFactory(application, course.id)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,13 +41,11 @@ class CourseActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupView()
+
+        viewModel.course.observe(this) { updateCourse(it) }
     }
 
     private fun setupView() {
-
-        binding.title.text = viewModel.course.title
-        binding.teacher.text = viewModel.course.teacher.name
-        binding.studentCount.text = getString(R.string.student_count, viewModel.course.studentCount)
 
         binding.review.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
         binding.create.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
@@ -57,7 +55,9 @@ class CourseActivity : BaseActivity() {
         }
 
         binding.review.setOnClickListener {
-            startCourseDetailActivity(this, viewModel.course.id)
+            viewModel.course.value?.let {
+                openCourseDetail.launch(it)
+            }
         }
 
         binding.create.setOnClickListener {
@@ -87,7 +87,9 @@ class CourseActivity : BaseActivity() {
         }.attach()
 
         binding.studentCount.setOnClickListener {
-            openStudentList.launch(viewModel.course)
+            viewModel.course.value?.let {
+                openStudentList.launch(it)
+            }
         }
 
         binding.viewPager.registerOnPageChangeCallback(callBack)
@@ -97,6 +99,12 @@ class CourseActivity : BaseActivity() {
         super.onDestroy()
 
         binding.viewPager.unregisterOnPageChangeCallback(callBack)
+    }
+
+    private fun updateCourse(course: Course) {
+        binding.title.text = course.title
+        binding.teacher.text = course.teacher.name
+        binding.studentCount.text = getString(R.string.student_count, course.studentCount)
     }
 
     private fun startCreateActivity() {
@@ -127,7 +135,19 @@ class CourseActivity : BaseActivity() {
             Timber.d("openStudentList - count: $count")
             if (count != -1) {
                 binding.studentCount.text = getString(R.string.student_count, count)
+                viewModel.loadCourse()
                 setResult(RESULT_OK, Intent())
             }
         }
+
+    private val openCourseDetail =
+        registerForActivityResult(OpenCourseDetail()) { isRefresh ->
+            Timber.d("openCourseDetail - isRefresh: $isRefresh")
+            if (isRefresh) {
+                viewModel.loadCourse()
+                setResult(RESULT_OK, Intent())
+            }
+        }
+
+
 }
