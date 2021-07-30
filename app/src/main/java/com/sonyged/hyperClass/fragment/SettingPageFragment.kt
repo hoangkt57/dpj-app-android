@@ -51,11 +51,9 @@ class SettingPageFragment : BaseFragment(R.layout.fragment_setting) {
             activity?.finish()
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.settingLayout.clipToOutline = true
-            binding.otherLayout.clipToOutline = true
+        binding.settingLayout.clipToOutline = true
+        binding.otherLayout.clipToOutline = true
 
-        }
         binding.settingLayout.setOnClickListener {
             binding.notificationSwitch.toggle()
         }

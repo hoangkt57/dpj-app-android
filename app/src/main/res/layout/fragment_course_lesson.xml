@@ -4,11 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date"
+        style="@style/BaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginStart="@dimen/item_margin_edge"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_text_primary"
+        android:textSize="14sp"
+        app:backgroundTint="@color/color_background"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/ic_down"
+        app:iconGravity="end"
+        app:iconTint="@color/color_primary_variant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loading"

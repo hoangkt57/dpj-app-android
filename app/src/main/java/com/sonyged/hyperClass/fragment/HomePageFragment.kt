@@ -104,20 +104,13 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     }
 
     private fun updateDateRange(date: Pair<Long, Long>) {
-        val startDate = Date(date.first)
-        val endDate = Date(date.second)
-
         val rangeDate = DateUtils.formatDateRange(
             requireContext(),
             date.first,
             date.second,
             DateUtils.FORMAT_SHOW_YEAR or DateUtils.FORMAT_NO_MONTH_DAY
         )
-
         binding.dayRange.text = formatDayRange(date)
-
-        Timber.d("updateDateRange - startDate: $startDate - endDate: $endDate - rangeDate: $rangeDate")
-
         if (activity is MainActivity) {
             (activity as MainActivity).setTitleDateRange(rangeDate)
         }

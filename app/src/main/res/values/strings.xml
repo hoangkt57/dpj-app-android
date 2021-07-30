@@ -116,6 +116,8 @@
     <string name="record_lesson">レッスンを録画する</string>
     <string name="comment">コメント</string>
     <string name="create">作成</string>
+    <string name="lesson_date_range">%s - %s</string>
+
 
     <string name="select_time">時間を選択</string>
     <string name="value_time">%02d:%02d</string>

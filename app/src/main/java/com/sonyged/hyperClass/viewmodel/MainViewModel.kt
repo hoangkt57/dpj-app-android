@@ -18,9 +18,7 @@ import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.model.Person
 import com.sonyged.hyperClass.model.User
 import com.sonyged.hyperClass.type.*
-import com.sonyged.hyperClass.utils.formatDate
-import com.sonyged.hyperClass.utils.formatDateTime
-import com.sonyged.hyperClass.utils.range7DayFromCurrent
+import com.sonyged.hyperClass.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -88,7 +86,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                         Exercise(
                             it.id,
                             it.name,
-                            formatDateTime(it.beginAt as String?),
+                            formatDateTime(it.beginAt as String?) + " - " + formatTime(formatDateTimeToLong(it.endAt as String?)),
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseName,

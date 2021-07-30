@@ -79,6 +79,9 @@ class MainActivity : BaseActivity(), Observer {
     }
 
     fun setTitleDateRange(title: String) {
+        if (binding.viewPager.currentItem != 0) {
+            return
+        }
         viewModel.rangeDateText = title
         changeTitle(title, true)
     }

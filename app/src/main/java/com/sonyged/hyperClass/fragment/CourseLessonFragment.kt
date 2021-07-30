@@ -3,9 +3,10 @@ package com.sonyged.hyperClass.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.contract.OpenLesson
 import com.sonyged.hyperClass.model.Exercise
-import timber.log.Timber
+import com.sonyged.hyperClass.utils.formatDate1
 
 class CourseLessonFragment : BaseExerciseFragment() {
 
@@ -20,10 +21,15 @@ class CourseLessonFragment : BaseExerciseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.lessons.observe(viewLifecycleOwner) { updateLessons(it) }
+        viewModel.lessonDateRange.observe(viewLifecycleOwner) { updateDateRange(it) }
     }
 
     private fun updateLessons(lessons: List<Exercise>) {
         updateData(lessons)
+    }
+
+    private fun updateDateRange(dateRange: Pair<Long, Long>) {
+        binding.date.text = getString(R.string.lesson_date_range, formatDate1(dateRange.first), formatDate1(dateRange.second))
     }
 
     override fun onItemClick(position: Int) {
