@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -9,18 +8,21 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.CoursePageAdapter
-import com.sonyged.hyperClass.constants.KEY_COURSE
+import com.sonyged.hyperClass.constants.*
+import com.sonyged.hyperClass.contract.CreateLesson
+import com.sonyged.hyperClass.contract.CreateLessonInput
 import com.sonyged.hyperClass.contract.OpenCourseDetail
 import com.sonyged.hyperClass.contract.OpenStudentList
 import com.sonyged.hyperClass.databinding.ActivityCourseBinding
 import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.utils.startLessonCreateActivity
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.observer.Observer
 import com.sonyged.hyperClass.utils.startWorkoutCreateActivity
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
 import timber.log.Timber
 
-class CourseActivity : BaseActivity() {
+class CourseActivity : BaseActivity(), Observer {
 
     private val binding: ActivityCourseBinding by lazy {
         ActivityCourseBinding.inflate(layoutInflater)
@@ -43,6 +45,8 @@ class CourseActivity : BaseActivity() {
         setupView()
 
         viewModel.course.observe(this) { updateCourse(it) }
+
+        AppObserver.getInstance().addObserver(this)
     }
 
     private fun setupView() {
@@ -99,6 +103,7 @@ class CourseActivity : BaseActivity() {
         super.onDestroy()
 
         binding.viewPager.unregisterOnPageChangeCallback(callBack)
+        AppObserver.getInstance().removeObserver(this)
     }
 
     private fun updateCourse(course: Course) {
@@ -110,7 +115,7 @@ class CourseActivity : BaseActivity() {
     private fun startCreateActivity() {
         when (binding.viewPager.currentItem) {
             0 -> {
-                startLessonCreateActivity(this)
+                createLesson.launch(CreateLessonInput(courseId = viewModel.courseId))
             }
             2 -> {
                 startWorkoutCreateActivity(this)
@@ -130,24 +135,24 @@ class CourseActivity : BaseActivity() {
         }
     }
 
-    private val openStudentList =
-        registerForActivityResult(OpenStudentList()) { count ->
-            Timber.d("openStudentList - count: $count")
-            if (count != -1) {
-                binding.studentCount.text = getString(R.string.student_count, count)
-                viewModel.loadCourse()
-                setResult(RESULT_OK, Intent())
-            }
-        }
+    private val openStudentList = registerForActivityResult(OpenStudentList()) {}
+    private val openCourseDetail = registerForActivityResult(OpenCourseDetail()) {}
+    private val createLesson = registerForActivityResult(CreateLesson()) {}
 
-    private val openCourseDetail =
-        registerForActivityResult(OpenCourseDetail()) { isRefresh ->
-            Timber.d("openCourseDetail - isRefresh: $isRefresh")
-            if (isRefresh) {
+    override fun onEvent(event: Int, data: Bundle?) {
+        Timber.d("onEvent - event: $event")
+        when (event) {
+            EVENT_LESSON_CHANGE -> {
+                viewModel.loadLessons()
+            }
+            EVENT_COURSE_DETAIL_CHANGE -> {
                 viewModel.loadCourse()
-                setResult(RESULT_OK, Intent())
+            }
+            EVENT_STUDENT_CHANGE -> {
+                viewModel.loadCourse()
             }
         }
+    }
 
 
 }

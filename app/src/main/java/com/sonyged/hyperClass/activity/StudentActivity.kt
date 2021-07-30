@@ -6,14 +6,19 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.StudentPageAdapter
+import com.sonyged.hyperClass.constants.EVENT_LESSON_CHANGE
+import com.sonyged.hyperClass.constants.EVENT_WORKOUT_CHANGE
 import com.sonyged.hyperClass.constants.KEY_STUDENT_ID
 import com.sonyged.hyperClass.constants.KEY_TITLE
 import com.sonyged.hyperClass.databinding.ActivityStudentBinding
 import com.sonyged.hyperClass.model.StudentPage
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.observer.Observer
 import com.sonyged.hyperClass.viewmodel.StudentViewModel
 import com.sonyged.hyperClass.viewmodel.StudentViewModelFactory
+import timber.log.Timber
 
-class StudentActivity : BaseActivity() {
+class StudentActivity : BaseActivity(), Observer {
 
     private val binding: ActivityStudentBinding by lazy {
         ActivityStudentBinding.inflate(layoutInflater)
@@ -36,6 +41,14 @@ class StudentActivity : BaseActivity() {
         setupView()
 
         viewModel.student.observe(this) { updateStudent(it) }
+
+        AppObserver.getInstance().addObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        AppObserver.getInstance().removeObserver(this)
     }
 
     private fun setupView() {
@@ -73,6 +86,18 @@ class StudentActivity : BaseActivity() {
     private fun updateStudent(student: StudentPage) {
         binding.title.text = student.name
         binding.id.text = student.loginId
+    }
+
+    override fun onEvent(event: Int, data: Bundle?) {
+        Timber.d("onEvent - event: $event")
+        when(event) {
+            EVENT_LESSON_CHANGE -> {
+                viewModel.loadLessons()
+            }
+            EVENT_WORKOUT_CHANGE -> {
+                viewModel.loadWorkouts()
+            }
+        }
     }
 
 

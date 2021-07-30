@@ -9,7 +9,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var progressDialog: AlertDialog? = null
 
-    protected fun showProgressDialog() {
+    fun showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = MaterialAlertDialogBuilder(this, R.style.ProgressDialog)
                 .setView(R.layout.dialog_loading)
@@ -20,7 +20,7 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog?.show()
     }
 
-    protected fun hideProgressDialog() {
+    fun hideProgressDialog() {
         progressDialog?.dismiss()
         progressDialog = null
     }

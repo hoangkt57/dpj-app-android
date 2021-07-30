@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.fragment
 
+import android.app.Activity
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.View
@@ -7,10 +8,19 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.activity.BaseActivity
+import com.sonyged.hyperClass.constants.EVENT_LESSON_CHANGE
+import com.sonyged.hyperClass.constants.STATUS_FAILED
+import com.sonyged.hyperClass.constants.STATUS_LOADING
+import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
+import com.sonyged.hyperClass.contract.CreateLesson
+import com.sonyged.hyperClass.contract.CreateLessonInput
 import com.sonyged.hyperClass.databinding.FragmentLessonBinding
 import com.sonyged.hyperClass.model.Lesson
-import com.sonyged.hyperClass.utils.startLessonCreateActivity
+import com.sonyged.hyperClass.model.Status
+import com.sonyged.hyperClass.observer.AppObserver
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
 import timber.log.Timber
 
@@ -62,24 +72,28 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
         }
 
         binding.deleteButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Feature is not implemented", Toast.LENGTH_SHORT)
-                .show()
+            extendFab()
+            viewModel.lesson.value?.let {
+                deleteLessonDialog(it)
+            }
         }
 
         binding.changeButton.setOnClickListener {
+            extendFab()
             viewModel.lesson.value?.let {
-                startLessonCreateActivity(requireContext(), it)
+                createLesson.launch(CreateLessonInput(lesson = it))
             }
         }
 
         viewModel.lesson.observe(viewLifecycleOwner) { updateLesson(it) }
+        viewModel.status.observe(viewLifecycleOwner) { updateStatus(it) }
     }
 
     private fun updateLesson(lesson: Lesson) {
         Timber.d("updateLesson - lesson: $lesson")
 
         binding.course.text2.text = lesson.courseName
-        binding.teacher.text2.text = lesson.teacher
+        binding.teacher.text2.text = lesson.teacher.name
         binding.student.text2.text = getString(R.string.student_count_1, lesson.studentCount)
 
         if (!viewModel.isTeacher()) {
@@ -120,4 +134,69 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
         binding.deleteButton.hide()
         binding.changeButton.hide()
     }
+
+    private fun updateStatus(status: Status) {
+        when (status.id) {
+            STATUS_LOADING -> {
+                if (activity is BaseActivity) {
+                    (activity as BaseActivity).showProgressDialog()
+                }
+            }
+            STATUS_FAILED -> {
+                if (activity is BaseActivity) {
+                    (activity as BaseActivity).hideProgressDialog()
+                }
+            }
+            STATUS_SUCCESSFUL -> {
+                activity?.let {
+                    if (activity is BaseActivity) {
+                        (activity as BaseActivity).hideProgressDialog()
+                    }
+                    Toast.makeText(it.applicationContext, R.string.deleted, Toast.LENGTH_SHORT).show()
+                    AppObserver.getInstance().sendEvent(EVENT_LESSON_CHANGE)
+                    it.finish()
+                }
+            }
+        }
+    }
+
+    private fun deleteLessonDialog(lesson: Lesson) {
+        val hasBatchId = lesson.batchId != null
+        val builder = if (hasBatchId) {
+            MaterialAlertDialogBuilder(requireContext(), R.style.DeleteLessonDialog)
+        } else {
+            MaterialAlertDialogBuilder(requireContext(), R.style.AddStudentDialog)
+        }
+        if (hasBatchId) {
+            builder.setTitle(R.string.do_you_want_delete_all_lesson)
+            builder.setMessage(R.string.do_you_want_delete_all_lesson_msg)
+            builder.setNeutralButton(R.string.mtrl_picker_cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+        } else {
+            builder.setTitle(R.string.do_you_want_delete_lesson)
+            builder.setMessage(R.string.do_you_want_delete_lesson_msg)
+        }
+        builder.setNegativeButton(if (!hasBatchId) R.string.no else R.string.delete_this_lesson) { dialog, _ ->
+            if (hasBatchId) {
+                viewModel.deleteLesson(lesson.id, false)
+            }
+            dialog.dismiss()
+        }
+        builder.setPositiveButton(if (!hasBatchId) R.string.yes else R.string.delete_all) { dialog, _ ->
+            if (hasBatchId) {
+                viewModel.deleteLesson(lesson.batchId, true)
+            } else {
+                viewModel.deleteLesson(lesson.id, false)
+            }
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private val createLesson =
+        registerForActivityResult(CreateLesson()) { isRefresh ->
+            Timber.d("createLesson - isRefresh: $isRefresh")
+        }
 }

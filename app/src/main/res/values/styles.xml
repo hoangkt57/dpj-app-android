@@ -203,6 +203,13 @@
         <item name="buttonBarNegativeButtonStyle">@style/AddStudentDialog.NegativeButton</item>
     </style>
 
+    <style name="DeleteLessonDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/AddStudentDialog.Title</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AddStudentDialog.PositiveButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AddStudentDialog.PositiveButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AddStudentDialog.NegativeButton</item>
+    </style>
+
     <style name="AddStudentDialog.PositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="backgroundTint">@color/color_primary</item>
         <item name="android:textColor">@color/on_primary</item>

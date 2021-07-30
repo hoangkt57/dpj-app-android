@@ -161,7 +161,6 @@
     <string name="student_selection">受講生の選択</string>
     <string name="delete_student">受講生の削除</string>
     <string name="delete_student_msg">%sを削除します。このコースのすべてのレッスンが受講できなくなります。よろしいですか？</string>
-    <string name="student_deleted">削除しました</string>
 
     <string name="none">なし</string>
     <string name="course_setting">コースの設定</string>
@@ -176,6 +175,25 @@
     <string name="could_not_update_due_to_ongoing_lesson">実施中のレッスンがあるため、コースの設定を更新できませんでした</string>
     <string name="could_not_update_due_to_completed_course">終了しているコースのため、設定を更新できませんでした</string>
 
+    <string name="title_required">タイトルは必須です</string>
+    <string name="teacher_required">講師は必須です</string>
+    <string name="start_time_after_5_from_current">開始時間は現在時刻よりも５分後以降に設定してください</string>
+    <string name="class_time_15_or_more">授業時間は15分以上に設定してください</string>
+    <string name="condition_required">終了条件は必須です</string>
+    <string name="frequency_required">頻度は必須です</string>
+    <string name="day_of_week_required">曜日は必須です</string>
+    <string name="created">作成しました</string>
+
+    <string name="do_you_want_delete_all_lesson">すべての繰り返しレッスンを 削除しますか？</string>
+    <string name="do_you_want_delete_all_lesson_msg">繰り返しが設定されているレッスンです。\nこのレッスンのみを削除しますか？すべてのレッスンを削除しますか？</string>
+    <string name="delete_all">すべて削除</string>
+    <string name="delete_this_lesson">このレッスンのみ削除</string>
+    <string name="do_you_want_delete_lesson">本当に削除しますか?</string>
+    <string name="do_you_want_delete_lesson_msg">この操作は取り消せません。よろしいですか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="deleted">削除しました</string>
+    <string name="edit_repeat_lesson_once">繰り返しレッスンを一括で編集</string>
 
 
 </resources>

@@ -1,0 +1,32 @@
+mutation batchUpdateCourseLesson($batchId: ID!, $name: String, $seatNum: Int, $record: Boolean, $cutCameraAreaInRecordedVideo: Boolean, $isHd: VideoQuality, $teacherId: ID, $assistantId: ID, $directoryId: ID, $beginAtOffsetInSecond: Int, $endAtOffsetInSecond: Int) {
+  lessonBatchUpdate(input: {batchId: $batchId, name: $name, seatNum: $seatNum, record: $record, cutCameraAreaInRecordedVideo: $cutCameraAreaInRecordedVideo, isHd: $isHd, teacherId: $teacherId, assistantId: $assistantId, directoryId: $directoryId, beginAtOffsetInSecond: $beginAtOffsetInSecond, endAtOffsetInSecond: $endAtOffsetInSecond}) {
+    ... on LessonBatchMutationSuccess {
+      lessons {
+        id
+        batchId
+        name
+        beginAt
+        endAt
+        teacher {
+          id
+          name
+        }
+        assistant {
+          id
+          name
+        }
+        students {
+          id
+        }
+        record
+        cutCameraAreaInRecordedVideo
+      }
+    }
+    ... on LessonMutationFailure {
+      errors {
+        code
+        message
+      }
+    }
+  }
+}

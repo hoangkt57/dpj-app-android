@@ -114,3 +114,39 @@ fun diffDate(date1: Long, date2: Long): Int {
     val diff = date2 - date1
     return (diff / (24 * 60 * 60 * 1000)).toInt()
 }
+
+fun getCurrentTimeUTC(): Long {
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+    calendar.time = Date()
+    return calendar.time.time
+}
+
+fun localTimeToUTC(date: Long, hour: Int, minute: Int): Long {
+    val calendar = Calendar.getInstance()
+    calendar.time = Date(date)
+    calendar.set(Calendar.HOUR_OF_DAY, hour)
+    calendar.set(Calendar.MINUTE, minute)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.time.time - TimeZone.getTimeZone("UTC").getOffset(calendar.time.time)
+}
+
+fun onlyDateFromTime(date: Long): Long {
+    val calendar = Calendar.getInstance()
+    calendar.time = Date(date)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.time.time
+}
+
+fun onlyTimeFromTime(date: Long): Pair<Int, Int> {
+    val calendar = Calendar.getInstance()
+    calendar.time = Date(date)
+    return Pair(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+}
+
+fun timeInSecond(time: Pair<Int, Int>): Int {
+    return time.first * 60 * 60 + time.second * 60
+}

@@ -1,0 +1,14 @@
+mutation batchDeleteCourseLesson($input: LessonBatchDeleteInput!) {
+  lessonBatchDelete(input: $input) {
+    ... on LessonBatchDeleteSuccess {
+      deleted
+    }
+    ... on LessonMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

@@ -57,8 +57,8 @@ class LoginActivity : BaseActivity() {
             )
         }
 
-//        binding.idEdittext.setText("teacher0003@sctest")
-        binding.idEdittext.setText("t0036@hcdemo")
+        binding.idEdittext.setText("teacher0003@sctest")
+//        binding.idEdittext.setText("t0036@hcdemo")
 //        binding.idEdittext.setText("student0008@sctest")
         binding.passwordEdittext.setText("indigo123")
 //        binding.passwordEdittext.setText("rmuct298")

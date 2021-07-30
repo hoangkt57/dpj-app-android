@@ -29,11 +29,8 @@ import java.util.*
 class MainViewModel(application: Application) : BaseViewModel(application) {
 
     val user = MutableLiveData<User>()
-
     val courses = MutableLiveData<List<Course>>()
-
     val type = MutableLiveData(UserEventFilterType.ALL)
-
     val dateRange = MutableLiveData<Pair<Long, Long>>()
 
     var rangeDateText = ""
@@ -54,6 +51,13 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         initDate()
         loadUserData()
         loadCourseData()
+    }
+
+    fun loadExercises() {
+        Timber.d("loadExercises")
+        dateRange.value?.let {
+            dateRange.postValue(it)
+        }
     }
 
     private suspend fun loadHomeData(
@@ -129,7 +133,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
             try {
                 val time = System.currentTimeMillis()
                 val userResponse = ApiUtils.getApolloClient().query(PageLayoutQuery()).await()
-                Timber.d("loadUserData - user : ${userResponse.data}")
+//                Timber.d("loadUserData - user : ${userResponse.data}")
 
                 userResponse.data?.currentUser?.let {
                     val data = User(
@@ -162,7 +166,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 val time = System.currentTimeMillis()
                 val pageResponse = ApiUtils.getApolloClient().query(TabCoursesQuery()).await()
 
-                Timber.d("loadCourseData - data : ${Gson().toJson(pageResponse.data)}")
+//                Timber.d("loadCourseData - data : ${Gson().toJson(pageResponse.data)}")
 
                 val result = arrayListOf<Course>()
 

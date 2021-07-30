@@ -64,13 +64,7 @@ class CoursePageFragment : BaseFragment(R.layout.fragment_course), OnItemClickLi
         openCourse.launch(course)
     }
 
-    private val openCourse =
-        registerForActivityResult(OpenCourse()) { isRefresh ->
-            Timber.d("openCourse - isRefresh: $isRefresh")
-            if (isRefresh) {
-                viewModel.loadCourseData()
-            }
-        }
+    private val openCourse = registerForActivityResult(OpenCourse()) {}
 
 
 }

@@ -21,9 +21,7 @@ import timber.log.Timber
 class StudentViewModel(application: Application, val studentId: String) : BaseViewModel(application) {
 
     val student = MutableLiveData<StudentPage>()
-
     val lessons = MutableLiveData<List<Exercise>>()
-
     val workouts = MutableLiveData<List<Exercise>>()
 
     init {
@@ -63,7 +61,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
         }
     }
 
-    private fun loadLessons() {
+    fun loadLessons() {
         Timber.d("loadLessons")
 
         viewModelScope.launch(Dispatchers.Default) {
@@ -100,7 +98,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
         }
     }
 
-    private fun loadWorkouts() {
+    fun loadWorkouts() {
         Timber.d("loadWorkouts")
 
         viewModelScope.launch(Dispatchers.Default) {

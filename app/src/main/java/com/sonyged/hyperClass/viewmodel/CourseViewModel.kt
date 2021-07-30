@@ -40,7 +40,7 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
             try {
                 val query = PageCourseQuery(courseId)
                 val response = ApiUtils.getApolloClient().query(query).await()
-                Timber.d("loadCourse - response : $response")
+//                Timber.d("loadCourse - response : $response")
 
                 response.data?.node?.asCourse?.let {
                     val result = Course(
@@ -69,9 +69,8 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
         }
     }
 
-    private fun loadLessons() {
+    fun loadLessons() {
         Timber.d("loadLessons")
-
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val time = range7DayFromCurrent()

@@ -4,13 +4,12 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
-import com.sonyged.hyperClass.PageWorkoutQuery
-import com.sonyged.hyperClass.SegExplanationQuery
-import com.sonyged.hyperClass.SegStudentsQuery
+import com.sonyged.hyperClass.*
 import com.sonyged.hyperClass.api.ApiUtils
-import com.sonyged.hyperClass.model.Lesson
-import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.model.Workout
+import com.sonyged.hyperClass.constants.STATUS_LOADING
+import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
+import com.sonyged.hyperClass.model.*
+import com.sonyged.hyperClass.type.LessonBatchDeleteInput
 import com.sonyged.hyperClass.type.WorkoutStatus
 import com.sonyged.hyperClass.utils.formatDateTime
 import com.sonyged.hyperClass.utils.formatDateTimeToLong
@@ -22,11 +21,8 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
     BaseViewModel(application) {
 
     val workout = MutableLiveData<Workout>()
-
     val lesson = MutableLiveData<Lesson>()
-
     val students = MutableLiveData<List<Student>>()
-
     val info = MutableLiveData<Triple<String, String, String>>()
 
     init {
@@ -39,41 +35,40 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
     }
 
 
-    private fun loadLesson() {
+    fun loadLesson() {
         Timber.d("loadLesson")
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val lessonResponse =
-                    ApiUtils.getApolloClient().query(SegExplanationQuery(id)).await()
-                val id = lessonResponse.data?.node?.asLesson?.id ?: ""
-                val name = lessonResponse.data?.node?.asLesson?.name ?: ""
-                val courseName = lessonResponse.data?.node?.asLesson?.course?.name ?: ""
-                val teacher = lessonResponse.data?.node?.asLesson?.teacher?.name ?: ""
-                val beginAt =
-                    formatDateTimeToLong(lessonResponse.data?.node?.asLesson?.beginAt as String?)
-                val endAt =
-                    formatDateTimeToLong(lessonResponse.data?.node?.asLesson?.endAt as String?)
-                val studentCount = lessonResponse.data?.node?.asLesson?.students?.size ?: 0
-                val kickUrl = lessonResponse.data?.node?.asLesson?.kickUrl
-
-                val data = Lesson(
-                    id,
-                    name,
-                    courseName,
-                    teacher,
-                    beginAt,
-                    endAt,
-                    studentCount,
-                    kickUrl
-                )
-
-                lesson.postValue(data)
-
-                val date = formatDateTime(lessonResponse.data?.node?.asLesson?.beginAt as String?)
-                info.postValue(Triple(name, date, teacher))
-
+                val response = ApiUtils.getApolloClient().query(SegExplanationQuery(id)).await()
+                response.data?.node?.asLesson?.let {
+                    val beginAt = formatDateTimeToLong(it.beginAt as String?)
+                    val endAt = formatDateTimeToLong(it.endAt as String?)
+                    val data = Lesson(
+                        it.id,
+                        it.batchId,
+                        it.name,
+                        it.course.name ?: "",
+                        Person(
+                            it.teacher.id,
+                            it.teacher.name ?: "",
+                            it.teacher.__typename
+                        ),
+                        Person(
+                            it.assistant?.id ?: "",
+                            it.assistant?.name ?: "",
+                            it.assistant?.__typename ?: ""
+                        ),
+                        beginAt,
+                        endAt,
+                        it.students.size,
+                        it.kickUrl
+                    )
+                    lesson.postValue(data)
+                    val date = formatDateTime(it.beginAt as String?)
+                    info.postValue(Triple(it.name, date, it.teacher.name ?: ""))
+                }
             } catch (e: Exception) {
-                Timber.e(e)
+                Timber.e(e, "loadLesson")
             }
         }
 
@@ -85,7 +80,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
             try {
                 val result = arrayListOf<Student>()
                 val studentResponse = ApiUtils.getApolloClient().query(SegStudentsQuery(id)).await()
-                Timber.d("loadStudent - studentResponse: $studentResponse")
+//                Timber.d("loadStudent - studentResponse: $studentResponse")
                 studentResponse.data?.node?.asLesson?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
                         result.add(Student(it.id, it.name ?: "", 0, it.__typename))
@@ -101,7 +96,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
 
     }
 
-    private fun loadWorkout() {
+    fun loadWorkout() {
         Timber.d("loadWorkout")
         viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -129,7 +124,6 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                         )
                     )
                 }
-
                 workoutResponse.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
                         result.add(Student(it.id, it.name ?: "", 0, it.__typename))
@@ -137,13 +131,32 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 }
 
                 students.postValue(result)
-
                 workout.postValue(Workout(id, name, courseName, description, date, status, files))
-
                 info.postValue(Triple(name, "", courseName))
-
             } catch (e: Exception) {
                 Timber.e(e)
+            }
+        }
+    }
+
+    fun deleteLesson(id: String?, isBatch: Boolean) {
+        if (status.value?.id == STATUS_LOADING || id.isNullOrEmpty()) {
+            return
+        }
+        status.value = Status(STATUS_LOADING)
+        Timber.d("deleteLesson")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val query = if (isBatch) {
+                    BatchDeleteCourseLessonMutation(LessonBatchDeleteInput(id))
+                } else {
+                    DeleteCourseLessonMutation(arrayListOf(id))
+                }
+                val response = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("deleteLesson - response: $response")
+                status.postValue(Status(STATUS_SUCCESSFUL))
+            } catch (e: Exception) {
+                Timber.e(e, "deleteLesson")
             }
         }
     }

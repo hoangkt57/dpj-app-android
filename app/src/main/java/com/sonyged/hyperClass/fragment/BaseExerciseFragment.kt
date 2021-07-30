@@ -6,14 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_COURSE
 import com.sonyged.hyperClass.databinding.FragmentCourseLessonBinding
-import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
-import com.sonyged.hyperClass.viewmodel.CourseViewModelFactory
 import com.sonyged.hyperClass.views.CourseSpaceItemDecoration
-import com.sonyged.hyperClass.views.ExerciseSpaceItemDecoration
 import timber.log.Timber
 
 abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_lesson), OnItemClickListener {

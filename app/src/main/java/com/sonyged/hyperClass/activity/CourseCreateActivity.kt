@@ -20,6 +20,7 @@ import com.sonyged.hyperClass.databinding.ViewChipTeacherBinding
 import com.sonyged.hyperClass.model.CourseDetail
 import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Tag
+import com.sonyged.hyperClass.observer.AppObserver
 import com.sonyged.hyperClass.utils.formatDate1
 import com.sonyged.hyperClass.viewmodel.CourseCreateViewModel
 import com.sonyged.hyperClass.views.CourseImageCoverItemDecoration
@@ -102,7 +103,7 @@ class CourseCreateActivity : BaseActivity(), OnItemClickListener {
             STATUS_SUCCESSFUL -> {
                 hideProgressDialog()
                 Toast.makeText(applicationContext, R.string.course_updated, Toast.LENGTH_SHORT).show()
-                setResult(Activity.RESULT_OK)
+                AppObserver.getInstance().sendEvent(EVENT_COURSE_DETAIL_CHANGE)
                 finish()
             }
         }
@@ -145,8 +146,6 @@ class CourseCreateActivity : BaseActivity(), OnItemClickListener {
     }
 
     private fun startDatePicker(button: MaterialButton) {
-        Locale.setDefault(Locale.JAPAN)
-        resources?.configuration?.setLocale(Locale.JAPAN)
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
         if (viewModel.date != -1L) {
             datePickerBuilder.setSelection(viewModel.date)

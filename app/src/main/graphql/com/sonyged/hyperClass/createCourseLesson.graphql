@@ -1,0 +1,24 @@
+mutation createCourseLesson($courseId: ID!, $name: String!, $beginAt: DateTime!, $endAt: DateTime!, $record: Boolean!, $cutCameraAreaInRecordedVideo: Boolean!, $teacherId: ID!, $assistantId: ID, $directoryId: ID) {
+  lessonCreate(
+    input: {courseId: $courseId, name: $name, beginAt: $beginAt, endAt: $endAt, record: $record, cutCameraAreaInRecordedVideo: $cutCameraAreaInRecordedVideo, teacherId: $teacherId, assistantId: $assistantId, directoryId: $directoryId, seatNum: 12, isHd: SD}
+  ) {
+    ... on LessonCreateSuccess {
+      lesson {
+        id
+        name
+        teacher {
+          name
+        }
+        record
+        cutCameraAreaInRecordedVideo
+      }
+    }
+    ... on LessonMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

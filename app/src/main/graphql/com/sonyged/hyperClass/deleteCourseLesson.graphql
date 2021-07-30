@@ -1,0 +1,5 @@
+mutation deleteCourseLesson($id: [ID!]!) {
+  lessonDelete(id: $id) {
+    deleted
+  }
+}

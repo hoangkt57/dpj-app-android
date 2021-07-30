@@ -5,22 +5,22 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.R
-import com.sonyged.hyperClass.constants.KEY_COURSE
+import com.sonyged.hyperClass.constants.EVENT_COURSE_DETAIL_CHANGE
 import com.sonyged.hyperClass.constants.KEY_COURSE_ID
 import com.sonyged.hyperClass.constants.KEY_TEACHER_ID
 import com.sonyged.hyperClass.contract.CreateCourse
 import com.sonyged.hyperClass.databinding.ActivityCourseDetailBinding
 import com.sonyged.hyperClass.databinding.ViewChipTagBinding
-import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.CourseDetail
-import com.sonyged.hyperClass.type.DefaultCourseCoverImageOption
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.observer.Observer
 import com.sonyged.hyperClass.utils.formatDate2
 import com.sonyged.hyperClass.viewmodel.CourseDetailViewModel
 import com.sonyged.hyperClass.viewmodel.CourseDetailViewModelFactory
 import com.sonyged.hyperClass.views.getCourseCoverImage
 import timber.log.Timber
 
-class CourseDetailActivity : BaseActivity() {
+class CourseDetailActivity : BaseActivity(), Observer {
 
     private val binding: ActivityCourseDetailBinding by lazy {
         ActivityCourseDetailBinding.inflate(layoutInflater)
@@ -40,6 +40,14 @@ class CourseDetailActivity : BaseActivity() {
         setupView()
 
         viewModel.courseDetail.observe(this) { updateCourseDetail(it) }
+
+        AppObserver.getInstance().addObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        AppObserver.getInstance().removeObserver(this)
     }
 
     private fun setupView() {
@@ -90,11 +98,14 @@ class CourseDetailActivity : BaseActivity() {
         binding.logo.setImageResource(getCourseCoverImage(courseDetail.icon))
     }
 
-    private val createCourse = registerForActivityResult(CreateCourse()) { isRefresh ->
-        Timber.d("createCourse - isRefresh: $isRefresh")
-        if (isRefresh) {
-            setResult(Activity.RESULT_OK)
-            viewModel.loadCourseDetail()
+    private val createCourse = registerForActivityResult(CreateCourse()) {}
+
+    override fun onEvent(event: Int, data: Bundle?) {
+        Timber.d("onEvent - event: $event")
+        when (event) {
+            EVENT_COURSE_DETAIL_CHANGE -> {
+                viewModel.loadCourseDetail()
+            }
         }
     }
 }

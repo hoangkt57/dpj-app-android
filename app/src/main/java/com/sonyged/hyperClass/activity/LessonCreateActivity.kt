@@ -18,19 +18,20 @@ import com.google.android.material.timepicker.TimeFormat
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ChooseUserAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_LESSON
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityLessonCreateBinding
 import com.sonyged.hyperClass.databinding.PopupTeacherBinding
 import com.sonyged.hyperClass.databinding.ViewChipTeacherBinding
 import com.sonyged.hyperClass.model.Lesson
+import com.sonyged.hyperClass.model.Person
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.utils.formatDate1
-import com.sonyged.hyperClass.utils.formatTime
-import com.sonyged.hyperClass.utils.hideKeyboard
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.type.DayOfWeek
+import com.sonyged.hyperClass.utils.*
 import com.sonyged.hyperClass.viewmodel.LessonCreateViewModel
 import com.sonyged.hyperClass.viewmodel.LessonCreateViewModelFactory
 import timber.log.Timber
-import java.util.*
 
 class LessonCreateActivity : BaseActivity(), OnItemClickListener {
 
@@ -39,8 +40,8 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
     }
 
     private val viewModel by viewModels<LessonCreateViewModel>() {
-        val lesson = intent.getParcelableExtra(KEY_LESSON) ?: Lesson.empty()
-        LessonCreateViewModelFactory(application, lesson)
+        val courseId = intent.getStringExtra(KEY_COURSE_ID) ?: ""
+        LessonCreateViewModelFactory(application, courseId)
     }
 
     private val teacherAdapter: ChooseUserAdapter by lazy {
@@ -54,10 +55,15 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
 
         setContentView(binding.root)
 
+        intent.getParcelableExtra<Lesson>(KEY_LESSON)?.let {
+            viewModel.lesson.postValue(it)
+        }
+
         setupView()
 
         viewModel.lesson.observe(this) { updateLesson(it) }
         viewModel.teachers.observe(this) { updateTeacher(it) }
+        viewModel.status.observe(this) { updateStatus(it) }
     }
 
     private fun setupView() {
@@ -65,36 +71,41 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         if (viewModel.isEditing()) {
             binding.repetition.visibility = View.GONE
             binding.expandLayout.visibility = View.GONE
+            binding.create.setText(R.string.change)
         }
-
+        binding.frequencyEdit.transformationMethod = null
+        binding.repeatTimeEdit.transformationMethod = null
         binding.back.setOnClickListener {
             finish()
         }
-
         binding.teacherGroup.setOnClickListener {
             showPopup(binding.teacherGroup)
         }
-
         binding.assistantGroup.setOnClickListener {
             showPopup(binding.assistantGroup)
         }
-
         binding.date.setOnClickListener {
             startDatePicker(binding.date)
         }
-
         binding.startTime.setOnClickListener {
-            startTimePicker(true)
+            startTimePicker(binding.startTime)
         }
-
         binding.endTime.setOnClickListener {
-            startTimePicker(false)
+            startTimePicker(binding.endTime)
         }
-
         binding.create.setOnClickListener {
-            Toast.makeText(this, "Feature is not implemented", Toast.LENGTH_SHORT).show()
+            viewModel.createLesson(
+                binding.lessonNameEdit.text.toString(),
+                binding.record.isChecked,
+                binding.cutCamera.isChecked,
+                binding.repetition.isChecked,
+                binding.untilRadio.isChecked,
+                binding.repeatTimeRadio.isChecked,
+                binding.frequencyEdit.text.toString(),
+                binding.repeatTimeEdit.text.toString(),
+                binding.editRepeatSwitch.isChecked
+            )
         }
-
         binding.record.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.cutCamera.visibility = View.VISIBLE
@@ -102,7 +113,6 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
                 binding.cutCamera.visibility = View.GONE
             }
         }
-
         binding.repetition.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.expandLayout.visibility = View.VISIBLE
@@ -110,7 +120,6 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
                 binding.expandLayout.visibility = View.GONE
             }
         }
-
         binding.frequencyType.setOnClickListener {
             showFrequencyPopup()
         }
@@ -126,12 +135,79 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         }
         binding.repeatTimeRadio.setOnCheckedChangeListener { _, isChecked ->
             enableView(!isChecked)
-        }
 
+        }
         binding.until.setOnClickListener {
             startDatePicker(binding.until)
         }
 
+        val arrView =
+            arrayOf(binding.sunDay, binding.monDay, binding.tueDay, binding.wedDay, binding.thuDay, binding.friDay, binding.satDay)
+        val arrData = arrayOf(DayOfWeek.SUN, DayOfWeek.MON, DayOfWeek.TUE, DayOfWeek.WED, DayOfWeek.THU, DayOfWeek.FRI, DayOfWeek.SAT)
+
+        for (i in arrView.indices) {
+            arrView[i].setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    if (!viewModel.days.contains(arrData[i])) {
+                        viewModel.days.add(arrData[i])
+                    }
+                } else {
+                    viewModel.days.remove(arrData[i])
+                }
+            }
+        }
+
+        binding.editRepeatLayout.setOnClickListener {
+            binding.editRepeatSwitch.toggle()
+            editRepeatOnce(binding.editRepeatSwitch.isChecked)
+        }
+
+    }
+
+    private fun editRepeatOnce(isChecked: Boolean) {
+        if (isChecked) {
+            viewModel.name1 = binding.lessonNameEdit.text.toString()
+            binding.lessonNameEdit.setText(viewModel.name2)
+            binding.date.alpha = 0.5f
+        } else {
+            viewModel.name2 = binding.lessonNameEdit.text.toString()
+            binding.lessonNameEdit.setText(viewModel.name1)
+            binding.date.alpha = 1f
+        }
+        binding.date.isEnabled = !isChecked
+        binding.date.isClickable = !isChecked
+        binding.date.isFocusable = !isChecked
+    }
+
+    private fun updateStatus(status: Status) {
+        Timber.d("updateStatus - status: $status")
+        when (status.id) {
+            STATUS_LOADING -> {
+                showProgressDialog()
+                hideError()
+            }
+            STATUS_FAILED -> {
+                hideProgressDialog()
+                val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
+                showError(error)
+            }
+            STATUS_SUCCESSFUL -> {
+                hideProgressDialog()
+                Toast.makeText(applicationContext, R.string.created, Toast.LENGTH_SHORT).show()
+                AppObserver.getInstance().sendEvent(EVENT_LESSON_CHANGE)
+                finish()
+            }
+        }
+    }
+
+    private fun showError(text: String) {
+        binding.error.text = text
+        binding.error.visibility = View.VISIBLE
+    }
+
+    private fun hideError() {
+        binding.error.text = ""
+        binding.error.visibility = View.GONE
     }
 
     private fun enableView(isUntil: Boolean) {
@@ -165,6 +241,7 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
                     chooseDayOfWeek(true)
                 }
             }
+            viewModel.frequencyType = position
             listPopupWindow.dismiss()
         }
         listPopupWindow.show()
@@ -178,6 +255,11 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
 
     private fun updateLesson(lesson: Lesson) {
 
+        if (lesson.batchId != null) {
+            binding.editRepeatLayout.visibility = View.VISIBLE
+            viewModel.setName(lesson.name)
+        }
+
         binding.lessonNameEdit.setText(lesson.name)
         binding.date.text = formatDate1(lesson.beginAt)
         binding.date.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
@@ -187,37 +269,67 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         binding.endTime.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
 
         val chipBinding = ViewChipTeacherBinding.inflate(layoutInflater)
-        chipBinding.root.text = lesson.teacher
+        chipBinding.root.text = lesson.teacher.name
         chipBinding.root.setOnCloseIconClickListener {
             binding.teacherGroup.removeView(it)
+            viewModel.teacher = null
         }
+        binding.teacherGroup.removeAllViews()
         binding.teacherGroup.addView(chipBinding.root)
 
+        lesson.assistant?.let { assistant ->
+            val assistantBinding = ViewChipTeacherBinding.inflate(layoutInflater)
+            assistantBinding.root.text = assistant.name
+            assistantBinding.root.setOnCloseIconClickListener {
+                binding.assistantGroup.removeView(it)
+                viewModel.assistant = null
+            }
+            binding.assistantGroup.removeAllViews()
+            binding.assistantGroup.addView(assistantBinding.root)
+        }
 
+        viewModel.teacher = lesson.teacher
+        viewModel.assistant = lesson.assistant
+        viewModel.date = onlyDateFromTime(lesson.beginAt)
+        viewModel.startTime = onlyTimeFromTime(lesson.beginAt)
+        viewModel.endTime = onlyTimeFromTime(lesson.endAt)
     }
 
     private fun startDatePicker(button: MaterialButton) {
-        Locale.setDefault(Locale.JAPAN)
-        resources?.configuration?.setLocale(Locale.JAPAN)
+        val isStart = button.id == R.id.date
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
-
+        if (viewModel.date != -1L && isStart) {
+            datePickerBuilder.setSelection(viewModel.date)
+        } else if (!isStart && viewModel.endDate != -1L) {
+            datePickerBuilder.setSelection(viewModel.endDate)
+        }
         val datePicker = datePickerBuilder.build()
         datePicker.show(supportFragmentManager, "datePicker")
 
         datePicker.addOnPositiveButtonClickListener { date ->
             Timber.d("startDatePicker - change date: $date")
-
+            if (button.id == R.id.date) {
+                viewModel.date = date
+            } else if (button.id == R.id.until) {
+                viewModel.endDate = date
+            }
             button.text = formatDate1(date)
             button.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
         }
     }
 
-    private fun startTimePicker(isStart: Boolean) {
-        Locale.setDefault(Locale.JAPAN)
-        resources?.configuration?.setLocale(Locale.JAPAN)
+    private fun startTimePicker(button: MaterialButton) {
         val timePickerBuilder = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(R.string.select_time)
+
+        if (button.id == R.id.start_time) {
+            timePickerBuilder.setHour(viewModel.startTime?.first ?: 0)
+            timePickerBuilder.setMinute(viewModel.startTime?.second ?: 0)
+        } else if (button.id == R.id.end_time) {
+            timePickerBuilder.setHour(viewModel.endTime?.first ?: 0)
+            timePickerBuilder.setMinute(viewModel.endTime?.second ?: 0)
+        }
 
         val timePicker = timePickerBuilder.build()
 
@@ -225,24 +337,34 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
 
         timePicker.addOnPositiveButtonClickListener {
             Timber.d("startTimePicker - hour: ${timePicker.hour} - minute: ${timePicker.minute}")
-            if (isStart) {
-                binding.startTime.text =
-                    getString(R.string.value_time, timePicker.hour, timePicker.minute)
-                binding.startTime.setTextColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.color_primary_variant
-                    )
+            button.text =
+                getString(R.string.value_time, timePicker.hour, timePicker.minute)
+            button.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.color_primary_variant
                 )
-            } else {
-                binding.endTime.text =
-                    getString(R.string.value_time, timePicker.hour, timePicker.minute)
-                binding.endTime.setTextColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.color_primary_variant
+            )
+            if (button.id == R.id.start_time) {
+                viewModel.startTime = Pair(timePicker.hour, timePicker.minute)
+                if (viewModel.endTime == null) {
+                    val endTimePair = Pair(timePicker.hour + 1, timePicker.minute)
+                    binding.endTime.text =
+                        getString(R.string.value_time, endTimePair.first, endTimePair.second)
+                    binding.endTime.setTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.color_primary_variant
+                        )
                     )
-                )
+                    viewModel.endTime = endTimePair
+                }
+            } else if (button.id == R.id.end_time) {
+                viewModel.endTime =
+                    Pair(
+                        if (timePicker.hour == 0) 23 else timePicker.hour,
+                        if (timePicker.minute == 0 && timePicker.hour == 0) 59 else timePicker.minute
+                    )
             }
         }
     }
@@ -276,18 +398,21 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
 
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
+        val item = teacherAdapter.getAdapterItem(position)
+
         val anchor = when (popupWindow?.contentView?.tag) {
             binding.teacherGroup.id -> {
+                viewModel.teacher = Person(item.id, item.name, TEACHER)
                 binding.teacherGroup
             }
             binding.assistantGroup.id -> {
+                viewModel.assistant = Person(item.id, item.name, TEACHER)
                 binding.assistantGroup
             }
             else -> {
                 null
             }
         }
-        val item = teacherAdapter.getAdapterItem(position)
 
         val chipBinding = ViewChipTeacherBinding.inflate(layoutInflater)
         chipBinding.root.text = item.name

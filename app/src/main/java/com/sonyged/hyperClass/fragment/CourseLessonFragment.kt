@@ -3,8 +3,9 @@ package com.sonyged.hyperClass.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.sonyged.hyperClass.contract.OpenLesson
 import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.utils.startLessonActivity
+import timber.log.Timber
 
 class CourseLessonFragment : BaseExerciseFragment() {
 
@@ -28,8 +29,9 @@ class CourseLessonFragment : BaseExerciseFragment() {
     override fun onItemClick(position: Int) {
         super.onItemClick(position)
 
-        val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startLessonActivity(context, exercise)
+        openLesson.launch(exercise)
     }
+
+    private val openLesson = registerForActivityResult(OpenLesson()) {}
 }

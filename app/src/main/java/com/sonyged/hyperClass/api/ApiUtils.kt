@@ -11,8 +11,8 @@ class ApiUtils {
 
     companion object {
 
-//        private const val BASE_URL = "http://192.168.1.23:5000/graphql"
-        const val BASE_URL = "https://api.hyperclass.jp/graphql"
+        const val BASE_URL = "http://192.168.0.106:5000/graphql"
+//        const val BASE_URL = "https://api.hyperclass.jp/graphql"
 
         fun getApolloClient(): ApolloClient {
             val okHttp = OkHttpClient

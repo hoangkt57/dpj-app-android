@@ -23,10 +23,6 @@ fun startStudentActivity(context: Context, student: Student) {
     startActivityWithException(context, intent)
 }
 
-fun startLessonActivity(context: Context, exercise: Exercise) {
-    startExerciseActivity(context, true, exercise)
-}
-
 fun startWorkoutActivity(context: Context, exercise: Exercise) {
     startExerciseActivity(context, false, exercise)
 }
@@ -63,16 +59,6 @@ fun startAgreementPpActivity(context: Context, userId: String, changePassword: B
     val intent = Intent(context, AgreementPpActivity::class.java)
     intent.putExtra(KEY_USER_ID, userId)
     intent.putExtra(KEY_CHANGE_PASSWORD_FIRST, changePassword)
-    startActivityWithException(context, intent)
-}
-
-fun startLessonCreateActivity(context: Context) {
-    startLessonCreateActivity(context, null)
-}
-
-fun startLessonCreateActivity(context: Context, lesson: Lesson?) {
-    val intent = Intent(context, LessonCreateActivity::class.java)
-    intent.putExtra(KEY_LESSON, lesson)
     startActivityWithException(context, intent)
 }
 

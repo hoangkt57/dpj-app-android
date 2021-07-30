@@ -34,7 +34,7 @@ class CourseDetailViewModel(application: Application, private val courseId: Stri
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val courseResponse = ApiUtils.getApolloClient().query(PageCourseDetailQuery(courseId)).await()
-                Timber.d("loadCourseDetail - courseResponse: $courseResponse")
+//                Timber.d("loadCourseDetail - courseResponse: $courseResponse")
 
                 courseResponse.data?.node?.asCourse?.let {
                     val tags = arrayListOf<Tag>()

@@ -111,8 +111,6 @@ class WorkoutCreateActivity : BaseActivity() {
     }
 
     private fun startDatePicker() {
-        Locale.setDefault(Locale.JAPAN)
-        resources?.configuration?.setLocale(Locale.JAPAN)
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
         if (viewModel.isEditing()) {
             datePickerBuilder.setSelection(viewModel.data.date)
@@ -132,8 +130,6 @@ class WorkoutCreateActivity : BaseActivity() {
     }
 
     private fun startTimePicker() {
-        Locale.setDefault(Locale.JAPAN)
-        resources?.configuration?.setLocale(Locale.JAPAN)
         val timePickerBuilder = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(R.string.select_time)

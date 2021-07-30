@@ -1,0 +1,22 @@
+mutation batchCreateCourseLesson($courseId: ID!, $name: String!, $startAt: DateTime!, $durationInSecond: Int!, $record: Boolean!, $cutCameraAreaInRecordedVideo: Boolean, $teacherId: ID!, $assistantId: ID, $directoryId: ID, $recurrence: RecurrenceInput!) {
+  lessonBatchCreate(
+    input: {courseId: $courseId, name: $name, startAt: $startAt, durationInSecond: $durationInSecond, record: $record, cutCameraAreaInRecordedVideo: $cutCameraAreaInRecordedVideo, teacherId: $teacherId, assistantId: $assistantId, directoryId: $directoryId, seatNum: 12, isHd: SD, recurrence: $recurrence}
+  ) {
+    ... on LessonBatchMutationSuccess {
+      lessons {
+        id
+        name
+        teacher {
+          name
+        }
+      }
+    }
+    ... on LessonMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

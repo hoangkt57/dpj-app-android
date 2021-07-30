@@ -1,7 +1,7 @@
 package com.sonyged.hyperClass.constants
 
 const val KEY_TOKEN = "key_token"
-const val KEY_LOGIN= "key_login"
+const val KEY_LOGIN = "key_login"
 const val KEY_TEACHER = "key_teacher"
 const val KEY_TITLE = "key_title"
 const val KEY_DATE = "key_date"
@@ -23,9 +23,14 @@ const val KEY_WORKOUT_DESCRIPTION = "key_workout_description"
 const val KEY_WORKOUT_FILE = "key_workout_file"
 const val KEY_STUDENT_WORKOUT_ID = "key_student_workout_id"
 
-const val KEY_URL= "key_url"
-const val KEY_WORKOUT= "key_workout"
+const val KEY_URL = "key_url"
+const val KEY_WORKOUT = "key_workout"
 
-const val KEY_NEW_STUDENT_COUNT= "key_new_student_count"
-const val KEY_TAG= "key_tag"
-const val KEY_ERROR_MSG= "key_error_msg"
+const val KEY_TAG = "key_tag"
+const val KEY_ERROR_MSG = "key_error_msg"
+const val KEY_SUCCESS_MSG = "key_success_msg"
+
+const val KEY_EDITING = "key_editing"
+const val KEY_STUDENT_CHANGE = "key_student_change"
+const val KEY_LESSON_CHANGE = "key_lesson_change"
+const val KEY_WORKOUT_CHANGE = "key_workout_change"

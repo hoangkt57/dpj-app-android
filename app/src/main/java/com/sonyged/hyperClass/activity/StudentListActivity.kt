@@ -3,6 +3,7 @@ package com.sonyged.hyperClass.activity
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonyged.hyperClass.R
@@ -10,13 +11,13 @@ import com.sonyged.hyperClass.adapter.ChooseUserAdapter
 import com.sonyged.hyperClass.adapter.StudentAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnDeleteClickListener
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_COURSE_ID
-import com.sonyged.hyperClass.constants.KEY_NEW_STUDENT_COUNT
-import com.sonyged.hyperClass.constants.KEY_TEACHER_ID
+import com.sonyged.hyperClass.constants.*
+import com.sonyged.hyperClass.contract.OpenStudent
 import com.sonyged.hyperClass.databinding.ActivityStudentListBinding
 import com.sonyged.hyperClass.databinding.DialogStudentAdditionBinding
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Student
-import com.sonyged.hyperClass.utils.startStudentActivity
+import com.sonyged.hyperClass.observer.AppObserver
 import com.sonyged.hyperClass.viewmodel.StudentListViewModel
 import com.sonyged.hyperClass.viewmodel.StudentListViewModelFactory
 import timber.log.Timber
@@ -50,6 +51,7 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
 
         viewModel.students.observe(this) { updateStudents(it) }
         viewModel.filterStudents.observe(this) { updateFilterStudents(it) }
+        viewModel.status.observe(this) { updateStatus(it) }
     }
 
     private fun setupView() {
@@ -78,20 +80,37 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
         Timber.d("updateStudents - size: ${students.size}")
 
         binding.studentCount.text = students.size.toString()
-        if (adapter.itemCount != 0 && adapter.itemCount != students.size) {
-            intent.putExtra(KEY_NEW_STUDENT_COUNT, students.size)
-            setResult(Activity.RESULT_OK, intent)
-        }
         adapter.submitList(students)
         binding.loading.hide()
 
+    }
+
+    private fun updateStatus(status: Status) {
+        when (status.id) {
+            STATUS_LOADING -> {
+                showProgressDialog()
+            }
+            STATUS_FAILED -> {
+                hideProgressDialog()
+            }
+            STATUS_ADD_SUCCESSFUL -> {
+                hideProgressDialog()
+                Toast.makeText(applicationContext, R.string.added, Toast.LENGTH_SHORT).show()
+                AppObserver.getInstance().sendEvent(EVENT_STUDENT_CHANGE)
+            }
+            STATUS_DELETE_SUCCESSFUL -> {
+                hideProgressDialog()
+                Toast.makeText(applicationContext, R.string.deleted, Toast.LENGTH_SHORT).show()
+                AppObserver.getInstance().sendEvent(EVENT_STUDENT_CHANGE)
+            }
+        }
     }
 
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
 
         val student = adapter.getAdapterItem(position)
-        startStudentActivity(this, student)
+        openStudent.launch(student)
 
     }
 
@@ -148,4 +167,6 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
             .create()
         dialog.show()
     }
+
+    private val openStudent = registerForActivityResult(OpenStudent()) {}
 }

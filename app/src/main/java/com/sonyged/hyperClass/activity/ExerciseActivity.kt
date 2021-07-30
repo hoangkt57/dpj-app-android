@@ -10,10 +10,13 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ExercisePageAdapter
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityExerciseBinding
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.observer.Observer
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModelFactory
+import timber.log.Timber
 
-class ExerciseActivity : BaseActivity() {
+class ExerciseActivity : BaseActivity(), Observer {
 
     private val binding: ActivityExerciseBinding by lazy {
         ActivityExerciseBinding.inflate(layoutInflater)
@@ -37,11 +40,17 @@ class ExerciseActivity : BaseActivity() {
         setupView()
 
         viewModel.info.observe(this) { updateInfo(it) }
+
+        AppObserver.getInstance().addObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        AppObserver.getInstance().removeObserver(this)
     }
 
     private fun setupView() {
-        loadFirstData()
-        
         if (viewModel.isTeacher()) {
             binding.tabLayout.visibility = View.VISIBLE
         }
@@ -84,23 +93,21 @@ class ExerciseActivity : BaseActivity() {
         }.attach()
     }
 
-    private fun loadFirstData() {
-        intent.getStringExtra(KEY_TITLE)?.let {
-            binding.title.text = it
-        }
-        intent.getStringExtra(KEY_DATE)?.let {
-            binding.date.text = it
-        }
-        intent.getStringExtra(KEY_TEACHER)?.let {
-            binding.teacher.text = it
-        }
-    }
-
     private fun updateInfo(info: Triple<String, String, String>) {
-
         binding.title.text = info.first
         binding.date.text = info.second
         binding.teacher.text = info.third
+    }
 
+    override fun onEvent(event: Int, data: Bundle?) {
+        Timber.d("onEvent - event: $event")
+        when(event) {
+            EVENT_LESSON_CHANGE -> {
+                viewModel.loadLesson()
+            }
+            EVENT_WORKOUT_CHANGE -> {
+                viewModel.loadWorkout()
+            }
+        }
     }
 }

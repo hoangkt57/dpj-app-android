@@ -76,7 +76,6 @@ class ChangePasswordActivity : BaseActivity() {
             } else {
                 Toast.makeText(applicationContext, R.string.password_changed, Toast.LENGTH_SHORT).show()
             }
-            setResult(Activity.RESULT_OK)
             finish()
             return
         }

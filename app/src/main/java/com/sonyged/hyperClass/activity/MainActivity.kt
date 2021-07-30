@@ -5,12 +5,15 @@ import android.view.View
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.MainPageAdapter
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityMainBinding
 import com.sonyged.hyperClass.fragment.OnTitleClickListener
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.observer.Observer
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import timber.log.Timber
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), Observer {
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -29,6 +32,14 @@ class MainActivity : BaseActivity() {
 
         setupView()
 
+        AppObserver.getInstance().addObserver(this)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        AppObserver.getInstance().removeAllObserver()
     }
 
     private fun setupView() {
@@ -76,6 +87,18 @@ class MainActivity : BaseActivity() {
         binding.title.text = title
         binding.titleLayout.isClickable = clickable
         binding.arrow.visibility = if (clickable) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun onEvent(event: Int, data: Bundle?) {
+        Timber.d("onEvent - event: $event")
+        when (event) {
+            EVENT_LESSON_CHANGE, EVENT_WORKOUT_CHANGE -> {
+                viewModel.loadExercises()
+            }
+            EVENT_COURSE_CHANGE, EVENT_STUDENT_CHANGE, EVENT_COURSE_DETAIL_CHANGE -> {
+                viewModel.loadCourseData()
+            }
+        }
     }
 
 

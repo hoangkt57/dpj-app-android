@@ -1,0 +1,35 @@
+mutation updateCourseLesson($id: ID!, $name: String, $beginAt: DateTime, $endAt: DateTime, $record: Boolean, $cutCameraAreaInRecordedVideo: Boolean, $teacherId: ID, $assistantId: ID, $directoryId: ID) {
+  lessonUpdate(
+    input: {id: $id, name: $name, beginAt: $beginAt, endAt: $endAt, record: $record, cutCameraAreaInRecordedVideo: $cutCameraAreaInRecordedVideo, teacherId: $teacherId, assistantId: $assistantId, directoryId: $directoryId}
+  ) {
+    ... on LessonUpdateSuccess {
+      lesson {
+        id
+        batchId
+        name
+        beginAt
+        endAt
+        teacher {
+          id
+          name
+        }
+        assistant {
+          id
+          name
+        }
+        students {
+          id
+        }
+        record
+        cutCameraAreaInRecordedVideo
+      }
+    }
+    ... on LessonMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

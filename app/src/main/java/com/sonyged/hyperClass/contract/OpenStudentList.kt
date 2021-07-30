@@ -6,11 +6,10 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import com.sonyged.hyperClass.activity.StudentListActivity
 import com.sonyged.hyperClass.constants.KEY_COURSE_ID
-import com.sonyged.hyperClass.constants.KEY_NEW_STUDENT_COUNT
 import com.sonyged.hyperClass.constants.KEY_TEACHER_ID
 import com.sonyged.hyperClass.model.Course
 
-class OpenStudentList : ActivityResultContract<Course, Int>() {
+class OpenStudentList : ActivityResultContract<Course, Boolean>() {
 
     override fun createIntent(context: Context, input: Course): Intent {
         val intent = Intent(context, StudentListActivity::class.java)
@@ -19,10 +18,7 @@ class OpenStudentList : ActivityResultContract<Course, Int>() {
         return intent
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Int {
-        if (resultCode == Activity.RESULT_OK) {
-            return intent?.getIntExtra(KEY_NEW_STUDENT_COUNT, -1) ?: -1
-        }
-        return -1
+    override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
+        return resultCode == Activity.RESULT_OK
     }
 }

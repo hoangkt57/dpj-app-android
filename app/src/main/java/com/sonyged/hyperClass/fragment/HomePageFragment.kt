@@ -14,11 +14,11 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.activity.MainActivity
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.contract.OpenLesson
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.UserEventFilterType
 import com.sonyged.hyperClass.utils.formatDayWithName
-import com.sonyged.hyperClass.utils.startLessonActivity
 import com.sonyged.hyperClass.utils.startWorkoutActivity
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import com.sonyged.hyperClass.views.ExerciseSpaceItemDecoration
@@ -79,7 +79,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         val exercise = adapter.getAdapterItem(position)
         val context = context ?: return
         if (exercise.type == UserEventFilterType.LESSON) {
-            startLessonActivity(context, exercise)
+            openLesson.launch(exercise)
         } else if (exercise.type == UserEventFilterType.WORKOUT) {
             startWorkoutActivity(context, exercise)
         }
@@ -87,9 +87,6 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
 
     override fun onTitleClick() {
         Timber.d("onTitleClick")
-
-        Locale.setDefault(Locale.JAPAN)
-        activity?.resources?.configuration?.setLocale(Locale.JAPAN)
 
         val dateRangePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
         dateRangePickerBuilder.setTitleText(R.string.picker_range_header_title)
@@ -109,9 +106,6 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     private fun updateDateRange(date: Pair<Long, Long>) {
         val startDate = Date(date.first)
         val endDate = Date(date.second)
-
-        Locale.setDefault(Locale.JAPAN)
-        activity?.resources?.configuration?.setLocale(Locale.JAPAN)
 
         val rangeDate = DateUtils.formatDateRange(
             requireContext(),
@@ -172,5 +166,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         }
         return ""
     }
+
+    private val openLesson = registerForActivityResult(OpenLesson()) {}
 
 }
