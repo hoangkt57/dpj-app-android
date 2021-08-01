@@ -62,7 +62,7 @@
     <string name="student_count_1">%d 人</string>
     <string name="edit">編集</string>
     <string name="description">説明</string>
-    <string name="workout_term">期限</string>
+    <string name="deadline">期限</string>
     <string name="status">ステータス</string>
     <string name="your_answer">あなたのこたえ</string>
     <string name="submission_file">提出ファイル</string>
@@ -124,7 +124,7 @@
 
     <string name="create_workout">ワークアウトの設定</string>
     <string name="title">タイトル</string>
-    <string name="deadline">提出期限</string>
+    <string name="submission_deadline">提出期限</string>
     <string name="select_file">ファイルを選択</string>
 
     <string name="please_wait">お待ちください</string>
@@ -196,6 +196,11 @@
     <string name="no">いいえ</string>
     <string name="deleted">削除しました</string>
     <string name="edit_repeat_lesson_once">繰り返しレッスンを一括で編集</string>
+
+    <string name="time_is_not_feature">「%s」は未来ではありません。</string>
+
+    <string name="do_you_want_delete_workout">本当に削除しますか?</string>
+    <string name="do_you_want_delete_workout_msg">このワークアウトを削除すると、受講生が提出した内容もすべて削除されます。この操作は取り消せません。本当によろしいですか？</string>
 
 
 </resources>

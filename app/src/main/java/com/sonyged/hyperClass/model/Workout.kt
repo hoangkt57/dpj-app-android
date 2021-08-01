@@ -15,17 +15,9 @@ data class Workout(
     val files: List<Attachment>
 ) : Parcelable {
 
-    @Parcelize
-    data class Attachment(
-        val id: String,
-        val filename: String,
-        val contentType: String?,
-        val url: String?
-    ) : Parcelable
-
     companion object {
         fun empty(): Workout {
-            return Workout("", "", "", "", 0, WorkoutStatus.UNKNOWN__, arrayListOf())
+            return Workout("", "", "", "", -1, WorkoutStatus.UNKNOWN__, arrayListOf())
         }
     }
 

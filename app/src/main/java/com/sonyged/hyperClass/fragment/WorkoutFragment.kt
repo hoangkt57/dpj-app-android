@@ -12,15 +12,20 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.activity.BaseActivity
 import com.sonyged.hyperClass.activity.SubmissionActivity
-import com.sonyged.hyperClass.constants.KEY_WORKOUT_NAME
+import com.sonyged.hyperClass.constants.*
+import com.sonyged.hyperClass.contract.CreateWorkout
+import com.sonyged.hyperClass.contract.CreateWorkoutInput
 import com.sonyged.hyperClass.databinding.FragmentWorkoutBinding
 import com.sonyged.hyperClass.databinding.ViewItemDetailValueBinding
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Workout
+import com.sonyged.hyperClass.observer.AppObserver
 import com.sonyged.hyperClass.utils.formatDate2
 import com.sonyged.hyperClass.utils.previewFileActivity
-import com.sonyged.hyperClass.utils.startWorkoutCreateActivity
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
 import timber.log.Timber
 
@@ -50,7 +55,7 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
 
         binding.course.text1.setText(R.string.course)
         binding.description.text1.setText(R.string.description)
-        binding.term.text1.setText(R.string.workout_term)
+        binding.deadline.text1.setText(R.string.deadline)
 //        binding.status.text1.setText(R.string.status)
 //        binding.answer.text1.setText(R.string.your_answer)
         binding.file.text1.setText(R.string.submission_file)
@@ -74,17 +79,46 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
         }
 
         binding.deleteButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Feature is not implemented", Toast.LENGTH_SHORT)
-                .show()
+            extendFab()
+            viewModel.workout.value?.let {
+                deleteWorkoutDialog(it)
+            }
         }
 
         binding.changeButton.setOnClickListener {
+            extendFab()
             viewModel.workout.value?.let {
-                startWorkoutCreateActivity(requireContext(), it)
+                createWorkout.launch(CreateWorkoutInput(workout = it))
             }
         }
 
         viewModel.workout.observe(viewLifecycleOwner) { updateWorkout(it) }
+        viewModel.status.observe(viewLifecycleOwner) { updateStatus(it) }
+    }
+
+    private fun updateStatus(status: Status) {
+        when (status.id) {
+            STATUS_LOADING -> {
+                if (activity is BaseActivity) {
+                    (activity as BaseActivity).showProgressDialog()
+                }
+            }
+            STATUS_FAILED -> {
+                if (activity is BaseActivity) {
+                    (activity as BaseActivity).hideProgressDialog()
+                }
+            }
+            STATUS_SUCCESSFUL -> {
+                activity?.let {
+                    if (activity is BaseActivity) {
+                        (activity as BaseActivity).hideProgressDialog()
+                    }
+                    Toast.makeText(it.applicationContext, R.string.deleted, Toast.LENGTH_SHORT).show()
+                    AppObserver.getInstance().sendEvent(EVENT_WORKOUT_CHANGE)
+                    it.finish()
+                }
+            }
+        }
     }
 
     private fun updateWorkout(workout: Workout) {
@@ -92,7 +126,7 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
 
         binding.course.text2.text = workout.courseName
         binding.description.text2.text = workout.description
-        binding.term.text2.text = formatDate2(workout.date)
+        binding.deadline.text2.text = formatDate2(workout.date)
 
         workout.files.forEach { attachment ->
             val fileBinding =
@@ -144,5 +178,21 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
         binding.changeButton.hide()
     }
 
+    private fun deleteWorkoutDialog(workout: Workout) {
+        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.AddStudentDialog)
+        builder.setTitle(R.string.do_you_want_delete_workout)
+        builder.setMessage(R.string.do_you_want_delete_workout_msg)
+        builder.setNegativeButton(R.string.no) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton(R.string.yes) { dialog, _ ->
+            viewModel.deleteWorkout(workout.id)
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private val createWorkout = registerForActivityResult(CreateWorkout()) {}
 
 }

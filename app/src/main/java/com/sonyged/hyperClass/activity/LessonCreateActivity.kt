@@ -298,9 +298,9 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
     private fun startDatePicker(button: MaterialButton) {
         val isStart = button.id == R.id.date
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
-        if (viewModel.date != -1L && isStart) {
+        if (viewModel.date != DATE_INVALID && isStart) {
             datePickerBuilder.setSelection(viewModel.date)
-        } else if (!isStart && viewModel.endDate != -1L) {
+        } else if (!isStart && viewModel.endDate != DATE_INVALID) {
             datePickerBuilder.setSelection(viewModel.endDate)
         }
         val datePicker = datePickerBuilder.build()

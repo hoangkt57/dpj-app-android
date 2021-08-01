@@ -92,6 +92,13 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
         }
     }
 
+    fun loadWorkouts() {
+        workoutDateRange.value?.let {
+            val data = Pair(it.first, it.second)
+            workoutDateRange.postValue(data)
+        }
+    }
+
     private suspend fun loadLessons(from: String, until: String): ArrayList<Exercise> {
         Timber.d("loadLessons - from: $from - until: $until")
         val result = arrayListOf<Exercise>()

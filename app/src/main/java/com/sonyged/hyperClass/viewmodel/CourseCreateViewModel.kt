@@ -35,7 +35,7 @@ class CourseCreateViewModel(application: Application) : BaseViewModel(applicatio
     private val itemSelected = hashMapOf<String, Boolean>()
 
     var imageSelected = -1
-    var date = -1L
+    var date = DATE_INVALID
 
     fun setCourseDetail(data: CourseDetail) {
         courseDetail.postValue(data)
@@ -126,7 +126,7 @@ class CourseCreateViewModel(application: Application) : BaseViewModel(applicatio
             } else {
                 true
             }
-            val dateChange = date != -1L && date != oldData.endDate
+            val dateChange = date != DATE_INVALID && date != oldData.endDate
             val autoChange = isAuto != oldData.autoCreateLessonWorkout
             val images = geCoverImageList()
             val iconChange = if (imageSelected != -1) {
@@ -140,9 +140,9 @@ class CourseCreateViewModel(application: Application) : BaseViewModel(applicatio
                 return@launch
             }
 
-            val serverDate = formatServerTime(if (date == -1L) oldData.endDate else date)
+            val serverDate = formatServerTime(if (date == DATE_INVALID) oldData.endDate else date)
 
-            if (date != -1L) {
+            if (date != DATE_INVALID) {
                 val diff = diffDate(System.currentTimeMillis(), date)
                 Timber.d("changeCourse - diff: $diff")
                 val value = Status(STATUS_FAILED)

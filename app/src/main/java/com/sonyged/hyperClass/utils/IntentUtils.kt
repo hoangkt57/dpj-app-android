@@ -62,17 +62,7 @@ fun startAgreementPpActivity(context: Context, userId: String, changePassword: B
     startActivityWithException(context, intent)
 }
 
-fun startWorkoutCreateActivity(context: Context) {
-    startWorkoutCreateActivity(context, null)
-}
-
-fun startWorkoutCreateActivity(context: Context, workout: Workout?) {
-    val intent = Intent(context, WorkoutCreateActivity::class.java)
-    intent.putExtra(KEY_WORKOUT, workout)
-    startActivityWithException(context, intent)
-}
-
-fun previewFileActivity(context: Context, attachment: Workout.Attachment) {
+fun previewFileActivity(context: Context, attachment: Attachment) {
     val intent = if (attachment.contentType?.startsWith("image") == true) {
         Intent(context, PreviewImageActivity::class.java)
     } else {

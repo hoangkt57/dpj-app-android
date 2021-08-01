@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.utils
 
+import com.sonyged.hyperClass.constants.DATE_INVALID
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,7 +24,7 @@ fun formatDateTime(dueDate: String?): String {
 fun formatDateTimeToLong(dueDate: String?): Long {
     try {
         if (dueDate.isNullOrEmpty()) {
-            return 0
+            return DATE_INVALID
         }
         val serverDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
         serverDf.timeZone = TimeZone.getTimeZone("UTC")
@@ -32,7 +33,7 @@ fun formatDateTimeToLong(dueDate: String?): Long {
     } catch (e: Exception) {
         Timber.e(e)
     }
-    return 0
+    return DATE_INVALID
 }
 
 fun formatDate(dateLong: Long): String {
@@ -48,6 +49,9 @@ fun formatDate(dateLong: Long): String {
 
 fun formatDate1(dateLong: Long): String {
     try {
+        if (dateLong == DATE_INVALID) {
+            return ""
+        }
         val date = Date(dateLong)
         val clientDf = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
         return clientDf.format(date)
@@ -59,6 +63,9 @@ fun formatDate1(dateLong: Long): String {
 
 fun formatDate2(dateLong: Long): String {
     try {
+        if (dateLong == DATE_INVALID) {
+            return ""
+        }
         val date = Date(dateLong)
         val clientDf = SimpleDateFormat("yy/MM/dd(E) HH:mm", Locale.JAPAN)
         return clientDf.format(date)
@@ -70,6 +77,9 @@ fun formatDate2(dateLong: Long): String {
 
 fun formatTime(dateLong: Long): String {
     try {
+        if (dateLong == DATE_INVALID) {
+            return ""
+        }
         val date = Date(dateLong)
         val clientDf = SimpleDateFormat("HH:mm", Locale.JAPAN)
         return clientDf.format(date)

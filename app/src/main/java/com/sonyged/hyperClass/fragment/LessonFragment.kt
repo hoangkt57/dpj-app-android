@@ -195,8 +195,5 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
         dialog.show()
     }
 
-    private val createLesson =
-        registerForActivityResult(CreateLesson()) { isRefresh ->
-            Timber.d("createLesson - isRefresh: $isRefresh")
-        }
+    private val createLesson = registerForActivityResult(CreateLesson()) {}
 }

@@ -19,7 +19,7 @@
             layout="@layout/view_item_detail" />
 
         <include
-            android:id="@+id/term"
+            android:id="@+id/deadline"
             layout="@layout/view_item_detail" />
 
         <!--        <include-->

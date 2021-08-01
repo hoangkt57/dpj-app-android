@@ -1,0 +1,17 @@
+mutation WorkoutCreate($courseId: ID!, $input: WorkoutCreateInput!) {
+  workoutCreate(courseId: $courseId, input: $input) {
+    ... on WorkoutMutationSuccess {
+      workout {
+        id
+        title
+        description
+      }
+    }
+    ... on WorkoutMutationFailure {
+      errors {
+        code
+        message
+      }
+    }
+  }
+}

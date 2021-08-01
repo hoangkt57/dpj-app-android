@@ -108,15 +108,14 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val name = workoutResponse.data?.node?.asWorkout?.title ?: ""
                 val courseName = workoutResponse.data?.node?.asWorkout?.course?.name ?: ""
                 val description = workoutResponse.data?.node?.asWorkout?.description ?: ""
-                val date =
-                    formatDateTimeToLong(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
+                val date = formatDateTimeToLong(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
                 val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status
                     ?: WorkoutStatus.UNKNOWN__
 
-                val files = arrayListOf<Workout.Attachment>()
+                val files = arrayListOf<Attachment>()
                 workoutResponse.data?.node?.asWorkout?.attachments?.forEach { attachment ->
                     files.add(
-                        Workout.Attachment(
+                        Attachment(
                             attachment.id,
                             attachment.filename,
                             attachment.contentType,
@@ -157,6 +156,24 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 status.postValue(Status(STATUS_SUCCESSFUL))
             } catch (e: Exception) {
                 Timber.e(e, "deleteLesson")
+            }
+        }
+    }
+
+    fun deleteWorkout(id: String?) {
+        if (status.value?.id == STATUS_LOADING || id.isNullOrEmpty()) {
+            return
+        }
+        status.value = Status(STATUS_LOADING)
+        Timber.d("deleteWorkout")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val query = WorkoutDeleteMutation(id)
+                val response = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("deleteWorkout - response: $response")
+                status.postValue(Status(STATUS_SUCCESSFUL))
+            } catch (e: Exception) {
+                Timber.e(e, "deleteWorkout")
             }
         }
     }

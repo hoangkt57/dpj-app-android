@@ -1,0 +1,13 @@
+mutation WorkoutDelete($id: ID!) {
+  workoutDelete(id: $id) {
+    ... on WorkoutDeleteSuccess {
+      deleted
+    }
+    ... on WorkoutMutationFailure {
+      errors {
+        code
+        message
+      }
+    }
+  }
+}

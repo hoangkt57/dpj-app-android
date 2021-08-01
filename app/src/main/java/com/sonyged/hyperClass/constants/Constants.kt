@@ -21,6 +21,8 @@ const val TYPE_WORKOUT = 3
 const val TYPE_EDIT_NAME = 1
 const val TYPE_EDIT_EMAIL = 2
 
+const val DATE_INVALID = -1L
+
 
 const val PASSWORD_ERROR_NONE = 0
 const val PASSWORD_ERROR_NOT_EQUAL_CONFIRM = 1
