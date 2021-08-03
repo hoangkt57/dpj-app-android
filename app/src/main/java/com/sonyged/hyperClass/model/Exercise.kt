@@ -12,8 +12,20 @@ data class Exercise(
     val teacherName: String,
     val courseName: String,
     val status: EnumValue,
-    val kickUrl: String?
+    val kickUrl: String?,
+    val answer: String?,
+    val attachments: List<Attachment>?
 ) {
+    constructor(
+        id: String,
+        title: String,
+        date: String,
+        type: UserEventFilterType,
+        teacherName: String,
+        courseName: String,
+        status: EnumValue,
+        kickUrl: String?
+    ) : this(id, title, date, type, teacherName, courseName, status, kickUrl, null, null)
 
     class DiffCallback : DiffUtil.ItemCallback<Exercise>() {
         override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {

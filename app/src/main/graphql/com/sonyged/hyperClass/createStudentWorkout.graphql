@@ -1,0 +1,6 @@
+mutation createStudentWorkout($workoutId: ID!, $input: StudentWorkoutHandInInput!) {
+  studentworkoutHandIn(workoutId: $workoutId, input: $input) {
+    ...Success
+    ...Failure
+  }
+}

@@ -1,14 +1,23 @@
 package com.sonyged.hyperClass.activity
 
-import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ImageAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
-import com.sonyged.hyperClass.constants.KEY_STUDENT_WORKOUT_ID
-import com.sonyged.hyperClass.constants.KEY_WORKOUT_NAME
+import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivitySubmissionBinding
+import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
+import com.sonyged.hyperClass.model.Attachment
+import com.sonyged.hyperClass.model.Status
+import com.sonyged.hyperClass.model.Workout
+import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.utils.previewFileActivity
 import com.sonyged.hyperClass.viewmodel.SubmissionViewModel
 import com.sonyged.hyperClass.viewmodel.SubmissionViewModelFactory
 import com.sonyged.hyperClass.views.SubmissionSpaceItemDecoration
@@ -32,32 +41,71 @@ class SubmissionActivity : BaseActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
+        intent.getParcelableExtra<Workout>(KEY_WORKOUT)?.let {
+            viewModel.workout.postValue(it)
+            viewModel.initAttachments(it)
+        }
 
+        setContentView(binding.root)
         setupView()
 
-        viewModel.images.observe(this) { updateImages(it) }
+        viewModel.attachments.observe(this) { updateAttachments(it) }
+        viewModel.workout.observe(this) { updateWorkout(it) }
+        viewModel.status.observe(this) { updateStatus(it) }
     }
 
     private fun setupView() {
-
         binding.title.text = intent.getStringExtra(KEY_WORKOUT_NAME) ?: ""
-
         binding.recyclerView.apply {
             addItemDecoration(SubmissionSpaceItemDecoration(this@SubmissionActivity))
             adapter = this@SubmissionActivity.adapter
         }
-
         binding.back.setOnClickListener {
             finish()
         }
-
         binding.camera.setOnClickListener {
             takePicture()
         }
-
         binding.library.setOnClickListener {
             pickImage()
+        }
+        binding.submit.setOnClickListener {
+            addSubmissionDialog()
+        }
+    }
+
+    private fun updateWorkout(workout: Workout) {
+        binding.title.text = workout.name
+        binding.description.text = workout.description
+        binding.file.removeAllViews()
+        workout.files.forEach { attachment ->
+            val fileBinding = ViewItemSubmissionFileBinding.inflate(layoutInflater)
+            fileBinding.text2.text = attachment.filename
+            fileBinding.text2.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
+            fileBinding.text3.visibility = View.GONE
+            fileBinding.root.setOnClickListener {
+                previewFileActivity(this, attachment)
+            }
+            binding.file.addView(fileBinding.root)
+        }
+        binding.answerEdit.setText(workout.answer)
+    }
+
+    private fun updateStatus(status: Status) {
+        when (status.id) {
+            STATUS_LOADING -> {
+                showProgressDialog()
+            }
+            STATUS_FAILED -> {
+                hideProgressDialog()
+                val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
+            }
+            STATUS_SUCCESSFUL -> {
+                hideProgressDialog()
+                Toast.makeText(applicationContext, R.string.created, Toast.LENGTH_SHORT).show()
+                AppObserver.getInstance().sendEvent(EVENT_WORKOUT_CHANGE)
+                finish()
+            }
         }
     }
 
@@ -92,11 +140,24 @@ class SubmissionActivity : BaseActivity(), OnItemClickListener {
     }
 
 
-    private fun updateImages(images: List<Uri>) {
-        Timber.d("updateImages - size: ${images.size}")
+    private fun updateAttachments(attachments: List<Attachment>) {
+        Timber.d("updateAttachments - size: ${attachments.size}")
 
-        adapter.submitList(images)
+        adapter.submitList(attachments)
+    }
 
+    private fun addSubmissionDialog() {
+        val builder = MaterialAlertDialogBuilder(this, R.style.AddStudentDialog)
+        builder.setMessage(R.string.submit_submission_title)
+        builder.setNegativeButton(R.string.no) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton(R.string.yes) { dialog, _ ->
+            viewModel.createSubmission(binding.answerEdit.text.toString())
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     override fun onItemClick(position: Int) {

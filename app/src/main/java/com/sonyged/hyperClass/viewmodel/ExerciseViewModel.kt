@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.*
 import com.sonyged.hyperClass.api.ApiUtils
+import com.sonyged.hyperClass.constants.DATE_INVALID
 import com.sonyged.hyperClass.constants.STATUS_LOADING
 import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
 import com.sonyged.hyperClass.model.*
@@ -101,36 +102,64 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val result = arrayListOf<Student>()
-                val workoutQuery = PageWorkoutQuery(id, sharedPref.isTeacher(), "")
-                val workoutResponse = ApiUtils.getApolloClient().query(workoutQuery).await()
+                val query = PageWorkoutQuery(id, sharedPref.isTeacher(), "")
+                val response = ApiUtils.getApolloClient().query(query).await()
 
-                val id = workoutResponse.data?.node?.asWorkout?.id ?: ""
-                val name = workoutResponse.data?.node?.asWorkout?.title ?: ""
-                val courseName = workoutResponse.data?.node?.asWorkout?.course?.name ?: ""
-                val description = workoutResponse.data?.node?.asWorkout?.description ?: ""
-                val date = formatDateTimeToLong(workoutResponse.data?.node?.asWorkout?.dueDate as String?)
-                val status = workoutResponse.data?.node?.asWorkout?.studentWorkout?.status
+                val id = response.data?.node?.asWorkout?.id ?: ""
+                val studentWorkoutId = response.data?.node?.asWorkout?.studentWorkout?.id ?: ""
+                val name = response.data?.node?.asWorkout?.title ?: ""
+                val courseName = response.data?.node?.asWorkout?.course?.name ?: ""
+                val description = response.data?.node?.asWorkout?.description ?: ""
+                val date = formatDateTimeToLong(response.data?.node?.asWorkout?.dueDate as String?)
+                val submissionAt = formatDateTimeToLong(response.data?.node?.asWorkout?.studentWorkout?.submittedAt as String?)
+                val status = response.data?.node?.asWorkout?.studentWorkout?.status
                     ?: WorkoutStatus.UNKNOWN__
-
+                val answer = response.data?.node?.asWorkout?.studentWorkout?.description ?: ""
                 val files = arrayListOf<Attachment>()
-                workoutResponse.data?.node?.asWorkout?.attachments?.forEach { attachment ->
+                response.data?.node?.asWorkout?.attachments?.forEach { attachment ->
                     files.add(
                         Attachment(
                             attachment.id,
+                            DATE_INVALID,
                             attachment.filename,
                             attachment.contentType,
                             attachment.url
                         )
                     )
                 }
-                workoutResponse.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
+                val submissionFile = arrayListOf<Attachment>()
+                response.data?.node?.asWorkout?.studentWorkout?.attachments?.forEach { attachment ->
+                    submissionFile.add(
+                        Attachment(
+                            attachment.id,
+                            formatDateTimeToLong(attachment.createdAt as String?),
+                            attachment.filename,
+                            attachment.contentType,
+                            attachment.url
+                        )
+                    )
+                }
+                response.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
                         result.add(Student(it.id, it.name ?: "", 0, it.__typename))
                     }
                 }
-
                 students.postValue(result)
-                workout.postValue(Workout(id, name, courseName, description, date, status, files))
+                workout.postValue(
+                    Workout(
+                        id,
+                        studentWorkoutId,
+                        name,
+                        description,
+                        date,
+                        status,
+                        files,
+                        submissionAt,
+                        answer,
+                        submissionFile,
+                        ""
+                    )
+                )
                 info.postValue(Triple(name, "", courseName))
             } catch (e: Exception) {
                 Timber.e(e)

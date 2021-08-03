@@ -1,16 +1,18 @@
 package com.sonyged.hyperClass.adapter.viewholder
 
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.apollographql.apollo.api.EnumValue
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.databinding.ItemExerciseBinding
+import com.sonyged.hyperClass.databinding.ViewItemExerciseFileBinding
 import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.StatusResource
 import com.sonyged.hyperClass.type.UserEventFilterType
-import com.sonyged.hyperClass.type.WorkoutStatus
+import com.sonyged.hyperClass.utils.previewFileActivity
 
 class ExerciseViewHolder(private val listener: OnItemClickListener?, private val binding: ItemExerciseBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -18,6 +20,9 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
     init {
         itemView.setOnClickListener {
             listener?.onItemClick(absoluteAdapterPosition)
+        }
+        binding.answerLayout.setOnClickListener {
+            showAnswer()
         }
     }
 
@@ -43,11 +48,12 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
             )
         }
 
-        val statusValues = getStatus(exercise.status)
-        if (statusValues.first != 0) {
+        val statusValues = StatusResource.getStatus(exercise.status)
+        if (statusValues.text != 0) {
             binding.status.visibility = View.VISIBLE
-            binding.status.setText(statusValues.first)
-            binding.status.setBackgroundColor(ContextCompat.getColor(itemView.context, statusValues.second))
+            binding.status.setText(statusValues.text)
+            binding.status.setTextColor(ContextCompat.getColor(itemView.context, statusValues.textColor))
+            binding.status.setBackgroundColor(ContextCompat.getColor(itemView.context, statusValues.bgColor))
         } else {
             binding.status.visibility = View.INVISIBLE
         }
@@ -58,30 +64,36 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
             binding.start.visibility = View.VISIBLE
         }
 
-    }
-
-    private fun getStatus(status: EnumValue): Pair<Int, Int> {
-        return when (status) {
-            WorkoutStatus.NONE -> {
-                Pair(R.string.not_submitted, R.color.workout_muted)
+        if (exercise.answer != null) {
+            binding.answerLayout.clipToOutline = true
+            binding.answerLayout.isSelected = false
+            binding.answerLayout.visibility = View.VISIBLE
+            binding.answer.text = exercise.answer
+            binding.fileLayout.removeAllViews()
+            exercise.attachments?.forEach { attachment ->
+                val fileBinding = ViewItemExerciseFileBinding.inflate(LayoutInflater.from(itemView.context))
+                fileBinding.root.text = attachment.filename
+                fileBinding.root.setOnClickListener {
+                    previewFileActivity(itemView.context, attachment)
+                }
+                binding.fileLayout.addView(fileBinding.root)
             }
-            WorkoutStatus.DRAFT -> {
-                Pair(R.string.draft, R.color.workout_muted)
-            }
-            WorkoutStatus.SUBMITTED -> {
-                Pair(R.string.submitted, R.color.workout_danger)
-            }
-            WorkoutStatus.REVIEWED -> {
-                Pair(R.string.reviewed, R.color.color_primary)
-            }
-            WorkoutStatus.REJECTED -> {
-                Pair(R.string.rejected, R.color.color_secondary)
-            }
-            else -> {
-                Pair(0, 0)
-            }
+        } else {
+            binding.answerLayout.visibility = View.GONE
         }
     }
 
-
+    private fun showAnswer() {
+        val isShow = !binding.answerLayout.isSelected
+        if (isShow) {
+            binding.answer.maxLines = 1000
+            binding.down.rotation = 180f
+            binding.fileLayout.visibility = View.VISIBLE
+        } else {
+            binding.answer.maxLines = 1
+            binding.down.rotation = 0f
+            binding.fileLayout.visibility = View.GONE
+        }
+        binding.answerLayout.isSelected = isShow
+    }
 }

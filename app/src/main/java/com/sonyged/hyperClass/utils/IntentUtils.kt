@@ -23,10 +23,6 @@ fun startStudentActivity(context: Context, student: Student) {
     startActivityWithException(context, intent)
 }
 
-fun startWorkoutActivity(context: Context, exercise: Exercise) {
-    startExerciseActivity(context, false, exercise)
-}
-
 fun startMainActivity(context: Context) {
     val intent = Intent(context, MainActivity::class.java)
     startActivityWithException(context, intent)
@@ -69,20 +65,6 @@ fun previewFileActivity(context: Context, attachment: Attachment) {
         Intent(context, WebViewActivity::class.java)
     }
     intent.putExtra(KEY_URL, attachment.url)
-    startActivityWithException(context, intent)
-}
-
-private fun startExerciseActivity(context: Context, isLesson: Boolean, exercise: Exercise) {
-    val intent = Intent(context, ExerciseActivity::class.java)
-    intent.putExtra(KEY_ID, exercise.id)
-    intent.putExtra(KEY_LESSON, isLesson)
-    intent.putExtra(KEY_TITLE, exercise.title)
-    if (isLesson) {
-        intent.putExtra(KEY_DATE, exercise.date)
-        intent.putExtra(KEY_TEACHER, exercise.teacherName)
-    } else {
-        intent.putExtra(KEY_TEACHER, exercise.courseName)
-    }
     startActivityWithException(context, intent)
 }
 

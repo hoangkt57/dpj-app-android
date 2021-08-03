@@ -40,8 +40,11 @@
 
     <color name="course_card_top_bg">#F9F9F9</color>
 
-    <color name="workout_muted">#E65757</color>
-    <color name="workout_danger">#D97D36</color>
+    <color name="workout_none">@color/color_secondary</color>
+    <color name="workout_draft">@color/color_secondary</color>
+    <color name="workout_submitted">#f7f7fa</color>
+    <color name="workout_reviewed">#f7f7fa</color>
+    <color name="workout_reject">@color/color_secondary</color>
 
     <color name="student_tag_bg">#F0F3FA</color>
     <color name="student_tag_stroke">#9EA8BA</color>

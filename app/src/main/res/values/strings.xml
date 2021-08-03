@@ -48,9 +48,9 @@
     <string name="mtrl_picker_date_header_title" tools:override="true">日付を選択してください</string>
 
 
-    <string name="not_submitted">未提出</string>
+    <string name="not_proposed">未提出</string>
     <string name="draft">下書き</string>
-    <string name="submitted">未確認</string>
+    <string name="submitted">提出済み</string>
     <string name="reviewed">レビュー済み</string>
     <string name="rejected">再提出</string>
 
@@ -58,6 +58,8 @@
 
     <string name="student">受講生</string>
     <string name="teacher">講師</string>
+
+    <string name="record">記録</string>
 
     <string name="student_count_1">%d 人</string>
     <string name="edit">編集</string>
@@ -67,6 +69,8 @@
     <string name="your_answer">あなたのこたえ</string>
     <string name="submission_file">提出ファイル</string>
     <string name="file">ファイル</string>
+    <string name="material">資料</string>
+    <string name="comment_from_teacher">先生からのコメント</string>
 
     <string name="take_with_camera">カメラで撮影</string>
     <string name="add_from_library">ライブラリから追加</string>
@@ -74,7 +78,7 @@
     <string name="answer">こたえをかく</string>
 
     <string name="save_draft">下書き保存</string>
-    <string name="put_forward">提出</string>
+    <string name="put_forward">追加提出</string>
 
     <string name="present_situation">提出状況</string>
     <string name="content">内容</string>
@@ -201,6 +205,8 @@
 
     <string name="do_you_want_delete_workout">本当に削除しますか?</string>
     <string name="do_you_want_delete_workout_msg">このワークアウトを削除すると、受講生が提出した内容もすべて削除されます。この操作は取り消せません。本当によろしいですか？</string>
+
+    <string name="submit_submission_title">追加提出します。よろしいですか？</string>
 
 
 </resources>

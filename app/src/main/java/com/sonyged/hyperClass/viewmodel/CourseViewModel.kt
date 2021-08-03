@@ -11,6 +11,8 @@ import com.sonyged.hyperClass.PageCourseQuery
 import com.sonyged.hyperClass.SegLessonsQuery
 import com.sonyged.hyperClass.SegWorkoutsQuery
 import com.sonyged.hyperClass.api.ApiUtils
+import com.sonyged.hyperClass.constants.DATE_INVALID
+import com.sonyged.hyperClass.model.Attachment
 import com.sonyged.hyperClass.model.Course
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.model.Person
@@ -146,9 +148,9 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
         Timber.d("loadWorkouts")
         val result = arrayListOf<Exercise>()
         try {
-            val workoutsQuery = SegWorkoutsQuery(
+            val query = SegWorkoutsQuery(
                 courseId,
-                isTeacher = true,
+                isTeacher = isTeacher(),
                 filter = Input.optional(
                     WorkoutFilter(
                         dueDateBetween = Input.optional(
@@ -160,12 +162,24 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                     )
                 )
             )
-            val workoutResponse = ApiUtils.getApolloClient().query(workoutsQuery).await()
-            val courseTitle = workoutResponse.data?.node?.asCourse?.name ?: ""
-            workoutResponse.data?.node?.asCourse?.workoutsConnection?.edges?.forEach { edge ->
+            val response = ApiUtils.getApolloClient().query(query).await()
+            val courseTitle = response.data?.node?.asCourse?.name ?: ""
+            response.data?.node?.asCourse?.workoutsConnection?.edges?.forEach { edge ->
                 edge?.node?.let {
                     val teacherName = it.course.teacher.name ?: ""
-                    val status = it.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
+                    val status = it.studentWorkout?.status ?: WorkoutStatus.NONE
+                    val files = arrayListOf<Attachment>()
+                    it.studentWorkout?.attachments?.forEach { attachment ->
+                        files.add(
+                            Attachment(
+                                attachment.id,
+                                DATE_INVALID,
+                                attachment.filename,
+                                attachment.__typename,
+                                attachment.url
+                            )
+                        )
+                    }
                     result.add(
                         Exercise(
                             it.id,
@@ -175,7 +189,9 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             teacherName,
                             courseTitle,
                             status,
-                            null
+                            null,
+                            it.studentWorkout?.description,
+                            files
                         )
                     )
                 }

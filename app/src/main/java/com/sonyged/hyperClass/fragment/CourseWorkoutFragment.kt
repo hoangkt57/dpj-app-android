@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.contract.OpenWorkout
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.utils.formatDate1
-import com.sonyged.hyperClass.utils.startWorkoutActivity
 
 class CourseWorkoutFragment : BaseExerciseFragment() {
 
@@ -35,8 +35,9 @@ class CourseWorkoutFragment : BaseExerciseFragment() {
     override fun onItemClick(position: Int) {
         super.onItemClick(position)
 
-        val context = context ?: return
         val exercise = adapter.getAdapterItem(position)
-        startWorkoutActivity(context, exercise)
+        openWorkout.launch(exercise)
     }
+
+    private val openWorkout = registerForActivityResult(OpenWorkout()) {}
 }

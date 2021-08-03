@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.fragment
 
-import android.content.Intent
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,13 +14,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.activity.BaseActivity
-import com.sonyged.hyperClass.activity.SubmissionActivity
-import com.sonyged.hyperClass.constants.*
+import com.sonyged.hyperClass.constants.EVENT_WORKOUT_CHANGE
+import com.sonyged.hyperClass.constants.STATUS_FAILED
+import com.sonyged.hyperClass.constants.STATUS_LOADING
+import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
 import com.sonyged.hyperClass.contract.CreateWorkout
 import com.sonyged.hyperClass.contract.CreateWorkoutInput
+import com.sonyged.hyperClass.contract.OpenSubmissionWorkout
 import com.sonyged.hyperClass.databinding.FragmentWorkoutBinding
 import com.sonyged.hyperClass.databinding.ViewItemDetailValueBinding
+import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
 import com.sonyged.hyperClass.model.Status
+import com.sonyged.hyperClass.model.StatusResource
 import com.sonyged.hyperClass.model.Workout
 import com.sonyged.hyperClass.observer.AppObserver
 import com.sonyged.hyperClass.utils.formatDate2
@@ -53,12 +57,21 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!viewModel.isTeacher()) {
+            binding.status.root.visibility = View.VISIBLE
+            binding.answer.root.visibility = View.VISIBLE
+            binding.submissionFile.root.visibility = View.VISIBLE
+            binding.comment.root.visibility = View.VISIBLE
+        }
+
         binding.course.text1.setText(R.string.course)
         binding.description.text1.setText(R.string.description)
         binding.deadline.text1.setText(R.string.deadline)
-//        binding.status.text1.setText(R.string.status)
-//        binding.answer.text1.setText(R.string.your_answer)
-        binding.file.text1.setText(R.string.submission_file)
+        binding.material.text1.setText(R.string.material)
+        binding.status.text1.setText(R.string.status)
+        binding.answer.text1.setText(R.string.your_answer)
+        binding.submissionFile.text1.setText(R.string.submission_file)
+        binding.comment.text1.setText(R.string.comment_from_teacher)
 
         binding.editButton.setImageDrawable(
             ContextCompat.getDrawable(
@@ -74,7 +87,9 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
                     shrinkFab()
                 }
             } else {
-                startSubmissionActivity()
+                viewModel.workout.value?.let {
+                    openSubmissionWorkout.launch(it)
+                }
             }
         }
 
@@ -94,6 +109,11 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
 
         viewModel.workout.observe(viewLifecycleOwner) { updateWorkout(it) }
         viewModel.status.observe(viewLifecycleOwner) { updateStatus(it) }
+        viewModel.info.observe(viewLifecycleOwner) { updateInfo(it) }
+    }
+
+    private fun updateInfo(info: Triple<String, String, String>) {
+        binding.course.text2.text = info.third
     }
 
     private fun updateStatus(status: Status) {
@@ -123,29 +143,40 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
 
     private fun updateWorkout(workout: Workout) {
         Timber.d("updateWorkout - workout: $workout")
-
-        binding.course.text2.text = workout.courseName
+        val context = context ?: return
         binding.description.text2.text = workout.description
         binding.deadline.text2.text = formatDate2(workout.date)
-
+        binding.material.value.removeAllViews()
         workout.files.forEach { attachment ->
-            val fileBinding =
-                ViewItemDetailValueBinding.inflate(LayoutInflater.from(requireContext()))
+            val fileBinding = ViewItemDetailValueBinding.inflate(LayoutInflater.from(context))
             fileBinding.root.text = attachment.filename
             val params = LinearLayoutCompat.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             params.topMargin = resources.getDimensionPixelSize(R.dimen.item_detail_value_margin_top)
             fileBinding.root.setOnClickListener {
-                previewFileActivity(requireContext(), attachment)
+                previewFileActivity(context, attachment)
             }
-            binding.file.root.addView(fileBinding.root, params)
+            binding.material.value.addView(fileBinding.root, params)
         }
-    }
-
-    private fun startSubmissionActivity() {
-        val name = viewModel.workout.value?.name ?: ""
-        val intent = Intent(requireContext(), SubmissionActivity::class.java)
-        intent.putExtra(KEY_WORKOUT_NAME, name)
-        startActivity(intent)
+        if (!viewModel.isTeacher()) {
+            val statusValues = StatusResource.getStatus(workout.status)
+            if (statusValues.text != 0) {
+                binding.status.text3.setText(statusValues.text)
+                binding.status.text3.setTextColor(ContextCompat.getColor(context, statusValues.textColor))
+                binding.status.text3.setBackgroundColor(ContextCompat.getColor(context, statusValues.bgColor))
+            }
+            binding.status.text2.text = formatDate2(workout.submittedAt)
+            binding.answer.text2.text = workout.answer
+            binding.submissionFile.value.removeAllViews()
+            workout.submissionFile.forEach { attachment ->
+                val fileBinding = ViewItemSubmissionFileBinding.inflate(LayoutInflater.from(context))
+                fileBinding.text2.text = attachment.filename
+                fileBinding.text3.text = formatDate2(attachment.createAt)
+                fileBinding.root.setOnClickListener {
+                    previewFileActivity(context, attachment)
+                }
+                binding.submissionFile.value.addView(fileBinding.root)
+            }
+        }
     }
 
     private fun shrinkFab() {
@@ -194,5 +225,6 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
     }
 
     private val createWorkout = registerForActivityResult(CreateWorkout()) {}
+    private val openSubmissionWorkout = registerForActivityResult(OpenSubmissionWorkout()) {}
 
 }

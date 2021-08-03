@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/item_margin_edge"
-        app:layout_constraintBottom_toTopOf="@+id/save_draft"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/color_primary_variant"
+                android:textColor="@color/color_text_primary"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description_text" />
@@ -84,7 +84,7 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="@dimen/item_margin_edge"
                 android:background="@color/setting_divider"
-                app:layout_constraintTop_toBottomOf="@+id/description_text" />
+                app:layout_constraintTop_toBottomOf="@+id/description" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/file_text"
@@ -99,14 +99,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/file"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/color_text_primary"
-                android:textSize="15sp"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical"
+                android:paddingBottom="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/file_text" />
 
@@ -159,7 +159,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/camera" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/reply_text"
+                android:id="@+id/answer_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_margin_edge"
@@ -172,7 +172,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reply_text_field"
+                android:id="@+id/answer_text_field"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,10 +184,10 @@
                 app:boxStrokeWidth="1dp"
                 app:hintEnabled="false"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reply_text">
+                app:layout_constraintTop_toBottomOf="@+id/answer_text">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/reply_edit"
+                    android:id="@+id/answer_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -198,12 +198,9 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_draft"
@@ -215,6 +212,7 @@
         android:layout_marginBottom="@dimen/item_margin_edge"
         android:text="@string/save_draft"
         android:textColor="@color/color_primary_variant"
+        android:visibility="gone"
         app:backgroundTint="@color/color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/submit"
@@ -225,17 +223,18 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submit"
         style="@style/Submission.Button.Text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="@dimen/item_margin_edge"
         android:layout_marginBottom="@dimen/item_margin_edge"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
         android:text="@string/put_forward"
         android:textColor="@color/on_primary"
         app:backgroundTint="@color/color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/save_draft" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

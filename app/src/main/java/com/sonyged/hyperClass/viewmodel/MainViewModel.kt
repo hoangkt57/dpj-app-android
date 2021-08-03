@@ -74,14 +74,11 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 isTeacher
             )
             val pageResponse = ApiUtils.getApolloClient().query(homeQuery).await()
-
             pageResponse.data?.currentUser?.eventsConnection?.edges?.forEach { edge ->
                 edge?.node?.asLesson?.fragments?.tabHomeLessonFragment?.let {
                     val teacherName = it.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
-
                     val status = LessonStatus.UNKNOWN__
-
                     result.add(
                         Exercise(
                             it.id,
@@ -99,9 +96,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 edge?.node?.asWorkout?.fragments?.tabHomeWorkoutFragment?.let {
                     val teacherName = it.course.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
-
-                    val status = it.studentWorkout?.status ?: WorkoutStatus.UNKNOWN__
-
+                    val status = it.studentWorkout?.status ?: WorkoutStatus.NONE
                     result.add(
                         Exercise(
                             it.id,
@@ -116,9 +111,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     )
                 }
             }
-
             Timber.d("loadHomeData - time: ${System.currentTimeMillis() - time}")
-
         } catch (e: Exception) {
             Timber.e(e)
         }

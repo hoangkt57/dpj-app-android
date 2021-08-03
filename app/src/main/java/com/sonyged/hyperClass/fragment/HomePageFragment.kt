@@ -15,11 +15,11 @@ import com.sonyged.hyperClass.activity.MainActivity
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.contract.OpenLesson
+import com.sonyged.hyperClass.contract.OpenWorkout
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
 import com.sonyged.hyperClass.model.Exercise
 import com.sonyged.hyperClass.type.UserEventFilterType
 import com.sonyged.hyperClass.utils.formatDayWithName
-import com.sonyged.hyperClass.utils.startWorkoutActivity
 import com.sonyged.hyperClass.viewmodel.MainViewModel
 import com.sonyged.hyperClass.views.ExerciseSpaceItemDecoration
 import timber.log.Timber
@@ -77,11 +77,10 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         Timber.d("onItemClick - position: $position")
 
         val exercise = adapter.getAdapterItem(position)
-        val context = context ?: return
         if (exercise.type == UserEventFilterType.LESSON) {
             openLesson.launch(exercise)
         } else if (exercise.type == UserEventFilterType.WORKOUT) {
-            startWorkoutActivity(context, exercise)
+            openWorkout.launch(exercise)
         }
     }
 
@@ -161,5 +160,6 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     }
 
     private val openLesson = registerForActivityResult(OpenLesson()) {}
+    private val openWorkout = registerForActivityResult(OpenWorkout()) {}
 
 }

@@ -34,6 +34,7 @@ query PageWorkout($id: ID!, $isTeacher: Boolean!, $baseUrl: String!) {
               filename
               contentType
               url
+              createdAt
               __typename
             }
             comments {
@@ -56,11 +57,13 @@ query PageWorkout($id: ID!, $isTeacher: Boolean!, $baseUrl: String!) {
           __typename
         }
         status
+        submittedAt
         attachments {
           id
           filename
           contentType
           url
+          createdAt
           __typename
         }
         comments {

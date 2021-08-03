@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sonyged.hyperClass.databinding.ItemImageBinding
 import com.sonyged.hyperClass.glide.GlideApp
 import com.sonyged.hyperClass.glide.MyGlideModule
+import com.sonyged.hyperClass.model.Attachment
 
 class ImageViewHolder(listener: OnItemClickListener?, private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -14,9 +15,9 @@ class ImageViewHolder(listener: OnItemClickListener?, private val binding: ItemI
         }
     }
 
-    fun bindView(uri: Uri) {
+    fun bindView(attachment: Attachment) {
         GlideApp.with(binding.image)
-            .load(uri)
+            .load(Uri.parse(attachment.url))
             .apply(MyGlideModule.noCacheOptions())
             .into(binding.image)
     }

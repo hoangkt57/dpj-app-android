@@ -7,17 +7,33 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Workout(
     val id: String,
+    val studentWorkoutId: String?,
     val name: String,
-    val courseName: String,
     val description: String,
     val date: Long,
     val status: WorkoutStatus,
-    val files: List<Attachment>
+    val files: List<Attachment>,
+    val submittedAt: Long,
+    val answer: String,
+    val submissionFile: List<Attachment>,
+    val comment: String
 ) : Parcelable {
 
     companion object {
         fun empty(): Workout {
-            return Workout("", "", "", "", -1, WorkoutStatus.UNKNOWN__, arrayListOf())
+            return Workout(
+                "",
+                null,
+                "",
+                "",
+                -1,
+                WorkoutStatus.UNKNOWN__,
+                arrayListOf(),
+                -1,
+                "",
+                arrayListOf(),
+                ""
+            )
         }
     }
 

@@ -72,11 +72,11 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
 
     private fun removeInternalFile(attachment: Attachment?) {
         Timber.d("removeInternalFile - attachment: $attachment")
-        if (attachment?.url == null) {
+        if (attachment?.path == null) {
             return
         }
         try {
-            val file = File(attachment.url)
+            val file = File(attachment.path)
             file.deleteRecursively()
         } catch (e: Exception) {
             Timber.e(e, "removeInternalFile")
@@ -108,7 +108,7 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
                         context.contentResolver.openInputStream(uri).use {
                             it?.copyTo(upload.outputStream())
                         }
-                        result[id] = Attachment(id, name, mimeType, upload.absolutePath)
+                        result[id] = Attachment(id, DATE_INVALID, name, mimeType, uri.toString(), upload.absolutePath)
                         Timber.d("setFile - new attachment: ${result[id]}")
                     }
                     uris.postValue(result)
@@ -174,7 +174,7 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
                 val attachments = if (newFile.isNotEmpty()) {
                     val list = arrayListOf<FileUpload>()
                     newFile.forEach {
-                        list.add(FileUpload(it.contentType ?: "", it.url))
+                        list.add(FileUpload(it.contentType ?: "", it.path))
                     }
                     Input.optional(list.toList())
                 } else {

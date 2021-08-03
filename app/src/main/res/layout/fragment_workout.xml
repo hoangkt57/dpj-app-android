@@ -4,37 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/course"
-            layout="@layout/view_item_detail" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/description"
-            layout="@layout/view_item_detail" />
+            <include
+                android:id="@+id/course"
+                layout="@layout/view_item_detail" />
 
-        <include
-            android:id="@+id/deadline"
-            layout="@layout/view_item_detail" />
+            <include
+                android:id="@+id/description"
+                layout="@layout/view_item_detail" />
 
-        <!--        <include-->
-        <!--            android:id="@+id/status"-->
-        <!--            layout="@layout/view_item_detail" />-->
+            <include
+                android:id="@+id/deadline"
+                layout="@layout/view_item_detail" />
 
-        <!--        <include-->
-        <!--            android:id="@+id/answer"-->
-        <!--            layout="@layout/view_item_detail" />-->
+            <include
+                android:id="@+id/material"
+                layout="@layout/view_item_detail_multiple_value" />
 
-        <include
-            android:id="@+id/file"
-            layout="@layout/view_item_detail_multiple_value" />
+            <include
+                android:id="@+id/status"
+                layout="@layout/view_item_status_date"
+                android:visibility="gone" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <include
+                android:id="@+id/answer"
+                layout="@layout/view_item_detail"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/submission_file"
+                layout="@layout/view_item_detail_multiple_value"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/comment"
+                layout="@layout/view_item_detail"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_button"

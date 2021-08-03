@@ -1,0 +1,32 @@
+mutation submitAdditionalStudentWorkout($studentWorkoutId: ID!, $input: StudentWorkoutSubmitAdditionalInput!) {
+  studentworkoutSubmitAdditional(studentWorkoutId: $studentWorkoutId, input: $input) {
+    ...Success
+    ...Failure
+  }
+}
+fragment Success on StudentWorkoutMutationSuccess {
+  studentWorkout {
+    id
+    description
+    student {
+      id
+    }
+    workout {
+      id
+    }
+    status
+    attachments {
+      id
+      filename
+      contentType
+      url
+    }
+  }
+}
+fragment Failure on StudentWorkoutMutationFailure {
+  errors {
+    code
+    message
+    field
+  }
+}
