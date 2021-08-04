@@ -101,10 +101,10 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
         Timber.d("loadWorkout")
         viewModelScope.launch(Dispatchers.Default) {
             try {
+                val context = getApplication<Application>()
                 val result = arrayListOf<Student>()
                 val query = PageWorkoutQuery(id, sharedPref.isTeacher(), "")
                 val response = ApiUtils.getApolloClient().query(query).await()
-
                 val id = response.data?.node?.asWorkout?.id ?: ""
                 val studentWorkoutId = response.data?.node?.asWorkout?.studentWorkout?.id ?: ""
                 val name = response.data?.node?.asWorkout?.title ?: ""
@@ -141,7 +141,16 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 }
                 response.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
-                        result.add(Student(it.id, it.name ?: "", 0, it.__typename))
+                        result.add(
+                            Student(
+                                it.id,
+                                it.name ?: "",
+                                0,
+                                it.__typename,
+                                edge.studentWorkout?.status,
+                                StatusResource.getStudentStatus(context, edge.studentWorkout?.status ?: WorkoutStatus.NONE)
+                            )
+                        )
                     }
                 }
                 students.postValue(result)

@@ -1,0 +1,38 @@
+mutation sendStudentWorkoutReview($studentWorkoutId: ID!, $status: WorkoutReviewStatus!, $comment: String!) {
+  studentworkoutReview(studentWorkoutId: $studentWorkoutId, input: {status: $status}) {
+    ... on StudentWorkoutMutationSuccess {
+      studentWorkout {
+        id
+        description
+        status
+      }
+    }
+    ... on StudentWorkoutMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+  studentWorkoutComment(studentWorkoutId: $studentWorkoutId, content: $comment) {
+    ... on StudentWorkoutMutationSuccess {
+      studentWorkout {
+        id
+        description
+        status
+        comments {
+          id
+          content
+        }
+      }
+    }
+    ... on StudentWorkoutMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

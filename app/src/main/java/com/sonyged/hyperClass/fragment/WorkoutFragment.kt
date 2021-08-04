@@ -158,9 +158,9 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
             binding.material.value.addView(fileBinding.root, params)
         }
         if (!viewModel.isTeacher()) {
-            val statusValues = StatusResource.getStatus(workout.status)
-            if (statusValues.text != 0) {
-                binding.status.text3.setText(statusValues.text)
+            val statusValues = StatusResource.getStatus(context, workout.status)
+            if (statusValues != null) {
+                binding.status.text3.text = statusValues.text
                 binding.status.text3.setTextColor(ContextCompat.getColor(context, statusValues.textColor))
                 binding.status.text3.setBackgroundColor(ContextCompat.getColor(context, statusValues.bgColor))
             }

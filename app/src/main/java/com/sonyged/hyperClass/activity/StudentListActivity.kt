@@ -9,7 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ChooseUserAdapter
 import com.sonyged.hyperClass.adapter.StudentAdapter
-import com.sonyged.hyperClass.adapter.viewholder.OnDeleteClickListener
+import com.sonyged.hyperClass.adapter.viewholder.OnActionClickListener
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.contract.OpenStudent
@@ -22,7 +22,7 @@ import com.sonyged.hyperClass.viewmodel.StudentListViewModel
 import com.sonyged.hyperClass.viewmodel.StudentListViewModelFactory
 import timber.log.Timber
 
-class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickListener {
+class StudentListActivity : BaseActivity(), OnItemClickListener, OnActionClickListener {
 
     private val binding: ActivityStudentListBinding by lazy {
         ActivityStudentListBinding.inflate(layoutInflater)
@@ -35,7 +35,7 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
     }
 
     private val adapter: StudentAdapter by lazy {
-        StudentAdapter(this, this, viewModel.isTeacher(), viewModel.isOwner())
+        StudentAdapter(this, this, viewModel.isTeacher(), viewModel.isOwner(), false)
     }
 
     private val filterAdapter: ChooseUserAdapter by lazy {
@@ -114,8 +114,8 @@ class StudentListActivity : BaseActivity(), OnItemClickListener, OnDeleteClickLi
 
     }
 
-    override fun onDeleteClick(position: Int) {
-        Timber.d("onDeleteClick - position: $position")
+    override fun onActionClick(position: Int) {
+        Timber.d("onActionClick - position: $position")
 
         val item = adapter.getAdapterItem(position)
         deleteStudentDialog(item)

@@ -1,7 +1,6 @@
 package com.sonyged.hyperClass.viewmodel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Input

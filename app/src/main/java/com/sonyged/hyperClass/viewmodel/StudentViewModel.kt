@@ -83,7 +83,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
                                 UserEventFilterType.LESSON,
                                 teacherName,
                                 courseName,
-                                LessonStatus.UNKNOWN__,
+                                null,
                                 null
                             )
                         )
@@ -120,7 +120,7 @@ class StudentViewModel(application: Application, val studentId: String) : BaseVi
                                 UserEventFilterType.WORKOUT,
                                 teacherName,
                                 courseName,
-                                WorkoutStatus.UNKNOWN__,
+                                null,
                                 null
                             )
                         )

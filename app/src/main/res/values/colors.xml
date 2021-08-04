@@ -45,6 +45,7 @@
     <color name="workout_submitted">#f7f7fa</color>
     <color name="workout_reviewed">#f7f7fa</color>
     <color name="workout_reject">@color/color_secondary</color>
+    <color name="workout_verify">#e8f6f2</color>
 
     <color name="student_tag_bg">#F0F3FA</color>
     <color name="student_tag_stroke">#9EA8BA</color>

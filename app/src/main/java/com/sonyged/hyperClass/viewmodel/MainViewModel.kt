@@ -7,16 +7,12 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
-import com.google.gson.Gson
 import com.sonyged.hyperClass.PageLayoutQuery
 import com.sonyged.hyperClass.TabCoursesQuery
 import com.sonyged.hyperClass.TabHomeQuery
 import com.sonyged.hyperClass.UpdateInfoMutation
 import com.sonyged.hyperClass.api.ApiUtils
-import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.model.Person
-import com.sonyged.hyperClass.model.User
+import com.sonyged.hyperClass.model.*
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.*
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +63,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         val result = arrayListOf<Exercise>()
         try {
             val time = System.currentTimeMillis()
+            val context = getApplication<Application>()
             val isTeacher = sharedPref.isTeacher()
             val homeQuery = TabHomeQuery(
                 Input.optional(""),
@@ -78,7 +75,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 edge?.node?.asLesson?.fragments?.tabHomeLessonFragment?.let {
                     val teacherName = it.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
-                    val status = LessonStatus.UNKNOWN__
                     result.add(
                         Exercise(
                             it.id,
@@ -87,7 +83,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseName,
-                            status,
+                            null,
                             it.kickUrl
                         )
                     )
@@ -96,7 +92,28 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 edge?.node?.asWorkout?.fragments?.tabHomeWorkoutFragment?.let {
                     val teacherName = it.course.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
-                    val status = it.studentWorkout?.status ?: WorkoutStatus.NONE
+                    var submittedCount = 0
+                    it.studentWorkouts?.forEach { studentWorkout ->
+                        if (studentWorkout.status == WorkoutStatus.SUBMITTED) {
+                            submittedCount++
+                        }
+                    }
+
+                    val status = if (isTeacher) {
+                        if (submittedCount == 0) {
+                            WorkoutStatus.UNKNOWN__
+                        } else {
+                            TeacherStatus.VERIFY
+                        }
+                    } else {
+                        it.studentWorkout?.status ?: WorkoutStatus.NONE
+                    }
+                    val temp = StatusResource.getStatus(context, status)
+                    val statusResource = if (temp != null && status == TeacherStatus.VERIFY) {
+                        temp.copy(text = temp.text + " " + submittedCount)
+                    } else {
+                        temp
+                    }
                     result.add(
                         Exercise(
                             it.id,
@@ -105,7 +122,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                             UserEventFilterType.WORKOUT,
                             teacherName,
                             courseName,
-                            status,
+                            statusResource,
                             null
                         )
                     )

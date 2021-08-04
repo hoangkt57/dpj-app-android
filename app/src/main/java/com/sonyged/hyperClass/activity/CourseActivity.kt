@@ -47,8 +47,12 @@ class CourseActivity : BaseActivity(), Observer {
 
     private fun setupView() {
 
-        binding.review.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
-        binding.create.visibility = if (viewModel.isTeacher()) View.VISIBLE else View.INVISIBLE
+        if (viewModel.isTeacher()) {
+            binding.review.visibility = View.VISIBLE
+            binding.create.visibility = View.VISIBLE
+            binding.record.visibility = View.GONE
+            binding.divider2.visibility = View.GONE
+        }
 
         binding.back.setOnClickListener {
             finish()

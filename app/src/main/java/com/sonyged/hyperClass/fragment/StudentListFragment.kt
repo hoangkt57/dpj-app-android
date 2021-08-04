@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.StudentAdapter
+import com.sonyged.hyperClass.adapter.viewholder.OnActionClickListener
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.databinding.FragmentStudentListBinding
 import com.sonyged.hyperClass.model.Student
@@ -13,7 +14,7 @@ import com.sonyged.hyperClass.utils.startStudentActivity
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
 import timber.log.Timber
 
-class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItemClickListener {
+class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItemClickListener, OnActionClickListener {
 
     companion object {
 
@@ -31,7 +32,7 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
     }
 
     private val adapter: StudentAdapter by lazy {
-        StudentAdapter(this, viewModel.isTeacher(), false)
+        StudentAdapter(this, this, viewModel.isTeacher(), false, true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,5 +62,9 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
 
         val student = adapter.getAdapterItem(position)
         startStudentActivity(requireContext(), student)
+    }
+
+    override fun onActionClick(position: Int) {
+        Timber.d("onItemClick - position: $position")
     }
 }

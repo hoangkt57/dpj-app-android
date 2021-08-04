@@ -10,7 +10,6 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.databinding.ItemExerciseBinding
 import com.sonyged.hyperClass.databinding.ViewItemExerciseFileBinding
 import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.model.StatusResource
 import com.sonyged.hyperClass.type.UserEventFilterType
 import com.sonyged.hyperClass.utils.previewFileActivity
 
@@ -48,12 +47,11 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
             )
         }
 
-        val statusValues = StatusResource.getStatus(exercise.status)
-        if (statusValues.text != 0) {
+        if (exercise.status != null) {
             binding.status.visibility = View.VISIBLE
-            binding.status.setText(statusValues.text)
-            binding.status.setTextColor(ContextCompat.getColor(itemView.context, statusValues.textColor))
-            binding.status.setBackgroundColor(ContextCompat.getColor(itemView.context, statusValues.bgColor))
+            binding.status.text = exercise.status.text
+            binding.status.setTextColor(ContextCompat.getColor(itemView.context, exercise.status.textColor))
+            binding.status.setBackgroundColor(ContextCompat.getColor(itemView.context, exercise.status.bgColor))
         } else {
             binding.status.visibility = View.INVISIBLE
         }

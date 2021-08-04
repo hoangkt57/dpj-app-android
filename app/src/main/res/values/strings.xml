@@ -53,6 +53,7 @@
     <string name="submitted">提出済み</string>
     <string name="reviewed">レビュー済み</string>
     <string name="rejected">再提出</string>
+    <string name="pending_verification">確認待ち</string>
 
     <string name="start">スタート</string>
 
@@ -207,6 +208,9 @@
     <string name="do_you_want_delete_workout_msg">このワークアウトを削除すると、受講生が提出した内容もすべて削除されます。この操作は取り消せません。本当によろしいですか？</string>
 
     <string name="submit_submission_title">追加提出します。よろしいですか？</string>
+
+    <string name="view">みる</string>
+    <string name="please_confirm">確認してください</string>
 
 
 </resources>

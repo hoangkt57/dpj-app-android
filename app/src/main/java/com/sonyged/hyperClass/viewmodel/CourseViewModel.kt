@@ -12,10 +12,7 @@ import com.sonyged.hyperClass.SegLessonsQuery
 import com.sonyged.hyperClass.SegWorkoutsQuery
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.DATE_INVALID
-import com.sonyged.hyperClass.model.Attachment
-import com.sonyged.hyperClass.model.Course
-import com.sonyged.hyperClass.model.Exercise
-import com.sonyged.hyperClass.model.Person
+import com.sonyged.hyperClass.model.*
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.*
 import kotlinx.coroutines.Dispatchers
@@ -132,7 +129,7 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseTitle,
-                            LessonStatus.UNKNOWN__,
+                            null,
                             it.kickUrl
                         )
                     )
@@ -148,6 +145,7 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
         Timber.d("loadWorkouts")
         val result = arrayListOf<Exercise>()
         try {
+            val context = getApplication<Application>()
             val query = SegWorkoutsQuery(
                 courseId,
                 isTeacher = isTeacher(),
@@ -167,7 +165,6 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
             response.data?.node?.asCourse?.workoutsConnection?.edges?.forEach { edge ->
                 edge?.node?.let {
                     val teacherName = it.course.teacher.name ?: ""
-                    val status = it.studentWorkout?.status ?: WorkoutStatus.NONE
                     val files = arrayListOf<Attachment>()
                     it.studentWorkout?.attachments?.forEach { attachment ->
                         files.add(
@@ -180,6 +177,28 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             )
                         )
                     }
+                    var submittedCount = 0
+                    it.studentWorkouts?.forEach { studentWorkout ->
+                        if (studentWorkout.status == WorkoutStatus.SUBMITTED) {
+                            submittedCount++
+                        }
+                    }
+
+                    val status = if (isTeacher()) {
+                        if (submittedCount == 0) {
+                            WorkoutStatus.UNKNOWN__
+                        } else {
+                            TeacherStatus.VERIFY
+                        }
+                    } else {
+                        it.studentWorkout?.status ?: WorkoutStatus.NONE
+                    }
+                    val temp = StatusResource.getStatus(context, status)
+                    val statusResource = if (temp != null && status == TeacherStatus.VERIFY) {
+                        temp.copy(text = temp.text + " " + submittedCount)
+                    } else {
+                        temp
+                    }
                     result.add(
                         Exercise(
                             it.id,
@@ -188,7 +207,7 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             UserEventFilterType.WORKOUT,
                             teacherName,
                             courseTitle,
-                            status,
+                            statusResource,
                             null,
                             it.studentWorkout?.description,
                             files

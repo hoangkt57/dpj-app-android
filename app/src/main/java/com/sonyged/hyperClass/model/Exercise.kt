@@ -11,7 +11,7 @@ data class Exercise(
     val type: UserEventFilterType,
     val teacherName: String,
     val courseName: String,
-    val status: EnumValue,
+    val status: StatusResource?,
     val kickUrl: String?,
     val answer: String?,
     val attachments: List<Attachment>?
@@ -23,7 +23,7 @@ data class Exercise(
         type: UserEventFilterType,
         teacherName: String,
         courseName: String,
-        status: EnumValue,
+        status: StatusResource?,
         kickUrl: String?
     ) : this(id, title, date, type, teacherName, courseName, status, kickUrl, null, null)
 

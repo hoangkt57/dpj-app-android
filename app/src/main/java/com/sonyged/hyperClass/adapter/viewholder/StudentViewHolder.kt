@@ -9,11 +9,11 @@ import com.sonyged.hyperClass.model.Student
 
 class StudentViewHolder(
     private val listener: OnItemClickListener?,
-    private val deleteListener: OnDeleteClickListener?,
+    private val actionListener: OnActionClickListener?,
     private val isTeacher: Boolean,
     private val isOwner: Boolean,
     private val binding: ItemStudentBinding
-) : RecyclerView.ViewHolder(binding.root) {
+) : BaseStudentViewHolder(binding.root) {
 
     init {
         if (isTeacher) {
@@ -21,12 +21,12 @@ class StudentViewHolder(
                 listener?.onItemClick(absoluteAdapterPosition)
             }
             binding.delete.setOnClickListener {
-                deleteListener?.onDeleteClick(absoluteAdapterPosition)
+                actionListener?.onActionClick(absoluteAdapterPosition)
             }
         }
     }
 
-    fun bindView(student: Student) {
+    override fun bindView(student: Student) {
         binding.name.text = student.name
         if (!isOwner) {
             binding.delete.visibility = View.INVISIBLE
