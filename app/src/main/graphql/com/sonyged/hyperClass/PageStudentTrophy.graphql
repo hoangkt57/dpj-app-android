@@ -1,0 +1,51 @@
+query PageStudentTrophy($id: ID!) {
+  node(id: $id) {
+    ... on Course {
+      id
+      name
+      achievements {
+        unlockedAt
+        seenAt
+        targetType
+        targetId
+        achievement {
+          id
+          name
+          rules {
+            category
+            activationValue
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  currentUser {
+    id
+    name
+    coursesConnection(first: 1, filter: {id: $id}) {
+      totalCount
+      edges {
+        node {
+          id
+          name
+          stats {
+            participationDurationInSec
+            raisedHandCount
+            speakDurationInSec
+            trophyCount
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

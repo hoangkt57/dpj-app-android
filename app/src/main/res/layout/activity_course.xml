@@ -123,19 +123,19 @@
                 app:iconGravity="textStart"
                 app:iconTint="@color/color_primary_variant"
                 app:layout_constraintBottom_toBottomOf="@+id/divider1"
-                app:layout_constraintEnd_toStartOf="@+id/record"
+                app:layout_constraintEnd_toStartOf="@+id/trophy"
                 app:layout_constraintStart_toEndOf="@+id/teacher"
                 app:layout_constraintTop_toTopOf="@+id/divider1" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/record"
+                android:id="@+id/trophy"
                 style="@style/BaseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/record"
                 android:textColor="@color/color_primary_variant"
                 android:textSize="12sp"
-                app:icon="@drawable/ic_cup"
+                app:icon="@drawable/ic_trophy"
                 app:iconGravity="textStart"
                 app:iconTint="@color/color_primary_variant"
                 app:layout_constraintBottom_toBottomOf="@+id/divider2"

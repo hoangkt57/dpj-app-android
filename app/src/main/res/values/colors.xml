@@ -62,5 +62,11 @@
     <color name="review_page_button_disable">#c5c6c7</color>
     <color name="review_button_bg_selected">#1F4168C6</color>
 
+    <color name="trophy_won">#B2AE2A</color>
+    <color name="trophy_progress_track">#FFFFFF</color>
+    <color name="trophy_progress_indicator">@color/color_secondary</color>
+    <color name="speak_progress_indicator">@color/color_primary</color>
+    <color name="hand_progress_indicator">#C8D52A</color>
+
 
 </resources>

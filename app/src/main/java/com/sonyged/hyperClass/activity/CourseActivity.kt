@@ -50,7 +50,7 @@ class CourseActivity : BaseActivity(), Observer {
         if (viewModel.isTeacher()) {
             binding.review.visibility = View.VISIBLE
             binding.create.visibility = View.VISIBLE
-            binding.record.visibility = View.GONE
+            binding.trophy.visibility = View.GONE
             binding.divider2.visibility = View.GONE
         }
 
@@ -93,6 +93,12 @@ class CourseActivity : BaseActivity(), Observer {
         binding.studentCount.setOnClickListener {
             viewModel.course.value?.let {
                 openStudentList.launch(it)
+            }
+        }
+
+        binding.trophy.setOnClickListener {
+            viewModel.course.value?.let {
+                openTrophy.launch(it.id)
             }
         }
 
@@ -139,6 +145,7 @@ class CourseActivity : BaseActivity(), Observer {
     private val openCourseDetail = registerForActivityResult(OpenCourseDetail()) {}
     private val createLesson = registerForActivityResult(CreateLesson()) {}
     private val createWorkout = registerForActivityResult(CreateWorkout()) {}
+    private val openTrophy = registerForActivityResult(OpenTrophy()) {}
 
     override fun onEvent(event: Int, data: Bundle?) {
         Timber.d("onEvent - event: $event")

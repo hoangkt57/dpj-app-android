@@ -226,5 +226,13 @@
     <string name="i_reviewed">レビューしました</string>
     <string name="verification">確認</string>
 
+    <string name="your_record_in_course">このコースでのあなたの記録</string>
+    <string name="reach_goal">目標達成！</string>
+    <string name="goal">目標 %d</string>
+    <string name="percent">%d%%</string>
+    <string name="trophy_won">獲得したトロフィー</string>
+    <string name="number_remark">発言回数</string>
+    <string name="number_hand_raise">挙手回数</string>
+
 
 </resources>
