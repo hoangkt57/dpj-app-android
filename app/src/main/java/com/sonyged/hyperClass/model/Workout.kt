@@ -11,7 +11,7 @@ data class Workout(
     val name: String,
     val description: String,
     val date: Long,
-    val status: WorkoutStatus,
+    val status: WorkoutStatus?,
     val files: List<Attachment>,
     val submittedAt: Long,
     val answer: String,

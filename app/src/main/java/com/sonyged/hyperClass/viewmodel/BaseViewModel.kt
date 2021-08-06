@@ -25,6 +25,10 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
         sharedPref.setLoginSuccess(true)
     }
 
+    protected fun sendErrorStatus() {
+        status.postValue(Status(STATUS_FAILED))
+    }
+
     protected fun sendErrorStatus(error: String) {
         val value = Status(STATUS_FAILED)
         value.extras.putString(KEY_ERROR_MSG, error)
@@ -35,6 +39,10 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
         val value = Status(STATUS_SUCCESSFUL)
         value.extras.putString(KEY_SUCCESS_MSG, text)
         status.postValue(value)
+    }
+
+    protected fun sendSuccessStatus() {
+        status.postValue(Status(STATUS_SUCCESSFUL))
     }
 
     protected fun sendErrorStatus(errors: List<Any>?) {

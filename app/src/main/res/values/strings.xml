@@ -28,6 +28,7 @@
     <string name="license">ソフトウェアライセンス</string>
 
     <string name="review">概要</string>
+    <string name="review2">レビュー</string>
 
     <string name="student_count">受講生 %d</string>
     <string name="teacher_info">%s | %s</string>
@@ -54,6 +55,8 @@
     <string name="reviewed">レビュー済み</string>
     <string name="rejected">再提出</string>
     <string name="pending_verification">確認待ち</string>
+    <string name="completion">完了</string>
+    <string name="reintroduction">再提出依頼</string>
 
     <string name="start">スタート</string>
 
@@ -211,6 +214,17 @@
 
     <string name="view">みる</string>
     <string name="please_confirm">確認してください</string>
+    <string name="next_student">次の生徒</string>
+    <string name="prev_student">前の生徒</string>
+    <string name="good_job">よくできました</string>
+    <string name="confirmed">確認しました</string>
+    <string name="check_again">もう一度確認してみよう</string>
+    <string name="to_comment">コメントする</string>
+    <string name="enter_comment">コメントを入力</string>
+    <string name="resubmit">再提出させる</string>
+    <string name="send_review">レビューを送信</string>
+    <string name="i_reviewed">レビューしました</string>
+    <string name="verification">確認</string>
 
 
 </resources>

@@ -155,6 +155,9 @@ class CourseActivity : BaseActivity(), Observer {
             EVENT_STUDENT_CHANGE -> {
                 viewModel.loadCourse()
             }
+            EVENT_REVIEW_CHANGE -> {
+                viewModel.loadWorkouts()
+            }
         }
     }
 

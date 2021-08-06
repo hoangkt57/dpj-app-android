@@ -1,6 +1,7 @@
 package com.sonyged.hyperClass.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityAgreementBinding
@@ -46,17 +47,31 @@ class AgreementPpActivity : BaseActivity() {
 
     private fun updateStatus(status: Status) {
         Timber.d("updateStatus - status: $status")
-
-        if (status.id == LOGIN_AGREEMENT_PP) {
-            val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
-            if (changePassword) {
-                val id = intent.getStringExtra(KEY_USER_ID) ?: ""
-                changePasswordActivityFirst(this, id)
-            } else {
-                viewModel.setLoginSuccess()
-                startMainActivity(this)
+        when (status.id) {
+            STATUS_LOADING -> {
+                showProgressDialog()
+                binding.error.visibility = View.GONE
             }
-            finish()
+            STATUS_FAILED -> {
+                hideProgressDialog()
+                val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
+                if (error.isNotEmpty()) {
+                    binding.error.text = error
+                    binding.error.visibility = View.VISIBLE
+                }
+            }
+            STATUS_SUCCESSFUL -> {
+                hideProgressDialog()
+                val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
+                if (changePassword) {
+                    val id = intent.getStringExtra(KEY_USER_ID) ?: ""
+                    changePasswordActivityFirst(this, id)
+                } else {
+                    viewModel.setLoginSuccess()
+                    startMainActivity(this)
+                }
+                finish()
+            }
         }
     }
 

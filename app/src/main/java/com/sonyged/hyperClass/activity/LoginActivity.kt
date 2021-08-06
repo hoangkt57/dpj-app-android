@@ -6,7 +6,7 @@ import android.view.View
 import androidx.activity.viewModels
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityLoginBinding
-import com.sonyged.hyperClass.utils.changePasswordActivity
+import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.utils.changePasswordActivityFirst
 import com.sonyged.hyperClass.utils.startAgreementPpActivity
 import com.sonyged.hyperClass.utils.startMainActivity
@@ -57,28 +57,32 @@ class LoginActivity : BaseActivity() {
             )
         }
 
-        binding.idEdittext.setText("teacher0003@sctest")
+//        binding.idEdittext.setText("teacher0003@sctest")
 //        binding.idEdittext.setText("s0008@hcdemo")
 //        binding.idEdittext.setText("t0036@hcdemo")
-//        binding.idEdittext.setText("student0000@sctest")
-        binding.passwordEdittext.setText("indigo123")
-//        binding.passwordEdittext.setText("rmuct298")
+        binding.idEdittext.setText("student0005@sctest")
+//        binding.passwordEdittext.setText("indigo123")
+        binding.passwordEdittext.setText("rmuct298")
 
-        viewModel.state.observe(this) { updateState(it) }
+        viewModel.status.observe(this) { updateStatus(it) }
 
     }
 
-    private fun updateState(state: Int) {
-        Timber.d("updateState - state: $state")
-
-        when (state) {
-            LOGIN_CHECKING -> {
-                binding.error.visibility = View.GONE
+    private fun updateStatus(status: Status) {
+        Timber.d("updateState - status: $status")
+        when (status.id) {
+            STATUS_LOADING -> {
                 showProgressDialog()
+                binding.error.visibility = View.GONE
             }
-            LOGIN_FAILED -> {
-                binding.error.visibility = View.VISIBLE
+            STATUS_FAILED -> {
                 hideProgressDialog()
+                binding.error.visibility = View.VISIBLE
+            }
+            STATUS_SUCCESSFUL -> {
+                viewModel.setLoginSuccess()
+                startMainActivity(this)
+                finish()
             }
             LOGIN_CHANGE_PASSWORD -> {
                 handleFirstLogin(agreementPP = false, changePassword = true)
@@ -88,11 +92,6 @@ class LoginActivity : BaseActivity() {
             }
             LOGIN_BOTH -> {
                 handleFirstLogin(agreementPP = true, changePassword = true)
-            }
-            LOGIN_SUCCESSFUL -> {
-                viewModel.setLoginSuccess()
-                startMainActivity(this)
-                finish()
             }
         }
     }

@@ -62,6 +62,12 @@
         <item name="strokeWidth">0dp</item>
     </style>
 
+    <style name="BaseButton.WithBorder">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/color_primary_variant</item>
+        <item name="backgroundTint">@color/color_background</item>
+    </style>
+
     <style name="FilterButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -105,22 +111,7 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="Base.Button" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:insetLeft">0dp</item>
-        <item name="android:insetRight">0dp</item>
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingRight">0dp</item>
-        <item name="iconGravity">textStart</item>
-        <item name="elevation">0dp</item>
-        <item name="rippleColor">@color/button_ripple</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-
-    </style>
-
-    <style name="Button.IconOnly" parent="Base.Button">
+    <style name="Button.IconOnly" parent="BaseButton">
         <item name="iconPadding">0dp</item>
         <item name="android:paddingLeft">-1dp</item>
         <item name="iconGravity">textStart</item>
@@ -129,7 +120,7 @@
 
     </style>
 
-    <style name="Submission.Button.IconText" parent="Base.Button">
+    <style name="Submission.Button.IconText" parent="BaseButton">
         <item name="iconPadding">6dp</item>
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/color_primary_variant</item>
@@ -144,7 +135,7 @@
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="Submission.Button.Text" parent="Base.Button">
+    <style name="Submission.Button.Text" parent="BaseButton">
         <item name="cornerRadius">4dp</item>
         <item name="backgroundTint">@color/color_home_bg</item>
         <item name="android:paddingBottom">12dp</item>

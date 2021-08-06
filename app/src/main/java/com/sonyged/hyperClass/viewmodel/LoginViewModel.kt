@@ -1,7 +1,6 @@
 package com.sonyged.hyperClass.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.AgreementCurrentUserQuery
@@ -9,6 +8,7 @@ import com.sonyged.hyperClass.ChangePasswordCurrentUserQuery
 import com.sonyged.hyperClass.PageLayoutQuery
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.*
+import com.sonyged.hyperClass.model.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -19,8 +19,6 @@ import java.net.URL
 
 class LoginViewModel(application: Application) : BaseViewModel(application) {
 
-    val state = MutableLiveData<Int>()
-
     var userId = ""
 
     fun isLogin(): Boolean {
@@ -29,24 +27,23 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
 
     fun login(id: String?, password: String?) {
         Timber.d("login")
-        state.value = LOGIN_CHECKING
+        if (status.value?.id == STATUS_LOADING) {
+            return
+        }
+        status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
-
-            if (!isDataValid(id, password)) {
-                state.postValue(LOGIN_FAILED)
-                return@launch
-            }
-
             try {
+                if (!isDataValid(id, password)) {
+                    sendErrorStatus()
+                    return@launch
+                }
                 val cookie = getCookie(URL(ApiUtils.BASE_URL), id!!, password!!)
 
                 if (cookie.isNullOrEmpty()) {
-                    state.postValue(LOGIN_FAILED)
+                    sendErrorStatus()
                     return@launch
                 }
-
                 sharedPref.setToken(cookie)
-
                 val agreementResponse = ApiUtils.getApolloClient().query(AgreementCurrentUserQuery()).await()
                 val changePasswordResponse = ApiUtils.getApolloClient().query(ChangePasswordCurrentUserQuery()).await()
                 Timber.d("login - agreementResponse: $agreementResponse")
@@ -60,25 +57,24 @@ class LoginViewModel(application: Application) : BaseViewModel(application) {
                 sharedPref.setTeacher(isTeacher)
 
                 if (userId.isEmpty()) {
-                    state.postValue(LOGIN_FAILED)
+                    sendErrorStatus()
                     return@launch
                 }
 
                 sharedPref.setUserId(userId)
 
                 if (agreementPP && changePassword) {
-                    state.postValue(LOGIN_SUCCESSFUL)
+                    sendSuccessStatus()
                 } else if (agreementPP && !changePassword) {
-                    state.postValue(LOGIN_CHANGE_PASSWORD)
+                    status.postValue(Status(LOGIN_CHANGE_PASSWORD))
                 } else if (!agreementPP && changePassword) {
-                    state.postValue(LOGIN_AGREEMENT_PP)
+                    status.postValue(Status(LOGIN_AGREEMENT_PP))
                 } else {
-                    state.postValue(LOGIN_BOTH)
+                    status.postValue(Status(LOGIN_BOTH))
                 }
-
             } catch (e: Exception) {
                 Timber.e(e, "login")
-                state.postValue(LOGIN_FAILED)
+                sendErrorStatus()
             }
         }
     }

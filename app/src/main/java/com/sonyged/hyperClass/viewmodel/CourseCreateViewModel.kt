@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
-import com.google.gson.Gson
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.UpdateCourseMutation
 import com.sonyged.hyperClass.api.ApiUtils
@@ -108,121 +107,113 @@ class CourseCreateViewModel(application: Application) : BaseViewModel(applicatio
         }
         status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
-            val context = getApplication<Application>()
-            val oldData = courseDetail.value
-            if (oldData == null) {
-                status.postValue(Status(STATUS_FAILED))
-                return@launch
-            }
-            val nameChange = name != oldData.name
-            val tagChange = if (oldData.tags.size == itemSelected.size) {
-                var count = 0
+            try {
+                val context = getApplication<Application>()
+                val oldData = courseDetail.value
+                if (oldData == null) {
+                    sendErrorStatus()
+                    return@launch
+                }
+                val nameChange = name != oldData.name
+                val tagChange = if (oldData.tags.size == itemSelected.size) {
+                    var count = 0
+                    oldData.tags.forEach {
+                        if (itemSelected.containsKey(it.id)) {
+                            count++
+                        }
+                    }
+                    count != itemSelected.size
+                } else {
+                    true
+                }
+                val dateChange = date != DATE_INVALID && date != oldData.endDate
+                val autoChange = isAuto != oldData.autoCreateLessonWorkout
+                val images = geCoverImageList()
+                val iconChange = if (imageSelected != -1) {
+                    images[imageSelected] != oldData.icon
+                } else {
+                    true
+                }
+                Timber.d("changeCourse - nameChange: $nameChange - tagChange: $tagChange - dateChange: $dateChange - autoChange: $autoChange - iconChange: $iconChange")
+                if (!nameChange && !tagChange && !dateChange && !autoChange && !iconChange) {
+                    sendSuccessStatus()
+                    return@launch
+                }
+
+                val serverDate = formatServerTime(if (date == DATE_INVALID) oldData.endDate else date)
+
+                if (date != DATE_INVALID) {
+                    val diff = diffDate(System.currentTimeMillis(), date)
+                    Timber.d("changeCourse - diff: $diff")
+                    val error = when {
+                        diff < 0 -> {
+                            context.getString(R.string.put_end_date_after_today)
+                        }
+                        diff < 1 -> {
+                            context.getString(R.string.course_error_date, serverDate, "1")
+                        }
+                        diff > 365 -> {
+                            context.getString(R.string.course_error_date, serverDate, "365")
+                        }
+                        else -> ""
+                    }
+                    if (error.isNotEmpty()) {
+                        sendErrorStatus(error)
+                        return@launch
+                    }
+                }
+
+                val ids = arrayListOf<String>()
+                val deletedIds = arrayListOf<String>()
+                val map = hashMapOf<String, Boolean>()
                 oldData.tags.forEach {
-                    if (itemSelected.containsKey(it.id)) {
-                        count++
+                    if (!itemSelected.containsKey(it.id)) {
+                        deletedIds.add(it.id)
+                    }
+                    map[it.id] = true
+                }
+                tags.forEach {
+                    if (itemSelected.containsKey(it.id) && !map.containsKey(it.id)) {
+                        ids.add(it.id)
                     }
                 }
-                count != itemSelected.size
-            } else {
-                true
-            }
-            val dateChange = date != DATE_INVALID && date != oldData.endDate
-            val autoChange = isAuto != oldData.autoCreateLessonWorkout
-            val images = geCoverImageList()
-            val iconChange = if (imageSelected != -1) {
-                images[imageSelected] != oldData.icon
-            } else {
-                true
-            }
-            Timber.d("changeCourse - nameChange: $nameChange - tagChange: $tagChange - dateChange: $dateChange - autoChange: $autoChange - iconChange: $iconChange")
-            if (!nameChange && !tagChange && !dateChange && !autoChange && !iconChange) {
-                status.postValue(Status(STATUS_SUCCESSFUL))
-                return@launch
-            }
 
-            val serverDate = formatServerTime(if (date == DATE_INVALID) oldData.endDate else date)
+                val query = UpdateCourseMutation(
+                    id = oldData.id,
+                    name = Input.optional(name),
+                    expiredAt = Input.optional(serverDate),
+                    autoCreateLessonWorkout = Input.optional(isAuto),
+                    defaultImage = Input.optional(images[imageSelected]),
+                    schoolTagIds = Input.optional(ids),
+                    deletedSchoolTagIds = Input.optional(deletedIds)
+                )
 
-            if (date != DATE_INVALID) {
-                val diff = diffDate(System.currentTimeMillis(), date)
-                Timber.d("changeCourse - diff: $diff")
-                val value = Status(STATUS_FAILED)
-                when {
-                    diff < 0 -> {
-                        value.extras.putString(KEY_ERROR_MSG, context.getString(R.string.put_end_date_after_today))
-                        status.postValue(value)
-                        return@launch
-                    }
-                    diff < 1 -> {
-                        val error = context.getString(R.string.course_error_date, serverDate, "1")
-                        value.extras.putString(KEY_ERROR_MSG, error)
-                        status.postValue(value)
-                        return@launch
-                    }
-                    diff > 365 -> {
-                        val error = context.getString(R.string.course_error_date, serverDate, "365")
-                        value.extras.putString(KEY_ERROR_MSG, error)
-                        status.postValue(value)
-                        return@launch
-                    }
+                Timber.d("changeCourse - ${oldData.id} - $name - $serverDate - $isAuto - ${images[imageSelected]} - $ids - $deletedIds")
+
+                val response = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("changeCourse - response: $response")
+                val errors = response.data?.courseUpdate?.asCourseMutationFailure?.errors
+                if (errors.isNullOrEmpty()) {
+                    sendSuccessStatus()
+                    return@launch
                 }
-            }
-
-            val ids = arrayListOf<String>()
-            val deletedIds = arrayListOf<String>()
-            val map = hashMapOf<String, Boolean>()
-            oldData.tags.forEach {
-                if (!itemSelected.containsKey(it.id)) {
-                    deletedIds.add(it.id)
-                }
-                map[it.id] = true
-            }
-            tags.forEach {
-                if (itemSelected.containsKey(it.id) && !map.containsKey(it.id)) {
-                    ids.add(it.id)
-                }
-            }
-
-            val query = UpdateCourseMutation(
-                id = oldData.id,
-                name = Input.optional(name),
-                expiredAt = Input.optional(serverDate),
-                autoCreateLessonWorkout = Input.optional(isAuto),
-                defaultImage = Input.optional(images[imageSelected]),
-                schoolTagIds = Input.optional(ids),
-                deletedSchoolTagIds = Input.optional(deletedIds)
-            )
-
-            Timber.d("changeCourse - ${oldData.id} - $name - $serverDate - $isAuto - ${images[imageSelected]} - $ids - $deletedIds")
-
-            val response = ApiUtils.getApolloClient().mutate(query).await()
-            Timber.d("changeCourse - response: $response")
-
-
-            if (response.data?.courseUpdate?.asCourseMutationFailure?.errors.isNullOrEmpty()) {
-                status.postValue(Status(STATUS_SUCCESSFUL))
-                return@launch
-            }
-
-            val value = Status(STATUS_FAILED)
-            val error = StringBuilder()
-            run loop@{
-                response.data?.courseUpdate?.asCourseMutationFailure?.errors?.forEach {
+                errors.forEach {
                     when (it.message) {
                         "139" -> {
-                            error.append(context.getString(R.string.could_not_update_due_to_ongoing_lesson))
+                            sendErrorStatus(context.getString(R.string.could_not_update_due_to_ongoing_lesson))
+                            return@launch
                         }
                         "153" -> {
-                            error.append(context.getString(R.string.could_not_update_due_to_completed_course))
-                        }
-                        else -> {
-                            error.append(Gson().toJson(it))
-                            error.append("\n")
+                            sendErrorStatus(context.getString(R.string.could_not_update_due_to_completed_course))
+                            return@launch
                         }
                     }
                 }
+                sendErrorStatus(errors)
+            } catch (e: Exception) {
+                Timber.e(e, "changeCourse")
+                sendErrorStatus()
             }
-            value.extras.putString(KEY_ERROR_MSG, error.toString())
-            status.postValue(value)
         }
     }
 }

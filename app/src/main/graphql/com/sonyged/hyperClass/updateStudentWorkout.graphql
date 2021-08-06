@@ -1,0 +1,6 @@
+mutation updateStudentWorkout($studentWorkoutId: ID!, $input: StudentWorkoutUpdateInput!) {
+  studentworkoutUpdate(studentWorkoutId: $studentWorkoutId, input: $input) {
+    ...Success
+    ...Failure
+  }
+}

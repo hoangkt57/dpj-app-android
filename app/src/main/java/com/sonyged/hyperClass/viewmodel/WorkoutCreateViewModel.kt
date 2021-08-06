@@ -16,7 +16,6 @@ import com.sonyged.hyperClass.WorkoutUpdateMutation
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.DATE_INVALID
 import com.sonyged.hyperClass.constants.STATUS_LOADING
-import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
 import com.sonyged.hyperClass.model.Attachment
 import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Workout
@@ -184,7 +183,7 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
                 if (isEditing()) {
                     val workout = workout.value
                     if (workout == null) {
-                        sendErrorStatus("")
+                        sendErrorStatus()
                         return@launch
                     }
                     val query = WorkoutUpdateMutation(
@@ -199,12 +198,12 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
                     )
                     val response = ApiUtils.getApolloClient().mutate(query).await()
                     Timber.d("createWorkout - isEditing - response: $response")
-
-                    if (response.data?.workoutUpdate?.asWorkoutMutationFailure?.errors.isNullOrEmpty()) {
-                        status.postValue(Status(STATUS_SUCCESSFUL))
+                    val errors = response.data?.workoutUpdate?.asWorkoutMutationFailure?.errors
+                    if (errors.isNullOrEmpty()) {
+                        sendSuccessStatus()
                         return@launch
                     }
-                    sendErrorStatus(response.data?.workoutUpdate?.asWorkoutMutationFailure?.errors)
+                    sendErrorStatus(errors)
                     return@launch
                 }
 
@@ -221,15 +220,15 @@ class WorkoutCreateViewModel(application: Application, val courseId: String) :
                 )
                 val response = ApiUtils.getApolloClient().mutate(query).await()
                 Timber.d("createWorkout - response: $response")
-
-                if (response.data?.workoutCreate?.asWorkoutMutationFailure?.errors.isNullOrEmpty()) {
-                    status.postValue(Status(STATUS_SUCCESSFUL))
+                val errors = response.data?.workoutCreate?.asWorkoutMutationFailure?.errors
+                if (errors.isNullOrEmpty()) {
+                    sendSuccessStatus()
                     return@launch
                 }
-                sendErrorStatus(response.data?.workoutCreate?.asWorkoutMutationFailure?.errors)
+                sendErrorStatus(errors)
             } catch (e: Exception) {
                 Timber.e(e, "createWorkout")
-                sendErrorStatus("")
+                sendErrorStatus()
             }
         }
     }

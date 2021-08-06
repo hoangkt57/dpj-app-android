@@ -1,0 +1,17 @@
+mutation MarkStudentWorkoutComplete($studentWorkoutId: ID!) {
+  studentworkoutComplete(studentWorkoutId: $studentWorkoutId) {
+    ... on StudentWorkoutMutationSuccess {
+      studentWorkout {
+        id
+        status
+      }
+    }
+    ... on StudentWorkoutMutationFailure {
+      errors {
+        code
+        message
+        field
+      }
+    }
+  }
+}

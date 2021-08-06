@@ -46,6 +46,7 @@
     <color name="workout_reviewed">#f7f7fa</color>
     <color name="workout_reject">@color/color_secondary</color>
     <color name="workout_verify">#e8f6f2</color>
+    <color name="workout_completion">@color/color_secondary</color>
 
     <color name="student_tag_bg">#F0F3FA</color>
     <color name="student_tag_stroke">#9EA8BA</color>
@@ -57,6 +58,9 @@
 
     <color name="lesson_create_arrow_down">#446B75</color>
     <color name="lesson_create_condition_text_bg">#f7f7fa</color>
+
+    <color name="review_page_button_disable">#c5c6c7</color>
+    <color name="review_button_bg_selected">#1F4168C6</color>
 
 
 </resources>

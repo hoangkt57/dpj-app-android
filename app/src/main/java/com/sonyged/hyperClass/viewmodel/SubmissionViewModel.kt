@@ -13,15 +13,17 @@ import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.BuildConfig
 import com.sonyged.hyperClass.CreateStudentWorkoutMutation
 import com.sonyged.hyperClass.SubmitAdditionalStudentWorkoutMutation
+import com.sonyged.hyperClass.UpdateStudentWorkoutMutation
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.DATE_INVALID
 import com.sonyged.hyperClass.constants.STATUS_LOADING
-import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
 import com.sonyged.hyperClass.model.Attachment
 import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Workout
 import com.sonyged.hyperClass.type.StudentWorkoutHandInInput
 import com.sonyged.hyperClass.type.StudentWorkoutSubmitAdditionalInput
+import com.sonyged.hyperClass.type.StudentWorkoutUpdateInput
+import com.sonyged.hyperClass.type.WorkoutStatus
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -153,7 +155,7 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
                     studentWorkoutId
                 }
                 if (id.isNullOrEmpty()) {
-                    sendErrorStatus("")
+                    sendErrorStatus()
                     return@launch
                 }
                 val attachmentList = attachments.value ?: arrayListOf()
@@ -170,34 +172,65 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
                         fileUpload.add(FileUpload(it.contentType ?: "", it.path))
                     }
                 }
-                Timber.d("createSubmission - deletedIds: $deletedIds")
+                Timber.d("createSubmission - deletedIds: $deletedIds - fileUpload: ${fileUpload.size}")
                 if (studentWorkoutId.isEmpty()) {
                     val query = CreateStudentWorkoutMutation(
                         id,
                         StudentWorkoutHandInInput(
                             Input.optional(answer),
-                            Input.optional(fileUpload),
+                            if (fileUpload.isNotEmpty()) Input.optional(fileUpload) else Input.absent(),
                             Input.optional(false)
                         )
                     )
                     val response = ApiUtils.getApolloClient().mutate(query).await()
                     Timber.d("createSubmission - response:$response")
-                    status.postValue(Status(STATUS_SUCCESSFUL))
+                    val errors = response.data?.studentworkoutHandIn?.fragments?.failure?.errors
+                    if (errors.isNullOrEmpty()) {
+                        sendSuccessStatus()
+                        return@launch
+                    }
+                    sendErrorStatus(errors)
+                    return@launch
+                }
+                if (workout.value?.status == WorkoutStatus.REJECTED) {
+                    val query = UpdateStudentWorkoutMutation(
+                        id,
+                        StudentWorkoutUpdateInput(
+                            Input.optional(answer),
+                            if (fileUpload.isNotEmpty()) Input.optional(fileUpload) else Input.absent(),
+                            if (deletedIds.isNotEmpty()) Input.optional(deletedIds) else Input.absent(),
+                            Input.optional(true)
+                        )
+                    )
+                    val response = ApiUtils.getApolloClient().mutate(query).await()
+                    Timber.d("createSubmission - response:$response")
+                    val errors = response.data?.studentworkoutUpdate?.fragments?.failure?.errors
+                    if (errors.isNullOrEmpty()) {
+                        sendSuccessStatus()
+                        return@launch
+                    }
+                    sendErrorStatus(errors)
                     return@launch
                 }
                 val query = SubmitAdditionalStudentWorkoutMutation(
-                    studentWorkoutId,
+                    id,
                     StudentWorkoutSubmitAdditionalInput(
                         Input.optional(answer),
-                        Input.optional(fileUpload),
-                        Input.optional(deletedIds)
+                        if (fileUpload.isNotEmpty()) Input.optional(fileUpload) else Input.absent(),
+                        if (deletedIds.isNotEmpty()) Input.optional(deletedIds) else Input.absent()
                     )
                 )
                 val response = ApiUtils.getApolloClient().mutate(query).await()
                 Timber.d("createSubmission - response:$response")
-                status.postValue(Status(STATUS_SUCCESSFUL))
+                val errors = response.data?.studentworkoutSubmitAdditional?.fragments?.failure?.errors
+                if (errors.isNullOrEmpty()) {
+                    sendSuccessStatus()
+                    return@launch
+                }
+                sendErrorStatus(errors)
             } catch (e: Exception) {
                 Timber.e(e, "createSubmission")
+                sendErrorStatus()
             }
         }
     }

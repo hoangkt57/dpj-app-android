@@ -9,9 +9,10 @@ data class Student(
     val icon: Int,
     val type: String,
     val status: EnumValue?,
-    val statusResource: StatusResource?
+    val statusResource: StatusResource?,
+    val studentWorkoutId: String?
 ) {
-    constructor(id: String, name: String, icon: Int, type: String) : this(id, name, icon, type, null, null)
+    constructor(id: String, name: String, icon: Int, type: String) : this(id, name, icon, type, null, null, null)
 
     class DiffCallback : DiffUtil.ItemCallback<Student>() {
         override fun areItemsTheSame(oldItem: Student, newItem: Student): Boolean {

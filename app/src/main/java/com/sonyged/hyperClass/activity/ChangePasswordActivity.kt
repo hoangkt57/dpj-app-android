@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -67,45 +66,32 @@ class ChangePasswordActivity : BaseActivity() {
 
     private fun updateStatus(status: Status) {
         Timber.d("updateStatus - status: $status")
-        if (status.id == PASSWORD_ERROR_NONE) {
-            binding.error.visibility = View.INVISIBLE
-            val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
-            if (changePassword) {
-                viewModel.setLoginSuccess()
-                startMainActivity(this)
-            } else {
-                Toast.makeText(applicationContext, R.string.password_changed, Toast.LENGTH_SHORT).show()
+        when (status.id) {
+            STATUS_LOADING -> {
+                showProgressDialog()
+                binding.error.visibility = View.GONE
             }
-            finish()
-            return
-        }
-        val error = when (status.id) {
-            PASSWORD_ERROR_NOT_EQUAL_CONFIRM -> {
-                R.string.new_pass_not_equal_new_pass_1
+            STATUS_FAILED -> {
+                hideProgressDialog()
+                val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
+                if (error.isNotEmpty()) {
+                    binding.error.text = error
+                    binding.error.visibility = View.VISIBLE
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN)
+                }
             }
-            PASSWORD_ERROR_LENGTH_8 -> {
-                R.string.new_pass_least_8
-            }
-            PASSWORD_ERROR_SAME_OLD_PASS -> {
-                R.string.old_pass_equal_new_pass
-            }
-            PASSWORD_ERROR_NEED_LETTER -> {
-                R.string.new_pass_need_letter
-            }
-            PASSWORD_ERROR_NEED_NUMBER -> {
-                R.string.new_pass_need_number
-            }
-            PASSWORD_ERROR_INVALID -> {
-                R.string.pass_not_match
-            }
-            else -> {
-                0
+            STATUS_SUCCESSFUL -> {
+                hideProgressDialog()
+                val changePassword = intent.getBooleanExtra(KEY_CHANGE_PASSWORD_FIRST, false)
+                if (changePassword) {
+                    viewModel.setLoginSuccess()
+                    startMainActivity(this)
+                } else {
+                    Toast.makeText(applicationContext, R.string.password_changed, Toast.LENGTH_SHORT).show()
+                }
+                finish()
             }
         }
-
-        binding.error.setText(error)
-        binding.error.visibility = View.VISIBLE
-        binding.scrollView.fullScroll(View.FOCUS_DOWN)
     }
 
     private fun submitPassword() {

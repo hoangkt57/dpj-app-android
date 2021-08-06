@@ -1,7 +1,6 @@
 package com.sonyged.hyperClass.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.AgreementMutation
@@ -14,29 +13,25 @@ import timber.log.Timber
 
 class AgreementViewModel(application: Application) : BaseViewModel(application) {
 
-    companion object {
-        var isRunning = false
-    }
-
     fun agreement() {
-        Timber.d("agreement - isRunning: $isRunning")
-        if (isRunning) {
+        Timber.d("agreement")
+        if (status.value?.id == STATUS_LOADING) {
             return
         }
+        status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                isRunning = true
                 val agreementResponse = ApiUtils.getApolloClient().mutate(AgreementMutation()).await()
                 Timber.d("agreement - infoResponse: $agreementResponse")
-                isRunning = false
                 if (agreementResponse.data?.userAcceptTouAndPp?.asUserResult?.user?.acceptedTouAndPp == true) {
-                    status.postValue(Status(LOGIN_AGREEMENT_PP))
+                    sendSuccessStatus()
                     return@launch
                 }
+                sendErrorStatus(agreementResponse.data?.userAcceptTouAndPp?.asUserMutationErrors?.errors)
             } catch (e: Exception) {
-                Timber.e(e, "changePassword")
+                Timber.e(e, "agreement")
+                sendErrorStatus()
             }
-            status.postValue(Status(LOGIN_FAILED))
         }
     }
 

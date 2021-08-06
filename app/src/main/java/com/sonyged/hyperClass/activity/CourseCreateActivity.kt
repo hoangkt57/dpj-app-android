@@ -93,12 +93,15 @@ class CourseCreateActivity : BaseActivity(), OnItemClickListener {
         when (status.id) {
             STATUS_LOADING -> {
                 showProgressDialog()
-                hideError()
+                binding.error.visibility = View.GONE
             }
             STATUS_FAILED -> {
                 hideProgressDialog()
                 val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
-                showError(error)
+                if (error.isNotEmpty()) {
+                    binding.error.text = error
+                    binding.error.visibility = View.VISIBLE
+                }
             }
             STATUS_SUCCESSFUL -> {
                 hideProgressDialog()
@@ -107,16 +110,6 @@ class CourseCreateActivity : BaseActivity(), OnItemClickListener {
                 finish()
             }
         }
-    }
-
-    private fun showError(text: String) {
-        binding.error.text = text
-        binding.error.visibility = View.VISIBLE
-    }
-
-    private fun hideError() {
-        binding.error.text = ""
-        binding.error.visibility = View.GONE
     }
 
     private fun updateCourseDetail(courseDetail: CourseDetail) {

@@ -113,20 +113,26 @@ class StudentListViewModel(application: Application, val courseId: String, val t
         }
         status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
-            val query = RemoveCourseStudentsMutation(courseId, arrayListOf(studentId))
-            val deleteResponse = ApiUtils.getApolloClient().mutate(query).await()
-//            Timber.d("deleteStudent - deleteResponse: $deleteResponse")
-            if (deleteResponse.data?.courseRemoveStudent?.asCourseMutationFailure?.errors.isNullOrEmpty()) {
-                val result = arrayListOf<Student>()
-                students.value?.forEach {
-                    if (it.id != studentId) {
-                        result.add(it)
+            try {
+                val query = RemoveCourseStudentsMutation(courseId, arrayListOf(studentId))
+                val deleteResponse = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("deleteStudent - deleteResponse: $deleteResponse")
+                val errors = deleteResponse.data?.courseRemoveStudent?.asCourseMutationFailure?.errors
+                if (errors.isNullOrEmpty()) {
+                    val result = arrayListOf<Student>()
+                    students.value?.forEach {
+                        if (it.id != studentId) {
+                            result.add(it)
+                        }
                     }
+                    students.postValue(result)
+                    status.postValue(Status(STATUS_DELETE_SUCCESSFUL))
+                } else {
+                    sendErrorStatus()
                 }
-                students.postValue(result)
-                status.postValue(Status(STATUS_DELETE_SUCCESSFUL))
-            } else {
-                status.postValue(Status(STATUS_FAILED))
+            } catch (e: Exception) {
+                Timber.e(e, "deleteStudent")
+                sendErrorStatus()
             }
         }
     }
@@ -137,29 +143,34 @@ class StudentListViewModel(application: Application, val courseId: String, val t
         }
         status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
-            val data = arrayListOf<Student>()
-            allStudents.forEach {
-                if (itemSelected.containsKey(it.id)) {
-                    data.add(it)
+            try {
+                val data = arrayListOf<Student>()
+                allStudents.forEach {
+                    if (itemSelected.containsKey(it.id)) {
+                        data.add(it)
+                    }
                 }
-            }
-            val ids = arrayListOf<String>()
-            data.forEach {
-                ids.add(it.id)
-            }
-            val query = AddCourseStudentsMutation(courseId, ids)
-            val response = ApiUtils.getApolloClient().mutate(query).await()
-            Timber.d("addStudent - response: $response")
-            if (response.data?.courseAddStudent?.asCourseMutationFailure?.errors.isNullOrEmpty()) {
-                val result = arrayListOf<Student>()
-                students.value?.let {
-                    result.addAll(it)
+                val ids = arrayListOf<String>()
+                data.forEach {
+                    ids.add(it.id)
                 }
-                result.addAll(0, data)
-                students.postValue(result)
-                status.postValue(Status(STATUS_ADD_SUCCESSFUL))
-            } else {
-                status.postValue(Status(STATUS_FAILED))
+                val query = AddCourseStudentsMutation(courseId, ids)
+                val response = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("addStudent - response: $response")
+                if (response.data?.courseAddStudent?.asCourseMutationFailure?.errors.isNullOrEmpty()) {
+                    val result = arrayListOf<Student>()
+                    students.value?.let {
+                        result.addAll(it)
+                    }
+                    result.addAll(0, data)
+                    students.postValue(result)
+                    status.postValue(Status(STATUS_ADD_SUCCESSFUL))
+                } else {
+                    sendErrorStatus()
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "addStudent")
+                sendErrorStatus()
             }
         }
     }

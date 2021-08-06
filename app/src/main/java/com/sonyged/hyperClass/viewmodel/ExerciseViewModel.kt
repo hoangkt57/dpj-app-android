@@ -8,7 +8,6 @@ import com.sonyged.hyperClass.*
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.DATE_INVALID
 import com.sonyged.hyperClass.constants.STATUS_LOADING
-import com.sonyged.hyperClass.constants.STATUS_SUCCESSFUL
 import com.sonyged.hyperClass.model.*
 import com.sonyged.hyperClass.type.LessonBatchDeleteInput
 import com.sonyged.hyperClass.type.WorkoutStatus
@@ -113,7 +112,6 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val date = formatDateTimeToLong(response.data?.node?.asWorkout?.dueDate as String?)
                 val submissionAt = formatDateTimeToLong(response.data?.node?.asWorkout?.studentWorkout?.submittedAt as String?)
                 val status = response.data?.node?.asWorkout?.studentWorkout?.status
-                    ?: WorkoutStatus.UNKNOWN__
                 val answer = response.data?.node?.asWorkout?.studentWorkout?.description ?: ""
                 val files = arrayListOf<Attachment>()
                 response.data?.node?.asWorkout?.attachments?.forEach { attachment ->
@@ -139,6 +137,12 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                         )
                     )
                 }
+                val comments = response.data?.node?.asWorkout?.studentWorkout?.comments
+                val comment = if (!comments.isNullOrEmpty()) {
+                    comments[comments.size - 1].content
+                } else {
+                    ""
+                }
                 response.data?.node?.asWorkout?.studentsConnection?.edges?.forEach { edge ->
                     edge?.node?.let {
                         result.add(
@@ -148,7 +152,8 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                                 0,
                                 it.__typename,
                                 edge.studentWorkout?.status,
-                                StatusResource.getStudentStatus(context, edge.studentWorkout?.status ?: WorkoutStatus.NONE)
+                                StatusResource.getStudentStatus(context, edge.studentWorkout?.status ?: WorkoutStatus.NONE),
+                                edge.studentWorkout?.id
                             )
                         )
                     }
@@ -166,7 +171,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                         submissionAt,
                         answer,
                         submissionFile,
-                        ""
+                        comment
                     )
                 )
                 info.postValue(Triple(name, "", courseName))
@@ -191,9 +196,10 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 }
                 val response = ApiUtils.getApolloClient().mutate(query).await()
                 Timber.d("deleteLesson - response: $response")
-                status.postValue(Status(STATUS_SUCCESSFUL))
+                sendSuccessStatus()
             } catch (e: Exception) {
                 Timber.e(e, "deleteLesson")
+                sendErrorStatus()
             }
         }
     }
@@ -209,9 +215,29 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                 val query = WorkoutDeleteMutation(id)
                 val response = ApiUtils.getApolloClient().mutate(query).await()
                 Timber.d("deleteWorkout - response: $response")
-                status.postValue(Status(STATUS_SUCCESSFUL))
+                sendSuccessStatus()
             } catch (e: Exception) {
                 Timber.e(e, "deleteWorkout")
+                sendErrorStatus()
+            }
+        }
+    }
+
+    fun verifyWorkout(studentWorkoutId: String) {
+        if (status.value?.id == STATUS_LOADING) {
+            return
+        }
+        status.value = Status(STATUS_LOADING)
+        Timber.d("verifyWorkout")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val query = MarkStudentWorkoutCompleteMutation(studentWorkoutId)
+                val response = ApiUtils.getApolloClient().mutate(query).await()
+                Timber.d("verifyWorkout - response: $response")
+                sendSuccessStatus()
+            } catch (e: Exception) {
+                Timber.e(e, "verifyWorkout")
+                sendErrorStatus()
             }
         }
     }

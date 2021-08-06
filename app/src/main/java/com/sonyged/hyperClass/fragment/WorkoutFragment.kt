@@ -28,6 +28,7 @@ import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.StatusResource
 import com.sonyged.hyperClass.model.Workout
 import com.sonyged.hyperClass.observer.AppObserver
+import com.sonyged.hyperClass.type.WorkoutStatus
 import com.sonyged.hyperClass.utils.formatDate2
 import com.sonyged.hyperClass.utils.previewFileActivity
 import com.sonyged.hyperClass.viewmodel.ExerciseViewModel
@@ -107,6 +108,12 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
             }
         }
 
+        binding.verify.setOnClickListener {
+            viewModel.workout.value?.studentWorkoutId?.let {
+                viewModel.verifyWorkout(it)
+            }
+        }
+
         viewModel.workout.observe(viewLifecycleOwner) { updateWorkout(it) }
         viewModel.status.observe(viewLifecycleOwner) { updateStatus(it) }
         viewModel.info.observe(viewLifecycleOwner) { updateInfo(it) }
@@ -175,6 +182,13 @@ class WorkoutFragment : BaseFragment(R.layout.fragment_workout) {
                     previewFileActivity(context, attachment)
                 }
                 binding.submissionFile.value.addView(fileBinding.root)
+            }
+            binding.comment.text2.text = workout.comment
+            binding.comment.divider.visibility = View.GONE
+            if (workout.status == WorkoutStatus.REVIEWED) {
+                binding.verify.visibility = View.VISIBLE
+            } else if (workout.status == WorkoutStatus.COMPLETED) {
+                binding.editButton.visibility = View.GONE
             }
         }
     }

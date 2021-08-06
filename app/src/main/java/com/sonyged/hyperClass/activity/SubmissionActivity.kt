@@ -95,10 +95,16 @@ class SubmissionActivity : BaseActivity(), OnItemClickListener {
         when (status.id) {
             STATUS_LOADING -> {
                 showProgressDialog()
+                binding.error.visibility = View.INVISIBLE
             }
             STATUS_FAILED -> {
                 hideProgressDialog()
                 val error = status.extras.getString(KEY_ERROR_MSG) ?: ""
+                if (error.isNotEmpty()) {
+                    binding.error.text = error
+                    binding.error.visibility = View.VISIBLE
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN)
+                }
             }
             STATUS_SUCCESSFUL -> {
                 hideProgressDialog()

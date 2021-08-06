@@ -177,7 +177,7 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
                 if (isEditing()) {
                     val lesson = lesson.value
                     if (lesson == null || lesson.id.isEmpty()) {
-                        status.postValue(Status(STATUS_FAILED))
+                        sendErrorStatus()
                         return@launch
                     }
 
@@ -204,12 +204,12 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
 
                         val response = ApiUtils.getApolloClient().mutate(query).await()
                         Timber.d("createLesson - isEditing - batchId - response: $response")
-
-                        if (response.data?.lessonBatchUpdate?.asLessonMutationFailure?.errors.isNullOrEmpty()) {
-                            status.postValue(Status(STATUS_SUCCESSFUL))
+                        val errors = response.data?.lessonBatchUpdate?.asLessonMutationFailure?.errors
+                        if (errors.isNullOrEmpty()) {
+                            sendSuccessStatus()
                             return@launch
                         }
-                        sendErrorStatus(response.data?.lessonBatchUpdate?.asLessonMutationFailure?.errors)
+                        sendErrorStatus(errors)
                         return@launch
                     }
 
@@ -225,12 +225,12 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
                     )
                     val response = ApiUtils.getApolloClient().mutate(query).await()
                     Timber.d("createLesson - isEditing - response: $response")
-
-                    if (response.data?.lessonUpdate?.asLessonMutationFailure?.errors.isNullOrEmpty()) {
-                        status.postValue(Status(STATUS_SUCCESSFUL))
+                    val errors = response.data?.lessonUpdate?.asLessonMutationFailure?.errors
+                    if (errors.isNullOrEmpty()) {
+                        sendSuccessStatus()
                         return@launch
                     }
-                    sendErrorStatus(response.data?.lessonUpdate?.asLessonMutationFailure?.errors)
+                    sendErrorStatus(errors)
                     return@launch
                 }
 
@@ -247,13 +247,12 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
                     )
                     val response = ApiUtils.getApolloClient().mutate(query).await()
                     Timber.d("createLesson - response: $response")
-
-                    if (response.data?.lessonCreate?.asLessonMutationFailure?.errors.isNullOrEmpty()) {
-                        status.postValue(Status(STATUS_SUCCESSFUL))
+                    val errors = response.data?.lessonCreate?.asLessonMutationFailure?.errors
+                    if (errors.isNullOrEmpty()) {
+                        sendSuccessStatus()
                         return@launch
                     }
-
-                    sendErrorStatus(response.data?.lessonCreate?.asLessonMutationFailure?.errors)
+                    sendErrorStatus(errors)
                     return@launch
                 }
 
@@ -297,9 +296,7 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
                 } else {
                     Input.absent()
                 }
-
                 Timber.d("createLesson - endDateServer: $endDateServer")
-
                 val query = BatchCreateCourseLessonMutation(
                     courseId,
                     name,
@@ -322,16 +319,15 @@ class LessonCreateViewModel(application: Application, val courseId: String) :
 
                 val response = ApiUtils.getApolloClient().mutate(query).await()
                 Timber.d("createLesson - isRepeatEnable - response: $response")
-
-                if (response.data?.lessonBatchCreate?.asLessonMutationFailure?.errors.isNullOrEmpty()) {
-                    status.postValue(Status(STATUS_SUCCESSFUL))
+                val errors = response.data?.lessonBatchCreate?.asLessonMutationFailure?.errors
+                if (errors.isNullOrEmpty()) {
+                    sendSuccessStatus()
                     return@launch
                 }
-
-                sendErrorStatus(response.data?.lessonBatchCreate?.asLessonMutationFailure?.errors)
+                sendErrorStatus(errors)
             } catch (e: Exception) {
                 Timber.e(e, "createLesson")
-                sendErrorStatus("")
+                sendErrorStatus()
             }
         }
     }

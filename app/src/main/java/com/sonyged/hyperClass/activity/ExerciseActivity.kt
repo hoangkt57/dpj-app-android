@@ -108,6 +108,9 @@ class ExerciseActivity : BaseActivity(), Observer {
             EVENT_WORKOUT_CHANGE -> {
                 viewModel.loadWorkout()
             }
+            EVENT_REVIEW_CHANGE -> {
+                viewModel.loadWorkout()
+            }
         }
     }
 }

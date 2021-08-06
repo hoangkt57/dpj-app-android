@@ -1,0 +1,50 @@
+query PageStudentWorkout($id: ID!) {
+  node(id: $id) {
+    ... on StudentWorkout {
+      id
+      description
+      submittedAt
+      student {
+        id
+        name
+        __typename
+      }
+      status
+      attachments {
+        id
+        filename
+        contentType
+        url
+        createdAt
+        __typename
+      }
+      comments {
+        id
+        content
+        __typename
+      }
+      workout {
+        id
+        title
+        description
+        dueDate
+        course {
+          id
+          name
+          __typename
+        }
+        attachments {
+          id
+          filename
+          contentType
+          url
+          createdAt
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

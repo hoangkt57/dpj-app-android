@@ -8,6 +8,7 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.StudentAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnActionClickListener
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.contract.StartReview
 import com.sonyged.hyperClass.databinding.FragmentStudentListBinding
 import com.sonyged.hyperClass.model.Student
 import com.sonyged.hyperClass.utils.startStudentActivity
@@ -65,6 +66,19 @@ class StudentListFragment : BaseFragment(R.layout.fragment_student_list), OnItem
     }
 
     override fun onActionClick(position: Int) {
-        Timber.d("onItemClick - position: $position")
+        Timber.d("onActionClick - position: $position")
+
+        val student = adapter.getAdapterItem(position)
+        val ids = arrayListOf<String>()
+        viewModel.students.value?.forEach {
+            it.studentWorkoutId?.let {
+                ids.add(it)
+            }
+        }
+        student.studentWorkoutId?.let {
+            startReview.launch(Pair(it, ids))
+        }
     }
+
+    private val startReview = registerForActivityResult(StartReview()) {}
 }

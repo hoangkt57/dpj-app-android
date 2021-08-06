@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.ChangePasswordCurrentUserQuery
+import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.UpdatePasswordMutation
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.*
@@ -15,61 +16,52 @@ import timber.log.Timber
 
 class ChangePasswordViewModel(application: Application) : BaseViewModel(application) {
 
-    companion object {
-        var isRunning = false
-    }
-
     val password = MutableLiveData<String>()
 
     fun isValidPassword(oldPass: String, newPass: String, newPassConfirm: String): Boolean {
-
+        val context = getApplication<Application>()
         if (newPass != newPassConfirm) {
-            status.postValue(Status(PASSWORD_ERROR_NOT_EQUAL_CONFIRM))
+            sendErrorStatus(context.getString(R.string.new_pass_not_equal_new_pass_1))
             return false
         }
-
         if (newPass.length < 8) {
-            status.postValue(Status(PASSWORD_ERROR_LENGTH_8))
+            sendErrorStatus(context.getString(R.string.new_pass_least_8))
             return false
         }
-
         if (oldPass == newPass) {
-            status.postValue(Status(PASSWORD_ERROR_SAME_OLD_PASS))
+            sendErrorStatus(context.getString(R.string.old_pass_equal_new_pass))
             return false
         }
-
         if (newPass.matches(Regex("[0-9]+"))) {
-            status.postValue(Status(PASSWORD_ERROR_NEED_LETTER))
+            sendErrorStatus(context.getString(R.string.new_pass_need_letter))
             return false
         }
-
         if (newPass.matches(Regex("^[a-zA-Z]*$"))) {
-            status.postValue(Status(PASSWORD_ERROR_NEED_NUMBER))
+            sendErrorStatus(context.getString(R.string.new_pass_need_number))
             return false
         }
-
         return true
     }
 
     fun changePassword(userId: String, oldPass: String, newPass: String) {
-        Timber.d("changePassword - isRunning: $isRunning")
-        if (isRunning) {
+        Timber.d("changePassword")
+        if (status.value?.id == STATUS_LOADING) {
             return
         }
+        status.value = Status(STATUS_LOADING)
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                isRunning = true
                 val infoResponse = ApiUtils.getApolloClient().mutate(UpdatePasswordMutation(userId, oldPass, newPass)).await()
                 Timber.d("changePassword - infoResponse: $infoResponse")
-                isRunning = false
-                if (!infoResponse.data?.userChangePassword?.asUserMutationErrors?.errors.isNullOrEmpty()) {
-                    status.postValue(Status(PASSWORD_ERROR_INVALID))
+                val errors = infoResponse.data?.userChangePassword?.asUserMutationErrors?.errors
+                if (errors.isNullOrEmpty()) {
+                    sendSuccessStatus()
                     return@launch
-                } else {
-                    status.postValue(Status(PASSWORD_ERROR_NONE))
                 }
+                sendErrorStatus(errors)
             } catch (e: Exception) {
                 Timber.e(e, "changePassword")
+                sendErrorStatus()
             }
         }
     }
