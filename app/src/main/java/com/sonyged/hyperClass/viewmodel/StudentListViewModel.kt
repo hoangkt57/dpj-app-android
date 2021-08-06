@@ -38,7 +38,6 @@ class StudentListViewModel(application: Application, val courseId: String, val t
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val result1 = arrayListOf<Student>()
-
                 val studentQuery = PageCourseStudentsQuery(courseId)
                 val studentResponse = ApiUtils.getApolloClient().query(studentQuery).await()
 //                Timber.d("loadStudents - studentResponse: $studentResponse")
@@ -47,15 +46,23 @@ class StudentListViewModel(application: Application, val courseId: String, val t
                         result1.add(Student(it.id, it.name ?: "", 0, it.__typename))
                     }
                 }
-
                 students.postValue(result1)
+                loadAllStudents(result1)
+            } catch (e: Exception) {
+                Timber.e(e, "loadStudents")
+            }
+        }
+    }
 
+    private fun loadAllStudents(list: List<Student>) {
+        Timber.d("loadAllStudents")
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
                 val map = hashMapOf<String, Boolean>()
-                result1.forEach {
+                list.forEach {
                     map[it.id] = true
                 }
                 val result2 = arrayListOf<Student>()
-
                 val allStudentQuery = ModalStudentsAddQuery(
                     first = Input.optional(200),
                     filter = Input.optional(
@@ -79,13 +86,11 @@ class StudentListViewModel(application: Application, val courseId: String, val t
                         result2.add(Student(it.id, it.name ?: "", 0, it.__typename))
                     }
                 }
-
                 allStudents.clear()
                 allStudents.addAll(result2)
                 filterStudents.postValue(result2)
-
             } catch (e: Exception) {
-                Timber.e(e)
+                Timber.e(e, "loadAllStudents")
             }
         }
     }
@@ -127,6 +132,7 @@ class StudentListViewModel(application: Application, val courseId: String, val t
                     }
                     students.postValue(result)
                     status.postValue(Status(STATUS_DELETE_SUCCESSFUL))
+                    loadStudents()
                 } else {
                     sendErrorStatus()
                 }
@@ -145,10 +151,18 @@ class StudentListViewModel(application: Application, val courseId: String, val t
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val data = arrayListOf<Student>()
+                val map = hashMapOf<String, Boolean>()
+                students.value?.forEach {
+                    map[it.id] = true
+                }
                 allStudents.forEach {
-                    if (itemSelected.containsKey(it.id)) {
+                    if (itemSelected.containsKey(it.id) && !map.containsKey(it.id)) {
                         data.add(it)
                     }
+                }
+                if (data.isEmpty()) {
+                    status.postValue(Status(STATUS_ADD_SUCCESSFUL))
+                    return@launch
                 }
                 val ids = arrayListOf<String>()
                 data.forEach {
@@ -162,9 +176,10 @@ class StudentListViewModel(application: Application, val courseId: String, val t
                     students.value?.let {
                         result.addAll(it)
                     }
-                    result.addAll(0, data)
+                    result.addAll(data)
                     students.postValue(result)
                     status.postValue(Status(STATUS_ADD_SUCCESSFUL))
+                    loadStudents()
                 } else {
                     sendErrorStatus()
                 }

@@ -96,6 +96,7 @@
         android:layout_marginStart="@dimen/item_margin_edge"
         android:layout_marginEnd="@dimen/item_margin_edge"
         android:background="@color/setting_divider"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="@+id/recycler_view" />
 
     <androidx.recyclerview.widget.RecyclerView
