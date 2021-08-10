@@ -48,6 +48,9 @@
     <color name="workout_verify">#e8f6f2</color>
     <color name="workout_completion">@color/color_secondary</color>
 
+    <color name="lesson_during_class">#E31665</color>
+    <color name="lesson_during_class_bg">#facadc</color>
+
     <color name="student_tag_bg">#F0F3FA</color>
     <color name="student_tag_stroke">#9EA8BA</color>
 

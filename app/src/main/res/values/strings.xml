@@ -234,5 +234,7 @@
     <string name="number_remark">発言回数</string>
     <string name="number_hand_raise">挙手回数</string>
 
+    <string name="during_class">授業中</string>
+
 
 </resources>

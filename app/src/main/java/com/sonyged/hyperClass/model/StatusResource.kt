@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Parcelable
 import com.apollographql.apollo.api.EnumValue
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.type.LessonStatus
 import com.sonyged.hyperClass.type.WorkoutStatus
 import kotlinx.parcelize.Parcelize
 
@@ -34,6 +35,9 @@ data class StatusResource(
                 }
                 WorkoutStatus.COMPLETED -> {
                     StatusResource(R.color.on_primary, R.color.workout_completion, context.getString(R.string.completion))
+                }
+                LessonStatus.IN_PROGRESS -> {
+                    StatusResource(R.color.lesson_during_class, R.color.lesson_during_class_bg, context.getString(R.string.during_class))
                 }
                 TeacherStatus.VERIFY -> {
                     StatusResource(

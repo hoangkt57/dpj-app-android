@@ -75,6 +75,14 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 edge?.node?.asLesson?.fragments?.tabHomeLessonFragment?.let {
                     val teacherName = it.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
+                    val beginAt = formatDateTimeToLong(it.beginAt as String?)
+                    val endAt = formatDateTimeToLong(it.endAt as String?)
+                    val current = System.currentTimeMillis()
+                    val status = if (current in (beginAt + 1) until endAt) {
+                        StatusResource.getStatus(context, LessonStatus.IN_PROGRESS)
+                    } else {
+                        null
+                    }
                     result.add(
                         Exercise(
                             it.id,
@@ -83,11 +91,10 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseName,
-                            null,
+                            status,
                             it.kickUrl
                         )
                     )
-
                 }
                 edge?.node?.asWorkout?.fragments?.tabHomeWorkoutFragment?.let {
                     val teacherName = it.course.teacher.name ?: ""
