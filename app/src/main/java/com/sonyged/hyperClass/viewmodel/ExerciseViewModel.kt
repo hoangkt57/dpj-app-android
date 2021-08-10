@@ -131,7 +131,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                     submissionFile.add(
                         Attachment(
                             attachment.id,
-                            formatDateTimeToLong(attachment.createdAt as String?),
+                            formatDateTimeToLong("" as String?),
                             attachment.filename,
                             attachment.contentType,
                             attachment.url

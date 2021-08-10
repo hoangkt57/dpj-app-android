@@ -15,7 +15,6 @@ query PageStudentWorkout($id: ID!) {
         filename
         contentType
         url
-        createdAt
         __typename
       }
       comments {
@@ -38,7 +37,6 @@ query PageStudentWorkout($id: ID!) {
           filename
           contentType
           url
-          createdAt
           __typename
         }
         __typename

@@ -54,7 +54,7 @@ class ReviewViewModel(application: Application, private val studentWorkoutId: St
                 attachments.add(
                     Attachment(
                         attachment.id,
-                        formatDateTimeToLong(attachment.createdAt as String?),
+                        formatDateTimeToLong("" as String?),
                         attachment.filename,
                         attachment.contentType,
                         attachment.url
