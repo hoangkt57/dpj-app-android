@@ -14,10 +14,12 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.activity.MainActivity
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.adapter.viewholder.OnMoreClickListener
 import com.sonyged.hyperClass.contract.OpenLesson
 import com.sonyged.hyperClass.contract.OpenWorkout
 import com.sonyged.hyperClass.databinding.FragmentHomeBinding
-import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.BaseItem
+import com.sonyged.hyperClass.model.ExerciseFilter
 import com.sonyged.hyperClass.type.UserEventFilterType
 import com.sonyged.hyperClass.utils.formatDayWithName
 import com.sonyged.hyperClass.viewmodel.MainViewModel
@@ -26,7 +28,7 @@ import timber.log.Timber
 import java.util.*
 
 
-class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListener, OnTitleClickListener {
+class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListener, OnTitleClickListener, OnMoreClickListener {
 
     companion object {
 
@@ -40,7 +42,7 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     }
 
     private val adapter: ExerciseAdapter by lazy {
-        ExerciseAdapter(this)
+        ExerciseAdapter()
     }
 
     private val viewModel by viewModels<MainViewModel>(ownerProducer = { requireActivity() })
@@ -52,6 +54,8 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter.setOnItemClickListener(this)
+        adapter.setOnMoreClickListener(this)
         binding.recyclerView.apply {
             addItemDecoration(ExerciseSpaceItemDecoration(requireContext()))
             adapter = this@HomePageFragment.adapter
@@ -63,12 +67,12 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
         }
 
         viewModel.exercises.observe(viewLifecycleOwner) { updateExercises(it) }
-        viewModel.dateRange.observe(viewLifecycleOwner) { updateDateRange(it) }
+        viewModel.exerciseFilter.observe(viewLifecycleOwner) { updateDateRange(it) }
     }
 
-    private fun updateExercises(exercises: List<Exercise>) {
-        Timber.d("updateExercises - size: ${exercises.size}")
-        adapter.submitList(exercises)
+    private fun updateExercises(list: List<BaseItem>) {
+        Timber.d("updateExercises - size: ${list.size}")
+        adapter.submitList(list)
         binding.loading.hide()
         binding.recyclerView.visibility = View.VISIBLE
     }
@@ -76,12 +80,17 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
 
-        val exercise = adapter.getAdapterItem(position)
+        val exercise = adapter.getAdapterItem(position) ?: return
         if (exercise.type == UserEventFilterType.LESSON) {
             openLesson.launch(exercise)
         } else if (exercise.type == UserEventFilterType.WORKOUT) {
             openWorkout.launch(exercise)
         }
+    }
+
+    override fun showMore() {
+        Timber.d("showMore")
+        viewModel.showMore()
     }
 
     override fun onTitleClick() {
@@ -98,11 +107,12 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
 
             binding.loading.show()
             binding.recyclerView.visibility = View.INVISIBLE
-            viewModel.dateRange.postValue(Pair(date.first, date.second))
+            viewModel.setDateRange(Pair(date.first, date.second))
         }
     }
 
-    private fun updateDateRange(date: Pair<Long, Long>) {
+    private fun updateDateRange(filter: ExerciseFilter) {
+        val date = filter.dateRange ?: return
         val rangeDate = DateUtils.formatDateRange(
             requireContext(),
             date.first,
@@ -118,18 +128,18 @@ class HomePageFragment : BaseFragment(R.layout.fragment_home), OnItemClickListen
     private fun changeFilter() {
         binding.loading.show()
         binding.recyclerView.visibility = View.INVISIBLE
-        when (viewModel.type.value) {
+        when (viewModel.exerciseFilter.value?.type) {
             UserEventFilterType.ALL -> {
                 binding.filter.setText(R.string.lesson)
-                viewModel.type.postValue(UserEventFilterType.LESSON)
+                viewModel.setType(UserEventFilterType.LESSON)
             }
             UserEventFilterType.LESSON -> {
                 binding.filter.setText(R.string.workout)
-                viewModel.type.postValue(UserEventFilterType.WORKOUT)
+                viewModel.setType(UserEventFilterType.WORKOUT)
             }
             else -> {
                 binding.filter.setText(R.string.all)
-                viewModel.type.postValue(UserEventFilterType.ALL)
+                viewModel.setType(UserEventFilterType.ALL)
             }
         }
     }

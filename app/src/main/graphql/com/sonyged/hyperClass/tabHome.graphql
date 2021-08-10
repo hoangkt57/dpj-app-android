@@ -6,7 +6,7 @@ query tabHome(
     currentUser {
         id
         eventsConnection(
-            first: 100,
+            first: 20,
             after: $after,
             filter: $filter,
             sort: {

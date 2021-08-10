@@ -26,10 +26,11 @@ class StudentWorkoutFragment : StudentExerciseFragment() {
     }
 
     override fun onItemClick(position: Int) {
-        super.onItemClick(position)
 
-        val exercise = adapter.getAdapterItem(position)
-        openWorkout.launch(exercise)
+        adapter.getAdapterItem(position)?.let {
+            openWorkout.launch(it)
+        }
+
     }
 
     private val openWorkout = registerForActivityResult(OpenWorkout()) {}

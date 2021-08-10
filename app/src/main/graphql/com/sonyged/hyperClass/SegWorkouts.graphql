@@ -5,7 +5,7 @@ query SegWorkouts($courseId: ID!, $after: String, $isTeacher: Boolean!, $filter:
             name
             workoutsConnection(
                 after: $after
-                first: 100
+                first: 20
                 sort: {field: DUE_DATE, order: DESC}
                 filter: $filter
             ) {

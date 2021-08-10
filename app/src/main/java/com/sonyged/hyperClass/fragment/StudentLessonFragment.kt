@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.sonyged.hyperClass.contract.OpenLesson
 import com.sonyged.hyperClass.model.Exercise
-import timber.log.Timber
 
 class StudentLessonFragment : StudentExerciseFragment() {
 
@@ -27,10 +26,11 @@ class StudentLessonFragment : StudentExerciseFragment() {
     }
 
     override fun onItemClick(position: Int) {
-        super.onItemClick(position)
 
-        val exercise = adapter.getAdapterItem(position)
-        openLesson.launch(exercise)
+        adapter.getAdapterItem(position)?.let {
+            openLesson.launch(it)
+        }
+
     }
 
     private val openLesson = registerForActivityResult(OpenLesson()) {}

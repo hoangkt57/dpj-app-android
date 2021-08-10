@@ -62,7 +62,7 @@ class ExerciseViewHolder(private val listener: OnItemClickListener?, private val
             binding.start.visibility = View.VISIBLE
         }
 
-        if (exercise.answer != null) {
+        if (!exercise.answer.isNullOrEmpty()) {
             binding.answerLayout.clipToOutline = true
             binding.answerLayout.isSelected = false
             binding.answerLayout.visibility = View.VISIBLE

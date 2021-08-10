@@ -7,13 +7,14 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.adapter.ExerciseAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
+import com.sonyged.hyperClass.adapter.viewholder.OnMoreClickListener
 import com.sonyged.hyperClass.databinding.FragmentCourseLessonBinding
-import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.BaseItem
 import com.sonyged.hyperClass.viewmodel.CourseViewModel
 import com.sonyged.hyperClass.views.CourseSpaceItemDecoration
 import timber.log.Timber
 
-abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_lesson), OnItemClickListener {
+abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_lesson), OnItemClickListener, OnMoreClickListener {
 
     protected val viewModel: CourseViewModel by lazy {
         ViewModelProvider(requireActivity()).get(CourseViewModel::class.java)
@@ -24,7 +25,7 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
     }
 
     protected val adapter: ExerciseAdapter by lazy {
-        ExerciseAdapter(this)
+        ExerciseAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +36,8 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
         super.onViewCreated(view, savedInstanceState)
 
         binding.loading.show()
+        adapter.setOnItemClickListener(this)
+        adapter.setOnMoreClickListener(this)
         binding.recyclerView.apply {
             addItemDecoration(CourseSpaceItemDecoration(requireContext()))
             adapter = this@BaseExerciseFragment.adapter
@@ -45,7 +48,7 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
         }
     }
 
-    protected fun updateData(data: List<Exercise>) {
+    protected fun updateData(data: List<BaseItem>) {
         Timber.d("updateData - size: ${data.size}")
         adapter.submitList(data)
         binding.recyclerView.visibility = View.VISIBLE
@@ -66,12 +69,16 @@ abstract class BaseExerciseFragment : BaseFragment(R.layout.fragment_course_less
             Timber.d("dateRangePickerDialog - date: $date")
             binding.loading.show()
             binding.recyclerView.visibility = View.INVISIBLE
-            if (this is CourseLessonFragment) {
-                viewModel.lessonDateRange.postValue(Pair(date.first, date.second))
-            } else if (this is CourseWorkoutFragment) {
-                viewModel.workoutDateRange.postValue(Pair(date.first, date.second))
-            } else {
-                throw NullPointerException()
+            when (this) {
+                is CourseLessonFragment -> {
+                    viewModel.setLessonDateRange(Pair(date.first, date.second))
+                }
+                is CourseWorkoutFragment -> {
+                    viewModel.setWorkoutDateRange(Pair(date.first, date.second))
+                }
+                else -> {
+                    throw NullPointerException()
+                }
             }
 
         }

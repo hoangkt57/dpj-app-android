@@ -1,10 +1,7 @@
 package com.sonyged.hyperClass.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.PageLayoutQuery
@@ -12,6 +9,7 @@ import com.sonyged.hyperClass.TabCoursesQuery
 import com.sonyged.hyperClass.TabHomeQuery
 import com.sonyged.hyperClass.UpdateInfoMutation
 import com.sonyged.hyperClass.api.ApiUtils
+import com.sonyged.hyperClass.constants.DEFAULT_PAGE_ID
 import com.sonyged.hyperClass.model.*
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.*
@@ -24,20 +22,34 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     val user = MutableLiveData<User>()
     val courses = MutableLiveData<List<Course>>()
-    val type = MutableLiveData(UserEventFilterType.ALL)
-    val dateRange = MutableLiveData<Pair<Long, Long>>()
-
+    val exerciseFilter = MutableLiveData<ExerciseFilter>()
     var rangeDateText = ""
 
-    val exercises = dateRange.switchMap { dateRange ->
-        type.switchMap { type ->
-            liveData(Dispatchers.Default) {
-                val from = formatDate(dateRange.first)
-                val until = formatDate(dateRange.second)
-                val result = loadHomeData(from, until, type)
-                val temp = MutableLiveData<List<Exercise>>(result)
-                emitSource(temp)
+    val exercises = exerciseFilter.switchMap { filter ->
+        liveData(Dispatchers.Default) {
+            if (filter.dateRange == null || filter.type == null) {
+                emitSource(MutableLiveData())
+                return@liveData
             }
+            val from = formatDate(filter.dateRange.first)
+            val until = formatDate(filter.dateRange.second)
+            val result = loadHomeData(filter.page?.after, from, until, filter.type)
+            val temp = if (filter.page?.after.isNullOrEmpty()) {
+                MutableLiveData<List<BaseItem>>(result)
+            } else {
+                val list = arrayListOf<BaseItem>()
+                val oldList = getOldData()
+                list.addAll(oldList)
+                if (list.isNotEmpty()) {
+                    val lastItem = list[list.size - 1]
+                    if (lastItem is Page) {
+                        list.remove(lastItem)
+                    }
+                }
+                list.addAll(result)
+                MutableLiveData<List<BaseItem>>(list)
+            }
+            emitSource(temp)
         }
     }
 
@@ -47,26 +59,55 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         loadCourseData()
     }
 
+    fun setDateRange(dateRange: Pair<Long, Long>) {
+        val data = exerciseFilter.value ?: return
+        exerciseFilter.postValue(data.copy(dateRange = dateRange, page = null))
+    }
+
+    fun setType(type: UserEventFilterType) {
+        val data = exerciseFilter.value ?: return
+        exerciseFilter.postValue(data.copy(type = type, page = null))
+    }
+
+    private fun getOldData(): List<BaseItem> {
+        return exercises.value ?: arrayListOf()
+    }
+
     fun loadExercises() {
         Timber.d("loadExercises")
-        dateRange.value?.let {
-            dateRange.postValue(it)
+        exerciseFilter.value?.let {
+            exerciseFilter.postValue(it)
+        }
+    }
+
+    fun showMore() {
+        val list = exercises.value ?: return
+        val item = list[list.size - 1]
+        if (item is Page) {
+            val data = exerciseFilter.value ?: return
+            exerciseFilter.postValue(data.copy(page = item))
         }
     }
 
     private suspend fun loadHomeData(
+        after: String?,
         from: String,
         until: String,
         type: UserEventFilterType
-    ): ArrayList<Exercise> {
-        Timber.d("loadHomeData - from: $from - until: $until - type: $type - thread: ${Thread.currentThread()}")
-        val result = arrayListOf<Exercise>()
+    ): ArrayList<BaseItem> {
+        Timber.d("loadHomeData - after: $after - from: $from - until: $until - type: $type")
+        val result = arrayListOf<BaseItem>()
         try {
             val time = System.currentTimeMillis()
             val context = getApplication<Application>()
             val isTeacher = sharedPref.isTeacher()
+            val afterInput = if (!after.isNullOrEmpty()) {
+                Input.optional(after)
+            } else {
+                Input.absent()
+            }
             val homeQuery = TabHomeQuery(
-                Input.optional(""),
+                afterInput,
                 UserEventFilter(Input.optional(from), Input.optional(until), type),
                 isTeacher
             )
@@ -133,6 +174,11 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                             null
                         )
                     )
+                }
+            }
+            pageResponse.data?.currentUser?.eventsConnection?.pageInfo?.let {
+                if (it.hasNextPage) {
+                    result.add(Page(DEFAULT_PAGE_ID, it.startCursor, it.endCursor))
                 }
             }
             Timber.d("loadHomeData - time: ${System.currentTimeMillis() - time}")
@@ -247,7 +293,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun initDate() {
-        dateRange.postValue(range7DayFromCurrent())
+        exerciseFilter.postValue(ExerciseFilter(range7DayFromCurrent(), UserEventFilterType.ALL, null))
     }
 
     fun logout() {

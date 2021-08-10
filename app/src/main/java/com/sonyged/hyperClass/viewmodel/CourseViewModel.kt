@@ -12,6 +12,7 @@ import com.sonyged.hyperClass.SegLessonsQuery
 import com.sonyged.hyperClass.SegWorkoutsQuery
 import com.sonyged.hyperClass.api.ApiUtils
 import com.sonyged.hyperClass.constants.DATE_INVALID
+import com.sonyged.hyperClass.constants.DEFAULT_PAGE_ID
 import com.sonyged.hyperClass.model.*
 import com.sonyged.hyperClass.type.*
 import com.sonyged.hyperClass.utils.*
@@ -23,32 +24,92 @@ import java.util.*
 class CourseViewModel(application: Application, val courseId: String) : BaseViewModel(application) {
 
     val course = MutableLiveData<Course>()
-    val lessonDateRange = MutableLiveData<Pair<Long, Long>>()
-    val lessons = lessonDateRange.switchMap { dateRange ->
+    val lessonFilter = MutableLiveData<ExerciseFilter>()
+    val lessons = lessonFilter.switchMap { filter ->
         liveData(Dispatchers.Default) {
-            val from = formatDate(dateRange.first)
-            val until = formatDate(dateRange.second)
-            val result = loadLessons(from, until)
-            val temp = MutableLiveData<List<Exercise>>(result)
-            emitSource(temp)
+            if (filter.dateRange == null) {
+                emitSource(MutableLiveData())
+                return@liveData
+            }
+            val from = formatDate(filter.dateRange.first)
+            val until = formatDate(filter.dateRange.second)
+            val result = loadLessons(filter.page?.after, from, until)
+            emitSource(getDataSource(true, filter.page?.after, result))
         }
     }
-    val workoutDateRange = MutableLiveData<Pair<Long, Long>>()
-    val workouts = workoutDateRange.switchMap { dateRange ->
+    val workoutFilter = MutableLiveData<ExerciseFilter>()
+    val workouts = workoutFilter.switchMap { filter ->
         liveData(Dispatchers.Default) {
-            val from = formatDate(dateRange.first)
-            val until = formatDate(dateRange.second)
-            val result = loadWorkouts(from, until)
-            val temp = MutableLiveData<List<Exercise>>(result)
-            emitSource(temp)
+            if (filter.dateRange == null) {
+                emitSource(MutableLiveData())
+                return@liveData
+            }
+            val from = formatDate(filter.dateRange.first)
+            val until = formatDate(filter.dateRange.second)
+            val result = loadWorkouts(filter.page?.after, from, until)
+            emitSource(getDataSource(false, filter.page?.after, result))
         }
     }
 
     init {
         val time = range7DayFromCurrent()
-        lessonDateRange.postValue(Pair(time.first, time.second))
-        workoutDateRange.postValue(Pair(time.first, time.second))
+        lessonFilter.postValue(ExerciseFilter(Pair(time.first, time.second), null, null))
+        workoutFilter.postValue(ExerciseFilter(Pair(time.first, time.second), null, null))
         loadCourse()
+    }
+
+    private fun getDataSource(isLesson: Boolean, after: String?, result: List<BaseItem>): MutableLiveData<List<BaseItem>> {
+        return if (after.isNullOrEmpty()) {
+            MutableLiveData<List<BaseItem>>(result)
+        } else {
+            val list = arrayListOf<BaseItem>()
+            val oldList = if (isLesson) getLessonData() else getWorkoutData()
+            list.addAll(oldList)
+            if (list.isNotEmpty()) {
+                val lastItem = list[list.size - 1]
+                if (lastItem is Page) {
+                    list.remove(lastItem)
+                }
+            }
+            list.addAll(result)
+            MutableLiveData<List<BaseItem>>(list)
+        }
+    }
+
+    fun setLessonDateRange(dateRange: Pair<Long, Long>) {
+        val data = lessonFilter.value ?: return
+        lessonFilter.postValue(data.copy(dateRange = dateRange, page = null))
+    }
+
+    fun setWorkoutDateRange(dateRange: Pair<Long, Long>) {
+        val data = workoutFilter.value ?: return
+        workoutFilter.postValue(data.copy(dateRange = dateRange, page = null))
+    }
+
+    private fun getLessonData(): List<BaseItem> {
+        return lessons.value ?: arrayListOf()
+    }
+
+    private fun getWorkoutData(): List<BaseItem> {
+        return workouts.value ?: arrayListOf()
+    }
+
+    fun loadMoreLessons() {
+        val list = lessons.value ?: return
+        val item = list[list.size - 1]
+        if (item is Page) {
+            val data = lessonFilter.value ?: return
+            lessonFilter.postValue(data.copy(page = item))
+        }
+    }
+
+    fun loadMoreWorkouts() {
+        val list = workouts.value ?: return
+        val item = list[list.size - 1]
+        if (item is Page) {
+            val data = workoutFilter.value ?: return
+            workoutFilter.postValue(data.copy(page = item))
+        }
     }
 
     fun loadCourse() {
@@ -85,26 +146,31 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
     }
 
     fun loadLessons() {
-        lessonDateRange.value?.let {
-            val data = Pair(it.first, it.second)
-            lessonDateRange.postValue(data)
+        lessonFilter.value?.let {
+            lessonFilter.postValue(it)
         }
     }
 
     fun loadWorkouts() {
-        workoutDateRange.value?.let {
-            val data = Pair(it.first, it.second)
-            workoutDateRange.postValue(data)
+        workoutFilter.value?.let {
+            workoutFilter.postValue(it)
         }
     }
 
-    private suspend fun loadLessons(from: String, until: String): ArrayList<Exercise> {
-        Timber.d("loadLessons - from: $from - until: $until")
-        val result = arrayListOf<Exercise>()
+    private suspend fun loadLessons(after: String?, from: String, until: String): ArrayList<BaseItem> {
+        Timber.d("loadLessons - after: $after - from: $from - until: $until")
+        val result = arrayListOf<BaseItem>()
         try {
+            val context = getApplication<Application>()
+            val afterInput = if (!after.isNullOrEmpty()) {
+                Input.optional(after)
+            } else {
+                Input.absent()
+            }
             val lessonsQuery = SegLessonsQuery(
                 courseId,
-                filter = Input.optional(
+                afterInput,
+                Input.optional(
                     LessonFilter(
                         beginAtBetween = Input.optional(
                             DateRange(
@@ -115,12 +181,20 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                     )
                 )
             )
-            val lessonResponse = ApiUtils.getApolloClient().query(lessonsQuery).await()
+            val response = ApiUtils.getApolloClient().query(lessonsQuery).await()
 //                Timber.d("loadData - data : ${lessonResponse}")
-            val courseTitle = lessonResponse.data?.node?.asCourse?.name ?: ""
-            lessonResponse.data?.node?.asCourse?.lessonsConnection?.edges?.forEach { edge ->
+            val courseTitle = response.data?.node?.asCourse?.name ?: ""
+            response.data?.node?.asCourse?.lessonsConnection?.edges?.forEach { edge ->
                 edge?.node?.let {
                     val teacherName = it.teacher.name ?: ""
+                    val beginAt = formatDateTimeToLong(it.beginAt as String?)
+                    val endAt = formatDateTimeToLong(it.endAt as String?)
+                    val current = System.currentTimeMillis()
+                    val status = if (current in (beginAt + 1) until endAt) {
+                        StatusResource.getStatus(context, LessonStatus.IN_PROGRESS)
+                    } else {
+                        null
+                    }
                     result.add(
                         Exercise(
                             it.id,
@@ -129,10 +203,15 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             UserEventFilterType.LESSON,
                             teacherName,
                             courseTitle,
-                            null,
+                            status,
                             it.kickUrl
                         )
                     )
+                }
+            }
+            response.data?.node?.asCourse?.lessonsConnection?.pageInfo?.let {
+                if (it.hasNextPage) {
+                    result.add(Page(DEFAULT_PAGE_ID, it.startCursor, it.endCursor))
                 }
             }
         } catch (e: Exception) {
@@ -141,15 +220,21 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
         return result
     }
 
-    private suspend fun loadWorkouts(from: String, until: String): ArrayList<Exercise> {
+    private suspend fun loadWorkouts(after: String?, from: String, until: String): ArrayList<BaseItem> {
         Timber.d("loadWorkouts")
-        val result = arrayListOf<Exercise>()
+        val result = arrayListOf<BaseItem>()
         try {
             val context = getApplication<Application>()
+            val afterInput = if (!after.isNullOrEmpty()) {
+                Input.optional(after)
+            } else {
+                Input.absent()
+            }
             val query = SegWorkoutsQuery(
                 courseId,
-                isTeacher = isTeacher(),
-                filter = Input.optional(
+                afterInput,
+                isTeacher(),
+                Input.optional(
                     WorkoutFilter(
                         dueDateBetween = Input.optional(
                             DateRange(
@@ -213,6 +298,11 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                             files
                         )
                     )
+                }
+            }
+            response.data?.node?.asCourse?.workoutsConnection?.pageInfo?.let {
+                if (it.hasNextPage) {
+                    result.add(Page(DEFAULT_PAGE_ID, it.startCursor, it.endCursor))
                 }
             }
         } catch (e: Exception) {

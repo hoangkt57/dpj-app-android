@@ -23,7 +23,7 @@ abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_studen
     }
 
     protected val adapter: ExerciseAdapter by lazy {
-        ExerciseAdapter(this)
+        ExerciseAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +34,7 @@ abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_studen
         super.onViewCreated(view, savedInstanceState)
 
         binding.loading.show()
+        adapter.setOnItemClickListener(this)
         binding.recyclerView.apply {
             addItemDecoration(CourseSpaceItemDecoration(requireContext()))
             adapter = this@StudentExerciseFragment.adapter
@@ -45,10 +46,5 @@ abstract class StudentExerciseFragment() : BaseFragment(R.layout.fragment_studen
         adapter.submitList(data)
         binding.loading.hide()
     }
-
-    override fun onItemClick(position: Int) {
-
-    }
-
 
 }

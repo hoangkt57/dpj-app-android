@@ -5,7 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.contract.OpenWorkout
-import com.sonyged.hyperClass.model.Exercise
+import com.sonyged.hyperClass.model.BaseItem
+import com.sonyged.hyperClass.model.ExerciseFilter
 import com.sonyged.hyperClass.utils.formatDate1
 
 class CourseWorkoutFragment : BaseExerciseFragment() {
@@ -21,22 +22,29 @@ class CourseWorkoutFragment : BaseExerciseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.workouts.observe(viewLifecycleOwner) { updateWorkouts(it) }
-        viewModel.workoutDateRange.observe(viewLifecycleOwner) { updateDateRange(it) }
+        viewModel.workoutFilter.observe(viewLifecycleOwner) { updateDateRange(it) }
     }
 
-    private fun updateWorkouts(workouts: List<Exercise>) {
+    private fun updateWorkouts(workouts: List<BaseItem>) {
         updateData(workouts)
     }
 
-    private fun updateDateRange(dateRange: Pair<Long, Long>) {
+    private fun updateDateRange(filter: ExerciseFilter) {
+        val dateRange = filter.dateRange ?: return
         binding.date.text = getString(R.string.lesson_date_range, formatDate1(dateRange.first), formatDate1(dateRange.second))
     }
 
     override fun onItemClick(position: Int) {
         super.onItemClick(position)
 
-        val exercise = adapter.getAdapterItem(position)
-        openWorkout.launch(exercise)
+        adapter.getAdapterItem(position)?.let {
+            openWorkout.launch(it)
+        }
+
+    }
+
+    override fun showMore() {
+        viewModel.loadMoreWorkouts()
     }
 
     private val openWorkout = registerForActivityResult(OpenWorkout()) {}
