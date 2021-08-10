@@ -271,12 +271,12 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
 
                     val status = if (isTeacher()) {
                         if (submittedCount == 0) {
-                            WorkoutStatus.UNKNOWN__
+                            null
                         } else {
                             TeacherStatus.VERIFY
                         }
                     } else {
-                        it.studentWorkout?.status ?: WorkoutStatus.NONE
+                        it.studentWorkout?.status
                     }
                     val temp = StatusResource.getStatus(context, status)
                     val statusResource = if (temp != null && status == TeacherStatus.VERIFY) {

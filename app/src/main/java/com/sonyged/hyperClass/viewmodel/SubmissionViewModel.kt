@@ -192,7 +192,7 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
                     sendErrorStatus(errors)
                     return@launch
                 }
-                if (workout.value?.status == WorkoutStatus.REJECTED) {
+                if (workout.value?.status != WorkoutStatus.SUBMITTED) {
                     val query = UpdateStudentWorkoutMutation(
                         id,
                         StudentWorkoutUpdateInput(

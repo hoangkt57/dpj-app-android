@@ -111,8 +111,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 UserEventFilter(Input.optional(from), Input.optional(until), type),
                 isTeacher
             )
-            val pageResponse = ApiUtils.getApolloClient().query(homeQuery).await()
-            pageResponse.data?.currentUser?.eventsConnection?.edges?.forEach { edge ->
+            val response = ApiUtils.getApolloClient().query(homeQuery).await()
+            Timber.d("loadHomeData - response: $response")
+            response.data?.currentUser?.eventsConnection?.edges?.forEach { edge ->
                 edge?.node?.asLesson?.fragments?.tabHomeLessonFragment?.let {
                     val teacherName = it.teacher.name ?: ""
                     val courseName = it.course.name ?: ""
@@ -149,12 +150,12 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
                     val status = if (isTeacher) {
                         if (submittedCount == 0) {
-                            WorkoutStatus.UNKNOWN__
+                            null
                         } else {
                             TeacherStatus.VERIFY
                         }
                     } else {
-                        it.studentWorkout?.status ?: WorkoutStatus.NONE
+                        it.studentWorkout?.status
                     }
                     val temp = StatusResource.getStatus(context, status)
                     val statusResource = if (temp != null && status == TeacherStatus.VERIFY) {
@@ -176,7 +177,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     )
                 }
             }
-            pageResponse.data?.currentUser?.eventsConnection?.pageInfo?.let {
+            response.data?.currentUser?.eventsConnection?.pageInfo?.let {
                 if (it.hasNextPage) {
                     result.add(Page(DEFAULT_PAGE_ID, it.startCursor, it.endCursor))
                 }

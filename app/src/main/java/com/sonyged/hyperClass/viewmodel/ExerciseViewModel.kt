@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.coroutines.await
 import com.sonyged.hyperClass.*
 import com.sonyged.hyperClass.api.ApiUtils
+import com.sonyged.hyperClass.api.ApiUtils.Companion.BASE_URL_UPLOAD
 import com.sonyged.hyperClass.constants.DATE_INVALID
 import com.sonyged.hyperClass.constants.STATUS_LOADING
 import com.sonyged.hyperClass.model.*
@@ -97,12 +98,12 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
     }
 
     fun loadWorkout() {
-        Timber.d("loadWorkout")
+        Timber.d("loadWorkout - id: $id")
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val context = getApplication<Application>()
                 val result = arrayListOf<Student>()
-                val query = PageWorkoutQuery(id, sharedPref.isTeacher(), "")
+                val query = PageWorkoutQuery(id, sharedPref.isTeacher(), BASE_URL_UPLOAD)
                 val response = ApiUtils.getApolloClient().query(query).await()
                 val id = response.data?.node?.asWorkout?.id ?: ""
                 val studentWorkoutId = response.data?.node?.asWorkout?.studentWorkout?.id ?: ""
@@ -152,7 +153,7 @@ class ExerciseViewModel(application: Application, val isLesson: Boolean, val id:
                                 0,
                                 it.__typename,
                                 edge.studentWorkout?.status,
-                                StatusResource.getStudentStatus(context, edge.studentWorkout?.status ?: WorkoutStatus.NONE),
+                                StatusResource.getStudentStatus(context, edge.studentWorkout?.status),
                                 edge.studentWorkout?.id
                             )
                         )

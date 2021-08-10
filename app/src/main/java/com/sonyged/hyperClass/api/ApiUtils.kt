@@ -13,6 +13,7 @@ class ApiUtils {
 
         const val BASE_URL = "http://192.168.0.106:5000/graphql"
 //        const val BASE_URL = "https://api.hyperclass.jp/graphql"
+        const val BASE_URL_UPLOAD = ""
 
         fun getApolloClient(): ApolloClient {
             val okHttp = OkHttpClient

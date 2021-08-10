@@ -27,7 +27,7 @@ data class Workout(
                 "",
                 "",
                 -1,
-                WorkoutStatus.UNKNOWN__,
+                null,
                 arrayListOf(),
                 -1,
                 "",
