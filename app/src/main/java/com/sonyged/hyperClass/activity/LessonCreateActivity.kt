@@ -1,18 +1,17 @@
 package com.sonyged.hyperClass.activity
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
-import androidx.core.widget.PopupWindowCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.sonyged.hyperClass.R
@@ -20,7 +19,7 @@ import com.sonyged.hyperClass.adapter.ChooseUserAdapter
 import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivityLessonCreateBinding
-import com.sonyged.hyperClass.databinding.PopupTeacherBinding
+import com.sonyged.hyperClass.databinding.DialogStudentAdditionBinding
 import com.sonyged.hyperClass.databinding.ViewChipTeacherBinding
 import com.sonyged.hyperClass.model.Lesson
 import com.sonyged.hyperClass.model.Person
@@ -48,7 +47,7 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         ChooseUserAdapter(this, false)
     }
 
-    private var popupWindow: PopupWindow? = null
+    private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,10 +78,10 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
             finish()
         }
         binding.teacherGroup.setOnClickListener {
-            showPopup(binding.teacherGroup)
+            addTeacherDialog(binding.teacherGroup)
         }
         binding.assistantGroup.setOnClickListener {
-            showPopup(binding.assistantGroup)
+            addTeacherDialog(binding.assistantGroup)
         }
         binding.date.setOnClickListener {
             startDatePicker(binding.date)
@@ -362,27 +361,19 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         }
     }
 
-    private fun showPopup(anchor: ChipGroup) {
-
-        val position = IntArray(2)
-        anchor.getLocationOnScreen(position)
-        val height = binding.root.height - position[1] - anchor.height - 100
-        val viewBinding = PopupTeacherBinding.inflate(layoutInflater)
-        popupWindow = PopupWindow(viewBinding.root, anchor.width, height)
-        popupWindow?.contentView?.tag = anchor.id
-        popupWindow?.isOutsideTouchable = true
-        popupWindow?.isFocusable = true
-        popupWindow?.elevation = 30f
-        popupWindow?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_popup))
-
+    private fun addTeacherDialog(anchor: ChipGroup) {
+        val viewBinding = DialogStudentAdditionBinding.inflate(layoutInflater)
+        teacherAdapter.tag = anchor.id
         viewBinding.recyclerView.adapter = teacherAdapter
         teacherAdapter.submitList(viewModel.teacherList)
-
         viewBinding.search.setOnClickListener {
             viewModel.filterTeacher(viewBinding.nameEdit.text.toString())
         }
-
-        PopupWindowCompat.showAsDropDown(popupWindow!!, anchor, 0, 30, Gravity.BOTTOM)
+        dialog = MaterialAlertDialogBuilder(this, R.style.AddStudentDialog)
+            .setTitle(R.string.add_teacher)
+            .setView(viewBinding.root)
+            .create()
+        dialog?.show()
     }
 
     private fun updateTeacher(teachers: List<Student>) {
@@ -392,8 +383,7 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
     override fun onItemClick(position: Int) {
         Timber.d("onItemClick - position: $position")
         val item = teacherAdapter.getAdapterItem(position)
-
-        val anchor = when (popupWindow?.contentView?.tag) {
+        val anchor = when (teacherAdapter.tag) {
             binding.teacherGroup.id -> {
                 viewModel.teacher = Person(item.id, item.name, TEACHER)
                 binding.teacherGroup
@@ -415,8 +405,8 @@ class LessonCreateActivity : BaseActivity(), OnItemClickListener {
         anchor?.removeAllViews()
         anchor?.addView(chipBinding.root)
 
-        popupWindow?.dismiss()
-        popupWindow = null
+        dialog?.dismiss()
+        dialog = null
 
     }
 

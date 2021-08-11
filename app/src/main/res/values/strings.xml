@@ -139,7 +139,7 @@
     <string name="url_null_empty">URLがnullまたは空です</string>
 
     <string name="delete">削除</string>
-
+    <string name="add_teacher">先生の追加</string>
     <string name="assistant">アシスタント</string>
     <string name="frequency">頻度</string>
     <string name="search_by_name_or_tag">名前またはタグで検索できます</string>

@@ -15,6 +15,7 @@ class ChooseUserAdapter(
     ListAdapter<Student, ChooseUserViewHolder>(Student.DiffCallback()), OnItemClickListener {
 
     private var itemSelected: HashMap<String, Boolean>? = null
+    var tag = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseUserViewHolder {
         val l = if (isMultipleSelection) this else listener
