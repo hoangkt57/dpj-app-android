@@ -44,6 +44,8 @@ class ExerciseAdapter() :
         val item = getItem(position)
         if (holder is ExerciseViewHolder && item is Exercise) {
             holder.bindView(item)
+        } else if (holder is PageViewHolder) {
+            holder.bindView()
         }
     }
 
