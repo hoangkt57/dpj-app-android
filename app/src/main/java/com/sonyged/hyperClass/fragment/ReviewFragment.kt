@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.FragmentReviewBinding
 import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
+import com.sonyged.hyperClass.glide.GlideApp
+import com.sonyged.hyperClass.glide.MyGlideModule
 import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.StudentWorkout
 import com.sonyged.hyperClass.type.WorkoutReviewStatus
@@ -54,6 +57,12 @@ class ReviewFragment : BaseFragment(R.layout.fragment_review) {
                 val fileBinding = ViewItemSubmissionFileBinding.inflate(LayoutInflater.from(context))
                 fileBinding.text2.text = attachment.filename
                 fileBinding.text3.text = formatDate2(attachment.createAt)
+                GlideApp.with(fileBinding.image)
+                    .load(Uri.parse(attachment.url))
+                    .placeholder(R.drawable.bg_image)
+                    .error(R.drawable.ic_error_file)
+                    .apply(MyGlideModule.fullRequestOptions())
+                    .into(fileBinding.image)
                 fileBinding.root.setOnClickListener {
                     previewFileActivity(context, attachment)
                 }

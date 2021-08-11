@@ -40,6 +40,7 @@ query SegWorkouts($courseId: ID!, $after: String, $isTeacher: Boolean!, $filter:
                             attachments {
                                 id
                                 filename
+                                contentType
                                 url
                                 __typename
                             }

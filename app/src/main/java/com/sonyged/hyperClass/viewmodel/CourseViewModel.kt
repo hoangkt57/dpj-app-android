@@ -257,7 +257,7 @@ class CourseViewModel(application: Application, val courseId: String) : BaseView
                                 attachment.id,
                                 DATE_INVALID,
                                 attachment.filename,
-                                attachment.__typename,
+                                attachment.contentType,
                                 attachment.url
                             )
                         )
