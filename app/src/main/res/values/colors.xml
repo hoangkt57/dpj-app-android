@@ -71,5 +71,7 @@
     <color name="speak_progress_indicator">@color/color_primary</color>
     <color name="hand_progress_indicator">#C8D52A</color>
 
+    <color name="image_bg">#9E9E9E</color>
+
 
 </resources>

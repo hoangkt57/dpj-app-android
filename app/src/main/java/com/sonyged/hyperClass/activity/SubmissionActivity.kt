@@ -1,5 +1,6 @@
 package com.sonyged.hyperClass.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,6 +14,8 @@ import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivitySubmissionBinding
 import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
+import com.sonyged.hyperClass.glide.GlideApp
+import com.sonyged.hyperClass.glide.MyGlideModule
 import com.sonyged.hyperClass.model.Attachment
 import com.sonyged.hyperClass.model.Status
 import com.sonyged.hyperClass.model.Workout
@@ -83,6 +86,12 @@ class SubmissionActivity : BaseActivity(), OnItemClickListener {
             fileBinding.text2.text = attachment.filename
             fileBinding.text2.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
             fileBinding.text3.visibility = View.GONE
+            GlideApp.with(fileBinding.image)
+                .load(Uri.parse(attachment.url))
+                .placeholder(R.drawable.bg_image)
+                .error(R.drawable.ic_error_file)
+                .apply(MyGlideModule.fullRequestOptions())
+                .into(fileBinding.image)
             fileBinding.root.setOnClickListener {
                 previewFileActivity(this, attachment)
             }
