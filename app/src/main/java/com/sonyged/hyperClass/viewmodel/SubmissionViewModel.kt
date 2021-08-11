@@ -192,7 +192,7 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
                     sendErrorStatus(errors)
                     return@launch
                 }
-                if (workout.value?.status != WorkoutStatus.SUBMITTED) {
+//                if (workout.value?.status != WorkoutStatus.SUBMITTED) {
                     val query = UpdateStudentWorkoutMutation(
                         id,
                         StudentWorkoutUpdateInput(
@@ -211,23 +211,23 @@ class SubmissionViewModel(application: Application, val studentWorkoutId: String
                     }
                     sendErrorStatus(errors)
                     return@launch
-                }
-                val query = SubmitAdditionalStudentWorkoutMutation(
-                    id,
-                    StudentWorkoutSubmitAdditionalInput(
-                        Input.optional(answer),
-                        if (fileUpload.isNotEmpty()) Input.optional(fileUpload) else Input.absent(),
-                        if (deletedIds.isNotEmpty()) Input.optional(deletedIds) else Input.absent()
-                    )
-                )
-                val response = ApiUtils.getApolloClient().mutate(query).await()
-                Timber.d("createSubmission - response:$response")
-                val errors = response.data?.studentworkoutSubmitAdditional?.fragments?.failure?.errors
-                if (errors.isNullOrEmpty()) {
-                    sendSuccessStatus()
-                    return@launch
-                }
-                sendErrorStatus(errors)
+//                }
+//                val query = SubmitAdditionalStudentWorkoutMutation(
+//                    id,
+//                    StudentWorkoutSubmitAdditionalInput(
+//                        Input.optional(answer),
+//                        if (fileUpload.isNotEmpty()) Input.optional(fileUpload) else Input.absent(),
+//                        if (deletedIds.isNotEmpty()) Input.optional(deletedIds) else Input.absent()
+//                    )
+//                )
+//                val response = ApiUtils.getApolloClient().mutate(query).await()
+//                Timber.d("createSubmission - response:$response")
+//                val errors = response.data?.studentworkoutSubmitAdditional?.fragments?.failure?.errors
+//                if (errors.isNullOrEmpty()) {
+//                    sendSuccessStatus()
+//                    return@launch
+//                }
+//                sendErrorStatus(errors)
             } catch (e: Exception) {
                 Timber.e(e, "createSubmission")
                 sendErrorStatus()
