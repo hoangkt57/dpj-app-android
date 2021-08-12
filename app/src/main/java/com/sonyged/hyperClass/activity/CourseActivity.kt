@@ -133,10 +133,12 @@ class CourseActivity : BaseActivity(), Observer {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
-            if (position == 1) {
-                binding.create.hide()
-            } else {
-                binding.create.show()
+            if (viewModel.isTeacher()) {
+                if (position == 1) {
+                    binding.create.hide()
+                } else {
+                    binding.create.show()
+                }
             }
         }
     }
