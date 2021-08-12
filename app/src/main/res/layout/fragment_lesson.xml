@@ -34,6 +34,7 @@
         android:gravity="center"
         android:text="@string/edit"
         android:textColor="@color/on_primary"
+        android:visibility="gone"
         app:backgroundTint="@color/color_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,5 +79,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/color_primary_variant"
         app:strokeWidth="1dp" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="17dp"
+        android:gravity="center"
+        android:text="@string/start"
+        android:textColor="@color/on_primary"
+        android:visibility="gone"
+        app:backgroundTint="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

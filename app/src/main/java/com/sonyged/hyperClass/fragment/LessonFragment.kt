@@ -1,6 +1,5 @@
 package com.sonyged.hyperClass.fragment
 
-import android.app.Activity
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.View
@@ -85,6 +84,10 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
             }
         }
 
+        binding.startButton.setOnClickListener {
+
+        }
+
         viewModel.lesson.observe(viewLifecycleOwner) { updateLesson(it) }
         viewModel.status.observe(viewLifecycleOwner) { updateStatus(it) }
     }
@@ -98,10 +101,12 @@ class LessonFragment : BaseFragment(R.layout.fragment_lesson) {
 
         if (!viewModel.isTeacher()) {
             if (lesson.kickUrl != null) {
-                binding.editButton.visibility = View.VISIBLE
+                binding.startButton.visibility = View.VISIBLE
             } else {
-                binding.editButton.visibility = View.GONE
+                binding.startButton.visibility = View.GONE
             }
+        } else {
+            binding.editButton.visibility = View.VISIBLE
         }
     }
 
