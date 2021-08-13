@@ -1,8 +1,12 @@
 package com.sonyged.hyperClass.constants
 
+import com.sonyged.hyperClass.BuildConfig
+
 const val LINK_TERM = "https://dist.hyperclass.jp/terms/HyperClass_TOU_v_1_0_0.html"
 const val LINK_POLICY = "https://dist.hyperclass.jp/privacy/HyperClass_PP_v_1_0_0.html"
 const val LINK_LICENSES = "https://dist.hyperclass.jp/misc/licenses/HyperClassLicense.html"
+
+const val FILE_PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.fileprovider"
 
 const val TEACHER = "Teacher"
 const val STUDENT = "Student"
