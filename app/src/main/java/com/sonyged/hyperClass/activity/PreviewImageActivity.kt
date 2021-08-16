@@ -8,8 +8,10 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.sonyged.hyperClass.R
+import com.sonyged.hyperClass.constants.KEY_ID
 import com.sonyged.hyperClass.constants.KEY_URL
 import com.sonyged.hyperClass.databinding.ActivityPreviewImageBinding
+import com.sonyged.hyperClass.glide.CustomGlideUrl
 import com.sonyged.hyperClass.glide.GlideApp
 import com.sonyged.hyperClass.glide.MyGlideModule
 import timber.log.Timber
@@ -30,6 +32,7 @@ class PreviewImageActivity : PreviewFileActivity() {
 
     private fun setupView() {
         val url = intent.getStringExtra(KEY_URL)
+        val id = intent.getStringExtra(KEY_ID) ?: System.currentTimeMillis().toString()
         Timber.d("setupView - url: $url")
         if (url.isNullOrEmpty()) {
             Toast.makeText(applicationContext, R.string.url_null_empty, Toast.LENGTH_SHORT).show()
@@ -40,7 +43,7 @@ class PreviewImageActivity : PreviewFileActivity() {
         binding.loading.show()
         GlideApp.with(this)
             .asBitmap()
-            .load(url)
+            .load(CustomGlideUrl(url, id))
             .dontTransform()
             .dontAnimate()
             .apply(MyGlideModule.fullRequestOptions())

@@ -10,6 +10,7 @@ import com.sonyged.hyperClass.R
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.FragmentReviewBinding
 import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
+import com.sonyged.hyperClass.glide.CustomGlideUrl
 import com.sonyged.hyperClass.glide.GlideApp
 import com.sonyged.hyperClass.glide.MyGlideModule
 import com.sonyged.hyperClass.model.Status
@@ -58,7 +59,7 @@ class ReviewFragment : BaseFragment(R.layout.fragment_review) {
                 fileBinding.text2.text = attachment.filename
                 fileBinding.text3.text = formatDate2(attachment.createAt)
                 GlideApp.with(fileBinding.image)
-                    .load(Uri.parse(attachment.url))
+                    .load(CustomGlideUrl(attachment.url, attachment.id))
                     .placeholder(R.drawable.bg_image)
                     .error(R.drawable.ic_error_file)
                     .apply(MyGlideModule.fullRequestOptions())

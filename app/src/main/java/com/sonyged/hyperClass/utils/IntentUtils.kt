@@ -65,6 +65,7 @@ fun previewFileActivity(context: Context, attachment: Attachment) {
         Intent(context, WebViewActivity::class.java)
     }
     intent.putExtra(KEY_URL, attachment.url)
+    intent.putExtra(KEY_ID, attachment.id)
     startActivityWithException(context, intent)
 }
 
