@@ -14,6 +14,7 @@ class MyGlideModule : AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)
+        builder.setLogLevel(Log.DEBUG)
         builder.setImageDecoderEnabledForBitmaps(true)
         builder.setDefaultRequestOptions(fullRequestOptions())
     }

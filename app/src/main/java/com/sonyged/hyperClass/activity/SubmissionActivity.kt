@@ -14,6 +14,7 @@ import com.sonyged.hyperClass.adapter.viewholder.OnItemClickListener
 import com.sonyged.hyperClass.constants.*
 import com.sonyged.hyperClass.databinding.ActivitySubmissionBinding
 import com.sonyged.hyperClass.databinding.ViewItemSubmissionFileBinding
+import com.sonyged.hyperClass.glide.CustomGlideUrl
 import com.sonyged.hyperClass.glide.GlideApp
 import com.sonyged.hyperClass.glide.MyGlideModule
 import com.sonyged.hyperClass.model.Attachment
@@ -87,7 +88,7 @@ class SubmissionActivity : BaseActivity(), OnItemClickListener {
             fileBinding.text2.setTextColor(ContextCompat.getColor(this, R.color.color_primary_variant))
             fileBinding.text3.visibility = View.GONE
             GlideApp.with(fileBinding.image)
-                .load(Uri.parse(attachment.url))
+                .load(CustomGlideUrl(attachment.url, attachment.id))
                 .placeholder(R.drawable.bg_image)
                 .error(R.drawable.ic_error_file)
                 .apply(MyGlideModule.fullRequestOptions())
