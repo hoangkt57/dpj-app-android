@@ -17,9 +17,16 @@ class ImageViewHolder(listener: OnItemClickListener?, private val binding: ItemI
     }
 
     fun bindView(attachment: Attachment) {
-        GlideApp.with(binding.image)
-            .load(CustomGlideUrl(attachment.url, attachment.id))
-            .apply(MyGlideModule.noCacheOptions())
-            .into(binding.image)
+        if (attachment.path == null) {
+            GlideApp.with(binding.image)
+                .load(CustomGlideUrl(attachment.url, attachment.id))
+                .apply(MyGlideModule.noCacheOptions())
+                .into(binding.image)
+        } else {
+            GlideApp.with(binding.image)
+                .load(attachment.url)
+                .apply(MyGlideModule.noCacheOptions())
+                .into(binding.image)
+        }
     }
 }
